@@ -25,7 +25,6 @@
 
 $string['course_recycle:addinstance'] = 'Ajouter un bloc Recyclage du Cours';
 $string['course_recycle:view'] = 'Voir le bloc Recyclage du cours';
-$string['course_recycle:admin'] = 'Administrer le recyclage des cours';
 
 $string['atendofsession'] = 'En fin de période';
 $string['throw'] = 'En fin de période, supprimer';

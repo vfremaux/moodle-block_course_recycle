@@ -25,7 +25,6 @@
 
 $string['course_recycle:addinstance'] = 'Add a new Course Recycle block';
 $string['course_recycle:view'] = 'View the Course Recycle block';
-$string['course_recycle:admin'] = 'Administrate Course Recycling';
 
 $string['atendofsession'] = 'At end of session';
 $string['throw'] = 'At end of session, delete the course';

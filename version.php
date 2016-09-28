@@ -19,18 +19,18 @@
  *
  * @package     block_course_recycle
  * @category    blocks
- * @author      Valery Fremaux (valery.fremaux@gmeil.com)
- * @copyright   2015 onwards Valery Fremaux (valery.fremaux@gmeil.com)
+ * @author      Valery Fremaux <valery.fremaux@gmail.com>
+ * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014090602;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2015050500;        // Requires this Moodle version
-$plugin->release = '(2.9.0 Build(2014090600)';
+$plugin->version   = 2014090602;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2015111100;        // Requires this Moodle version.
+$plugin->component = 'block_course_recycle';  // Full name of the plugin (used for diagnostics).
+$plugin->release = '(3.0.0 Build(2014090600)';
 $plugin->maturity = MATURITY_BETA;
-$plugin->component = 'block_course_recycle';      // Full name of the plugin (used for diagnostics)
 
 // Non moodle attributes.
-$plugin->codeincrement = '2.9.0000';
+$plugin->codeincrement = '3.0.0000';
