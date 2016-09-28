@@ -37,7 +37,7 @@ class block_course_recycle extends block_base {
     }
 
     function applicable_formats() {
-        return array('all' => false, 'course' => true, 'site' => true);
+        return array('all' => false, 'course' => true);
     }
 
     function specialization() {
@@ -51,7 +51,6 @@ class block_course_recycle extends block_base {
         global $PAGE;
 
         $renderer = $PAGE->get_renderer('block_course_recycle');
-        $config = get_config('block_course_recycle');
 
         $blockcontext = context_block::instance($this->instance->id);
 
@@ -69,14 +68,6 @@ class block_course_recycle extends block_base {
             return $this->content;
         }
 
-        // Not in period
-        if ((time() < $config->showdate) || (time() > $config->resetdate)) {
-            $this->content = new StdClass;
-            $this->content->text = '';
-            $this->content->footer = '';
-            return $this->content;
-        }
-
         if (empty($this->config)) {
             $this->config = new StdClass;
         }
@@ -84,8 +75,11 @@ class block_course_recycle extends block_base {
         if (empty($this->config->recycleaction)) {
             $this->config->recycleaction = 'reset';
         }
-
+        
         $this->content = new StdClass();
+        
+        // for paged formats
+        $page = optional_param('page', '', PARAM_INT);
 
         $this->content->text = '';
         $this->content->text = $renderer->recyclebutton($this, '');
@@ -113,6 +107,7 @@ class block_course_recycle extends block_base {
         return true;
     }
 
+
     /**
      * The block should only be dockable when the title of the block is not empty
      * and when parent allows docking.
@@ -121,12 +116,5 @@ class block_course_recycle extends block_base {
      */
     public function instance_can_be_docked() {
         return (!empty($this->config->title) && parent::instance_can_be_docked());
-    }
-
-    public function get_required_javascript() {
-        global $CFG, $PAGE;
-
-        parent::get_required_javascript();
-        $PAGE->requires->js('/blocks/course_recycle/js/recycle.js');
     }
 }

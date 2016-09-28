@@ -41,25 +41,24 @@ class block_course_recycle_renderer extends plugin_renderer_base {
     }
 
     function recyclebutton($theblock, $url) {
-        global $OUTPUT, $COURSE, $USER, $CFG;
+        global $OUTPUT, $COURSE;
 
-        $str = '<div id="block-recycle-state">';
+        $page = optional_param('page', '', PARAM_INT);
+
+        $str = '';
 
         switch($theblock->config->recycleaction) {
             case 'throw':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'keep\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('throw', 'block_course_recycle').'" title="'.get_string('throw', 'block_course_recycle').'"/></a></centrer>';
+                $str .= '<center><a href="'.$url.'?id='.$COURSE->id.'&recycleaction=keep&page='.$page.'"><img width="30%" src="'.$OUTPUT->pix_url('throw', 'block_course_recycle').'" title="'.get_string('throw', 'block_course_recycle').'"/></a></centrer>';
                 break;
     
             case 'keep':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'reset\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('keep', 'block_course_recycle').'" title="'.get_string('keep', 'block_course_recycle').'"/></a></centrer>';
+                $str .= '<center><a href="'.$url.'?id='.$COURSE->id.'&recycleaction=reset&page='.$page.'"><img width="30%" src="'.$OUTPUT->pix_url('keep', 'block_course_recycle').'" title="'.get_string('keep', 'block_course_recycle').'"/></a></centrer>';
                 break;
     
             case 'reset':
             default :
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'throw\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('reset', 'block_course_recycle').'" title="'.get_string('reset', 'block_course_recycle').'"/></a></centrer>';
+                $str .= '<center><a href="'.$url.'?id='.$COURSE->id.'&recycleaction=throw&page='.$page.'"><img width="30%" src="'.$OUTPUT->pix_url('reset', 'block_course_recycle').'" title="'.get_string('reset', 'block_course_recycle').'"/></a></centrer>';
         }
 
         return $str;
