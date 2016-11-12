@@ -26,11 +26,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014090602;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2014110400;        // Requires this Moodle version
-$plugin->release = '(2.8.0 Build(2014090600)';
+$plugin->version   = 2014090602;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires  = 2015050500;        // Requires this Moodle version.
+$plugin->release = '(2.9.0 Build(2014090600)';
 $plugin->maturity = MATURITY_BETA;
-$plugin->component = 'block_course_recycle';      // Full name of the plugin (used for diagnostics)
+$plugin->component = 'block_course_recycle';      // Full name of the plugin (used for diagnostics).
 
 // Non moodle attributes.
-$plugin->codeincrement = '2.8.0000';
+$plugin->codeincrement = '2.9.0000';
