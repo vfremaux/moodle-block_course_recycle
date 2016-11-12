@@ -32,6 +32,7 @@ $context = context_system::instance();
 $PAGE->set_context($context);
 
 // Security.
+
 require_login();
 require_capability('block/recycle:admin');
 

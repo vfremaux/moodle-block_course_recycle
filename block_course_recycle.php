@@ -28,26 +28,26 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_course_recycle extends block_base {
 
-    function init() {
+    public function init() {
         $this->title = get_string('pluginname', 'block_course_recycle');
     }
 
-    function has_config() {
+    public function has_config() {
         return true;
     }
 
-    function applicable_formats() {
+    public function applicable_formats() {
         return array('all' => false, 'course' => true, 'site' => true);
     }
 
-    function specialization() {
+    public function specialization() {
     }
 
-    function instance_allow_multiple() {
+    public function instance_allow_multiple() {
         return false;
     }
 
-    function get_content() {
+    public function get_content() {
         global $PAGE;
 
         $renderer = $PAGE->get_renderer('block_course_recycle');
@@ -69,7 +69,7 @@ class block_course_recycle extends block_base {
             return $this->content;
         }
 
-        // Not in period
+        // Not in period.
         if ((time() < $config->showdate) || (time() > $config->resetdate)) {
             $this->content = new StdClass;
             $this->content->text = '';
@@ -80,7 +80,7 @@ class block_course_recycle extends block_base {
         if (empty($this->config)) {
             $this->config = new StdClass;
         }
-        
+
         if (empty($this->config->recycleaction)) {
             $this->config->recycleaction = 'reset';
         }
@@ -99,15 +99,14 @@ class block_course_recycle extends block_base {
     /**
      * Serialize and store config data
      */
-    function instance_config_save($data, $nolongerused = false) {
-        global $DB;
+    public function instance_config_save($data, $nolongerused = false) {
 
         $config = clone($data);
         parent::instance_config_save($config, $nolongerused);
     }
 
-    function instance_delete() {
-        global $DB;
+    public function instance_delete() {
+
         $fs = get_file_storage();
         $fs->delete_area_files($this->context->id, 'block_course_recycle');
         return true;

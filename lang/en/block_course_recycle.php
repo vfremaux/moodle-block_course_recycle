@@ -35,8 +35,8 @@ $string['pluginname'] = 'Course Recycle';
 $string['nonotifications'] = 'No notifications';
 
 $string['defaultnotification_title_tpl'] = 'Course reycling notice %NOTIF% : %COURSE%';
-$string['defaultnotification_tpl'] = 'Ce cours va devoir être recyclé le %TASKDATE%. Vous pouvez encore choisir quelle action sera
-faite sur ce cours à cette date. Si vous ne faites aucun choix, votre cours sera %DEFAULTACTION%. 
+$string['defaultnotification_tpl'] = 'This course will be recycled on %TASKDATE%. You can choose which action
+will be performed on this course at this date. If you do NOT choose, your course will be %DEFAULTACTION%. 
 
 Browse <a href="%COURSEURL%">in your course</a> to choose the course action or to stop notifications.
 ';
