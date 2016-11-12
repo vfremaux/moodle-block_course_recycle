@@ -15,22 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Definition of block dashboard scheduled tasks.
  *
- * @package     block_course_recycle
- * @category    blocks
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package   block_course_recycle
+ * @category  blocks
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2014090602;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2015050500;        // Requires this Moodle version.
-$plugin->release = '(2.9.0 Build(2014090600)';
-$plugin->maturity = MATURITY_BETA;
-$plugin->component = 'block_course_recycle';      // Full name of the plugin (used for diagnostics).
-
-// Non moodle attributes.
-$plugin->codeincrement = '2.9.0000';
+$tasks = array(
+    array(
+        'classname' => 'block_course_recycle\task\recycle_task',
+        'blocking' => 0,
+        'minute' => '*',
+        'hour' => '*',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    )
+);
