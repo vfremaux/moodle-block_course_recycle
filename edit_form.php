@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Form for editing HTML block instances.
  *
@@ -25,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2014 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Form for editing Course Recycle block instances.
@@ -43,8 +41,8 @@ class block_course_recycle_edit_form extends block_edit_form {
             'reset' => get_string('reset', 'block_course_recycle'),
             'keep' => get_string('keep', 'block_course_recycle'),
         );
-        $mform->addElement('select', 'config_recycleaction', get_string('configrecycleaction', 'block_course_recycle'), $options, 'reset');
-
+        $label = get_string('configrecycleaction', 'block_course_recycle');
+        $mform->addElement('select', 'config_recycleaction', $label, $options, 'reset');
     }
 
 }

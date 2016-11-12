@@ -33,3 +33,32 @@ $string['reset'] = 'En fin de période, réinitialiser';
 $string['keep'] = 'En fin de période, conserver sans aucune modification';
 $string['blockname'] = 'Recyclage du cours';
 $string['pluginname'] = 'Recyclage du cours';
+$string['nonotifications'] = 'Pas de notifications';
+$string['stopnotifications'] = 'Ne plus me rappeler pour ce cours';
+$string['stopallnotifications'] = 'Ne plus m\'envoyer de rappel pour aucun cours';
+
+$string['defaultnotification_title_tpl'] = 'Avis de fin de période %NOTIF% : %COURSE%';
+$string['defaultnotification_tpl'] = 'Ce cours va devoir être recyclé le %TASKDATE%. Vous pouvez encore choisir quelle action sera
+faite sur ce cours à cette date. Si vous ne faites aucun choix, votre cours sera %DEFAULTACTION%. 
+
+Rendez-vous <a href="%COURSEURL%">dans votre cours</a> pour faire votre choix ou pour désactiver ces notifications.
+';
+
+$string['task_recycle'] = 'Recyclage des cours en fin de session';
+
+$string['configresetdate'] = 'Date de réinitialisation';
+$string['configresetdate_desc'] = 'La date à laquelle le système de passage d\'année se réinitialise et les blocs se cachent';
+
+$string['configshowdate'] = 'Date d\'apparition';
+$string['configshowdate_desc'] = 'La date à laquelle les blocs apparaissent dans le cours s\'ils y sont. Le bloc restera visible pour les enseignants jusqu\'à la date de réinitialisation';
+
+$string['configrecycleaction'] = 'Action de recyclage ';
+
+$string['configdefaultaction'] = 'Action par défaut ';
+$string['configdefaultaction_desc'] = 'ce qu\'il adviendra du cours lorsque la tâche de fin d\'année est exécutée.';
+
+$string['confignumberofnotifications'] = 'Notifications ';
+$string['confignumberofnotifications_desc'] = 'Le nombre de notifications à envoyer avant la date d\'éxécution. Les notifications seront envoyées à 15 jours d\'intervalle.';
+
+$string['confignotificationtext'] = 'Texte de notification ';
+$string['confignotificationtext_desc'] = 'Le texte à envoyer. Ce texte peut utiliser les emplacements %NOTIF% pour le numéro de notification, %REMAININGNOTIFS% pour le nombre de notifications restantes et %TASKDATE% pour indiquer la date de traitement.';
