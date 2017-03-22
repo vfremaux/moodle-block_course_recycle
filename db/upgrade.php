@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * This file keeps track of upgrades to the html block
  *
@@ -25,6 +22,7 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  Valery Fremaux (valery.fremaux@gmail.com) http://www.mylearningfactory.com
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  *
@@ -32,22 +30,6 @@ defined('MOODLE_INTERNAL') || die();
  * @param object $block
  */
 function xmldb_block_course_recycle_upgrade($oldversion) {
-    global $CFG, $DB;
-
-    // Moodle v2.3.0 release upgrade line
-    // Put any upgrade step following this
-
-
-    // Moodle v2.4.0 release upgrade line
-    // Put any upgrade step following this
-
-
-    // Moodle v2.5.0 release upgrade line.
-    // Put any upgrade step following this.
-
-
-    // Moodle v2.6.0 release upgrade line.
-    // Put any upgrade step following this.
 
     return true;
 }

@@ -36,8 +36,8 @@ $PAGE->set_context($context);
 require_login();
 require_capability('block/recycle:admin');
 
-$PAGE->set_heading(get_string('pluginname', 'block_course_reclycle'));
-$PAGE->set_title(get_string('pluginname', 'block_course_reclycle'));
+$PAGE->set_heading(get_string('pluginname', 'block_course_recycle'));
+$PAGE->set_title(get_string('pluginname', 'block_course_recycle'));
 
 $countinstances = $DB->count_records('block_instances', array('blockname' => 'course_recycle'));
 
