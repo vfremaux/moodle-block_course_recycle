@@ -20,13 +20,12 @@
  * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 namespace block_course_recycle\task;
 
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Scheduled task to export dashboard.
+ * Recycle processing for courses.
  */
 class recycle_task extends \core\task\scheduled_task {
 

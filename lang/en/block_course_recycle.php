@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,11 +15,11 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'block_html', language 'en', branch 'MOODLE_20_STABLE'
- *
- * @package   block_course_recycle
- * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     block_course_recycle
+ * @category    blocks
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   1999 onwards Martin Dougiamas  http://dougiamas.com
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 $string['course_recycle:addinstance'] = 'Add a new Course Recycle block';
@@ -36,7 +35,7 @@ $string['nonotifications'] = 'No notifications';
 
 $string['defaultnotification_title_tpl'] = 'Course reycling notice %NOTIF% : %COURSE%';
 $string['defaultnotification_tpl'] = 'This course will be recycled on %TASKDATE%. You can choose which action
-will be performed on this course at this date. If you do NOT choose, your course will be %DEFAULTACTION%. 
+will be performed on this course at this date. If you do NOT choose, your course will be %DEFAULTACTION%.
 
 Browse <a href="%COURSEURL%">in your course</a> to choose the course action or to stop notifications.
 ';
@@ -47,7 +46,8 @@ $string['configresetdate'] = 'Date for reset';
 $string['configresetdate_desc'] = 'The date the block will be reset and will not be shown any more in the courses';
 
 $string['configshowdate'] = 'Date for showing';
-$string['configshowdate_desc'] = 'The date the block will be shown if present in the course. The block will be shown untill the reset date is reached';
+$string['configshowdate_desc'] = 'The date the block will be shown if present in the course. The block will be shown
+until the reset date is reached';
 
 $string['configrecycleaction'] = 'Recycling action ';
 
@@ -55,7 +55,10 @@ $string['configdefaultaction'] = 'Default action ';
 $string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
 
 $string['confignumberofnotifications'] = 'Notifications ';
-$string['confignumberofnotifications_desc'] = 'The amount of messages that will be sent to the course editing teachers before the task scheduling date. Notifications will be sent at 15 days interval.';
+$string['confignumberofnotifications_desc'] = 'The amount of messages that will be sent to the course editing teachers
+before the task scheduling date. Notifications will be sent at 15 days interval.';
 
 $string['confignotificationtext'] = 'Notification text ';
-$string['confignotificationtext_desc'] = 'The text to be sent. this text can use %NOTIF% as the notification number and %REMAININGNOTIFS% for the remaining amount of notifications before processing. %TASKDATE% can be used as processing task date information.';
+$string['confignotificationtext_desc'] = 'The text to be sent. this text can use %NOTIF% as the notification number
+and %REMAININGNOTIFS% for the remaining amount of notifications before processing. %TASKDATE% can be used as processing
+task date information.';

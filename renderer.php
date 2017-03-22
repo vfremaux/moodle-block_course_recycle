@@ -18,7 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class block_course_recycle_renderer extends plugin_renderer_base {
 
-    function globalstable(&$globals) {
+    public function globalstable(&$globals) {
 
         $throwstr = get_string('throw', 'block_course_recycle');
         $keepstr = get_string('keep', 'block_course_recycle');
@@ -40,21 +40,27 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         $str .= '</tr></table>';
     }
 
-    function recyclebutton($theblock, $url) {
+    public function recyclebutton($theblock, $url) {
         global $OUTPUT, $COURSE, $USER, $CFG;
 
         $str = '<div id="block-recycle-state">';
 
-        switch($theblock->config->recycleaction) {
-            case 'throw':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'keep\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('throw', 'block_course_recycle').'" title="'.get_string('throw', 'block_course_recycle').'"/></a></centrer>';
+        switch ($theblock->config->recycleaction) {
+            case 'throw': {
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'keep\');';
+                $pixurl = $this->output->pix_url('throw', 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('throw', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
+            }
     
-            case 'keep':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'reset\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('keep', 'block_course_recycle').'" title="'.get_string('keep', 'block_course_recycle').'"/></a></centrer>';
+            case 'keep': {
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'reset\');';
+                $pixurl = $this->output->pix_url('keep', 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('keep', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
+            }
     
             case 'reset':
             default :

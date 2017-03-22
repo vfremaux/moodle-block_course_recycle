@@ -17,7 +17,7 @@
 /**
  * Form for editing HTML block instances.
  *
- * @package   block_course_descendants
+ * @package   block_course_recycle
  * @category  blocks
  * @copyright 2014 Valery Fremaux (valery.fremaux@gmail.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
