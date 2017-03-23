@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die;
  */
 class admin_setting_configdatetime extends \admin_setting {
 
-    var $options;
+    public $options;
 
     /**
      * Constructor
@@ -108,7 +108,9 @@ class admin_setting_configdatetime extends \admin_setting {
         } else {
             $defaultinfo = null;
         }
-        if ($data['y'] == 1970) $data = $default;
+        if ($data['y'] == 1970) {
+            $data = $default;
+        }
 
         $return = '<div class="form-datetime defaultsnext">';
 

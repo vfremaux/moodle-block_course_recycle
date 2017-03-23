@@ -16,7 +16,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once $CFG->dirroot.'/blocks/course_recycle/adminlib.php';
+require_once($CFG->dirroot.'/blocks/course_recycle/adminlib.php');
 
 use \block\course_recycle\admin_setting_configdatetime;
 
@@ -24,7 +24,7 @@ if ($ADMIN->fulltree) {
 
     $year = date('Y', time());
 
-    $defaultreset = array('y' => $year, 'M' => 8, 'd'=> 15, 'h' => 0, 'm' => 0);
+    $defaultreset = array('y' => $year, 'M' => 8, 'd' => 15, 'h' => 0, 'm' => 0);
 
     $key = 'block_course_recycle/resetdate';
     $label = get_string('configresetdate', 'block_course_recycle');
@@ -32,7 +32,7 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configdatetime($key, $label,
                        $desc, $defaultreset, array('tmask' => true, 'ymask' => true)));
 
-    $defaultset = array('y' => $year, 'M' => 5, 'd'=> 15, 'h' => 0, 'm' => 0);
+    $defaultset = array('y' => $year, 'M' => 5, 'd' => 15, 'h' => 0, 'm' => 0);
     $key = 'block_course_recycle/showdate';
     $label = get_string('configshowdate', 'block_course_recycle');
     $desc = get_string('configshowdate_desc', 'block_course_recycle');
