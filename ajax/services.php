@@ -38,7 +38,7 @@ if ($action == 'change') {
     $recycleaction = required_param('action', PARAM_ALPHA);
     $userid = required_param('userid', PARAM_INT);
 
-    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id)) {
+    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id))) {
         $oldrec->userid = $userid;
         $oldrec->recycleaction = $recycleaction;
         $DB->update_record('block_course_recycle', $oldrec);
@@ -52,7 +52,7 @@ if ($action == 'change') {
 }
 if ($action == 'stopnotify') {
     $courseid = required_param('id', PARAM_INT);
-    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id)) {
+    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id))) {
         $oldrec->stopnotify = true;
         $DB->update_record('block_course_recycle', $oldrec);
     } else {
