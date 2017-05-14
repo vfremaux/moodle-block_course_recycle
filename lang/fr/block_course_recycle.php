@@ -24,15 +24,34 @@ $string['course_recycle:addinstance'] = 'Ajouter un bloc Recyclage du Cours';
 $string['course_recycle:view'] = 'Voir le bloc Recyclage du cours';
 $string['course_recycle:admin'] = 'Administrer le recyclage des cours';
 
+$string['active'] = 'Visible';
+$string['addeverywhere'] = 'Ajouter une instance à tous les cours';
+$string['archive'] = 'En fin de période, archiver';
 $string['atendofsession'] = 'En fin de période';
-$string['throw'] = 'En fin de période, supprimer';
-$string['reset'] = 'En fin de période, réinitialiser';
-$string['keep'] = 'En fin de période, conserver sans aucune modification';
 $string['blockname'] = 'Recyclage du cours';
-$string['pluginname'] = 'Recyclage du cours';
+$string['choicelocked'] = 'Le choix du mode de recyclage est fermé. Contactez vos administrateurs.';
+$string['configblockstate'] = 'Etat du bloc';
+$string['configdefaultaction'] = 'Action par défaut ';
+$string['confignumberofnotifications'] = 'Notifications ';
+$string['configrecycleaction'] = 'Action de recyclage ';
+$string['inactive'] = 'Caché';
+$string['keep'] = 'En fin de période, conserver sans aucune modification';
+$string['locked'] = 'Verrouilé';
 $string['nonotifications'] = 'Pas de notifications';
-$string['stopnotifications'] = 'Ne plus me rappeler pour ce cours';
+$string['opentill'] = 'Vous pouvez encore changer l\'opération de fin d\'année jusqu\'au {$a}.';
+$string['pluginname'] = 'Recyclage du cours';
+$string['recycle'] = 'Gérer le recyclage';
+$string['reminded1'] = 'Premier rappel émis';
+$string['reminded2'] = 'Deuxième rappel émis';
+$string['reminded3'] = 'Troisième rappel émis';
+$string['reset'] = 'En fin de période, réinitialiser';
 $string['stopallnotifications'] = 'Ne plus m\'envoyer de rappel pour aucun cours';
+$string['stopnotifications'] = 'Ne plus me rappeler pour ce cours';
+$string['task_recycle'] = 'Recyclage des cours : nettoyage';
+$string['task_show'] = 'Recyclage des cours : Activation des choix';
+$string['task_reset'] = 'Recyclage des cours : Réinitialisation';
+$string['task_lock'] = 'Recyclage des cours : Verrouillage des choix';
+$string['throw'] = 'En fin de période, supprimer';
 
 $string['defaultnotification_title_tpl'] = 'Avis de fin de période %NOTIF% : %COURSE%';
 $string['defaultnotification_tpl'] = 'Ce cours va devoir être recyclé le %TASKDATE%. Vous pouvez encore choisir quelle action sera
@@ -41,21 +60,8 @@ faite sur ce cours à cette date. Si vous ne faites aucun choix, votre cours ser
 Rendez-vous <a href="%COURSEURL%">dans votre cours</a> pour faire votre choix ou pour désactiver ces notifications.
 ';
 
-$string['task_recycle'] = 'Recyclage des cours en fin de session';
-
-$string['configresetdate'] = 'Date de réinitialisation';
-$string['configresetdate_desc'] = 'La date à laquelle le système de passage d\'année se réinitialise et les blocs se cachent';
-
-$string['configshowdate'] = 'Date d\'apparition';
-$string['configshowdate_desc'] = 'La date à laquelle les blocs apparaissent dans le cours s\'ils y sont. Le bloc restera
-visible pour les enseignants jusqu\'à la date de réinitialisation';
-
-$string['configrecycleaction'] = 'Action de recyclage ';
-
-$string['configdefaultaction'] = 'Action par défaut ';
 $string['configdefaultaction_desc'] = 'ce qu\'il adviendra du cours lorsque la tâche de fin d\'année est exécutée.';
 
-$string['confignumberofnotifications'] = 'Notifications ';
 $string['confignumberofnotifications_desc'] = 'Le nombre de notifications à envoyer avant la date d\'éxécution. Les notifications
 seront envoyées à 15 jours d\'intervalle.';
 

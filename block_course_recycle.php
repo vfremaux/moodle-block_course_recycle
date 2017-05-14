@@ -48,7 +48,7 @@ class block_course_recycle extends block_base {
     }
 
     public function get_content() {
-        global $PAGE;
+        global $PAGE, $OUTPUT, $COURSE;
 
         $renderer = $PAGE->get_renderer('block_course_recycle');
         $config = get_config('block_course_recycle');
@@ -70,7 +70,7 @@ class block_course_recycle extends block_base {
         }
 
         // Not in period.
-        if ((time() < $config->showdate) || (time() > $config->resetdate)) {
+        if ($config->blockstate == 'inactive') {
             $this->content = new StdClass;
             $this->content->text = '';
             $this->content->footer = '';
@@ -88,9 +88,24 @@ class block_course_recycle extends block_base {
         $this->content = new StdClass();
 
         $this->content->text = '';
-        $this->content->text = $renderer->recyclebutton($this, '');
+        $this->content->text .= $OUTPUT->box_start('', 'block-recycle-state');
+        $this->content->text .= $renderer->recyclebutton($this->config->recycleaction);
+        $this->content->text .= $OUTPUT->box_end();
 
         $this->content->footer = '';
+
+        if ($config->blockstate != 'locked') {
+            $this->context->footer .= get_string('opentill', 'block_course_recycle');
+        } else {
+            $this->context->footer .= get_string('choicelocked', 'block_course_recycle');
+        }
+
+        $contextsystem = context_system::instance();
+        if (has_capability('moodle/site:config', $contextsystem)) {
+            $this->content->footer .= '<br/>';
+            $indexurl = new moodle_url('/block/courserecycle/index.php', array('courseid' => $COURSE->id));
+            $this->content->footer .= '<a href="'.$indexurl.'">'.get_string('recycle', 'block_course_recycle').'</a>';
+        }
 
         return $this->content;
     }
@@ -127,5 +142,35 @@ class block_course_recycle extends block_base {
 
         parent::get_required_javascript();
         $PAGE->requires->js('/blocks/course_recycle/js/recycle.js');
+    }
+
+    public static function compare_date($d1, $d2) {
+
+        $date1 = get_date($d1);
+        $date2 = get_date($d2);
+
+        if ($date1['mon'] > $date2['mon']) {
+            return true;
+        }
+
+        if ($date1['mon'] < $date2['mon']) {
+            return false;
+        }
+
+        if ($date1['mday'] > $date2['mday']) {
+            return true;
+        }
+
+        if ($date1['mday'] < $date2['mday']) {
+            return false;
+        }
+
+        if ($date1['hours'] > $date2['hours']) {
+            return true;
+        }
+
+        if ($date1['hours'] < $date2['hours']) {
+            return false;
+        }
     }
 }

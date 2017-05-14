@@ -22,26 +22,22 @@ use \block\course_recycle\admin_setting_configdatetime;
 
 if ($ADMIN->fulltree) {
 
-    $year = date('Y', time());
-
-    $defaultreset = array('y' => $year, 'M' => 8, 'd' => 15, 'h' => 0, 'm' => 0);
-
-    $key = 'block_course_recycle/resetdate';
-    $label = get_string('configresetdate', 'block_course_recycle');
-    $desc = get_string('configresetdate_desc', 'block_course_recycle');
-    $settings->add(new admin_setting_configdatetime($key, $label,
-                       $desc, $defaultreset, array('tmask' => true, 'ymask' => true)));
-
-    $defaultset = array('y' => $year, 'M' => 5, 'd' => 15, 'h' => 0, 'm' => 0);
-    $key = 'block_course_recycle/showdate';
-    $label = get_string('configshowdate', 'block_course_recycle');
-    $desc = get_string('configshowdate_desc', 'block_course_recycle');
-    $settings->add(new admin_setting_configdatetime($key, $label, $desc, $defaultset, array('tmask' => true, 'ymask' => true)));
+    $key = 'block_course_recycle/blockstate';
+    $label = get_string('configblockstate', 'block_course_recycle');
+    $desc = get_string('configblockstate_desc', 'block_course_recycle');
+    $states = array('active' => get_string('active' => 'block_course_recycle'),
+                    'remind1' => get_string('remind1', 'block_course_recycle')),
+                    'remind2' => get_string('remind2', 'block_course_recycle')),
+                    'remind3' => get_string('remind3', 'block_course_recycle')),
+                    'locked' => get_string('locked', 'block_course_recycle')),
+                    'inactive' => get_string('inavtice', 'block_course_recycle'));
+    $settings->add(new admin_setting_configselect($key, $label, $desc, $states, 'visible'));
 
     $actionoptions = array(
         '0' => get_string('keep', 'block_course_recycle'),
         '1' => get_string('reset', 'block_course_recycle'),
-        '2' => get_string('throw', 'block_course_recycle')
+        '2' => get_string('archive', 'block_course_recycle'),
+        '3' => get_string('throw', 'block_course_recycle')
     );
 
     $key = 'block_course_recycle/defaultaction';

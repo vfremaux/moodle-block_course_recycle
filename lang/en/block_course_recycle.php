@@ -26,12 +26,41 @@ $string['course_recycle:addinstance'] = 'Add a new Course Recycle block';
 $string['course_recycle:view'] = 'View the Course Recycle block';
 $string['course_recycle:admin'] = 'Administrate Course Recycling';
 
+$string['active'] = 'Visible';
+$string['addeverywhere'] = 'Ensure an instance is available in all courses';
+$string['archive'] = 'At end of session, archive the course';
 $string['atendofsession'] = 'At end of session';
-$string['throw'] = 'At end of session, delete the course';
-$string['reset'] = 'At end of session, reset the course';
+$string['choicelocked'] = 'Choice are now closed. Contact our administrators.';
+$string['configblockstate'] = 'Block state';
+$string['configdefaultaction'] = 'Default action ';
+$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
+$string['configlockdate'] = 'Date of choice lock';
+$string['confignotificationtext'] = 'Notification text ';
+$string['confignumberofnotifications'] = 'Notifications ';
+$string['configrecycleaction'] = 'Recycling action ';
+$string['inactive'] = 'Hidden';
 $string['keep'] = 'At end of session, keep unchanged';
-$string['pluginname'] = 'Course Recycle';
+$string['locked'] = 'Locked';
 $string['nonotifications'] = 'No notifications';
+$string['opentill'] = 'You can still change the course recycling action till {$a}.';
+$string['pluginname'] = 'Course Recycle';
+$string['recycle'] = 'Manage the recycling process';
+$string['reminded1'] = 'First reminder sent';
+$string['reminded2'] = 'Second reminder sent';
+$string['reminded3'] = 'Third reminder sent';
+$string['reset'] = 'At end of session, reset the course';
+$string['task_recycle'] = 'Recycling process end of year cleanup';
+$string['task_lock'] = 'Recycle lock choices';
+$string['task_show'] = 'Recycle activate blocks';
+$string['task_reset'] = 'Recycle process cycle reset';
+$string['throw'] = 'At end of session, delete the course';
+
+$string['confignumberofnotifications_desc'] = 'The amount of messages that will be sent to the course editing teachers
+before the task scheduling date. Notifications will be sent at 15 days interval.';
+
+$string['confignotificationtext_desc'] = 'The text to be sent. this text can use %NOTIF% as the notification number
+and %REMAININGNOTIFS% for the remaining amount of notifications before processing. %TASKDATE% can be used as processing
+task date information.';
 
 $string['defaultnotification_title_tpl'] = 'Course reycling notice %NOTIF% : %COURSE%';
 $string['defaultnotification_tpl'] = 'This course will be recycled on %TASKDATE%. You can choose which action
@@ -39,26 +68,3 @@ will be performed on this course at this date. If you do NOT choose, your course
 
 Browse <a href="%COURSEURL%">in your course</a> to choose the course action or to stop notifications.
 ';
-
-$string['task_recycle'] = 'Recycling end of life courses';
-
-$string['configresetdate'] = 'Date for reset';
-$string['configresetdate_desc'] = 'The date the block will be reset and will not be shown any more in the courses';
-
-$string['configshowdate'] = 'Date for showing';
-$string['configshowdate_desc'] = 'The date the block will be shown if present in the course. The block will be shown
-until the reset date is reached';
-
-$string['configrecycleaction'] = 'Recycling action ';
-
-$string['configdefaultaction'] = 'Default action ';
-$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
-
-$string['confignumberofnotifications'] = 'Notifications ';
-$string['confignumberofnotifications_desc'] = 'The amount of messages that will be sent to the course editing teachers
-before the task scheduling date. Notifications will be sent at 15 days interval.';
-
-$string['confignotificationtext'] = 'Notification text ';
-$string['confignotificationtext_desc'] = 'The text to be sent. this text can use %NOTIF% as the notification number
-and %REMAININGNOTIFS% for the remaining amount of notifications before processing. %TASKDATE% can be used as processing
-task date information.';

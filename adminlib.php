@@ -58,7 +58,7 @@ class admin_setting_configdatetime extends \admin_setting {
     public function get_setting() {
         $result = $this->config_read($this->name);
 
-        $datearr = getdate($result);
+        $datearr = getdate((float) $result);
 
         $data = array('h' => $datearr['hours'],
             'm' => $datearr['minutes'],
@@ -79,7 +79,7 @@ class admin_setting_configdatetime extends \admin_setting {
             return '';
         }
 
-        $datetime = mktime($data['h'], $data['m'], 0, $data['M'], $data['d'], $data['y']);
+        $datetime = mktime((float) $data['h'], (float) $data['m'], 0, (float) $data['M'], (float) $data['d'], (float) $data['y']);
 
         $result = $this->config_write($this->name, $datetime);
         return ($result ? '' : get_string('errorsetting', 'admin'));
@@ -131,7 +131,7 @@ class admin_setting_configdatetime extends \admin_setting {
         }
         $return .= '</select>';
 
-        $return .= '<select id="'.$this->get_id().'d" name="'.$this->get_full_name().'[d]">';
+        $return .= ' <select id="'.$this->get_id().'d" name="'.$this->get_full_name().'[d]">';
         for ($i = 1; $i <= 31; $i++) {
             $return .= '<option value="'.$i.'"'.($i == $data['d'] ? ' selected="selected"' : '').'>'.sprintf('%02d', $i).'</option>';
         }

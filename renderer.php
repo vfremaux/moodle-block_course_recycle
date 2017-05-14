@@ -40,15 +40,22 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         $str .= '</tr></table>';
     }
 
-    public function recyclebutton($theblock, $url) {
+    public function recyclebutton($recycleaction) {
         global $COURSE, $USER;
 
-        $str = '<div id="block-recycle-state">';
+        $str = '';
 
-        switch ($theblock->config->recycleaction) {
+        $config = get_config('block_course_recycle');
+
+        $suffix = '';
+        if ($config->block-state == 'locked') {
+            $suffix = '_locked';
+        }
+
+        switch ($recycleaction) {
             case 'throw': {
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'keep\');';
-                $pixurl = $this->output->pix_url('throw', 'block_course_recycle');
+                $pixurl = $this->output->pix_url('throw'.$suffix, 'block_course_recycle');
                 $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('throw', 'block_course_recycle').'"/>';
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
@@ -56,8 +63,16 @@ class block_course_recycle_renderer extends plugin_renderer_base {
 
             case 'keep': {
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'reset\');';
-                $pixurl = $this->output->pix_url('keep', 'block_course_recycle');
+                $pixurl = $this->output->pix_url('keep'.$suffix, 'block_course_recycle');
                 $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('keep', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
+                break;
+            }
+
+            case 'archive': {
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'archive\');';
+                $pixurl = $this->output->pix_url('archive'.$suffix, 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('archive', 'block_course_recycle').'"/>';
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
             }
@@ -65,7 +80,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             case 'reset':
             default :
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'throw\');';
-                $pixurl = $this->output->pix_url('reset', 'block_course_recycle');
+                $pixurl = $this->output->pix_url('reset'.$suffix, 'block_course_recycle');
                 $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('reset', 'block_course_recycle').'"/>';
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
         }

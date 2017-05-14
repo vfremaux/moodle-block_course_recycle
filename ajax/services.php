@@ -21,6 +21,7 @@
  * @copyright   1999 onwards Martin Dougiamas  http://dougiamas.com
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+define('AJAX_SCRIPT');
 
 require('../../../config.php');
 
@@ -30,6 +31,8 @@ if (!$course = $DB->get_record('course', array('id' => $id))) {
     die;
 }
 
+$context = context_course::instance($course->id);
+
 require_login($course);
 
 $action = required_param('what', PARAM_ALPHA); // MCD command.
@@ -37,6 +40,9 @@ $action = required_param('what', PARAM_ALPHA); // MCD command.
 if ($action == 'change') {
     $recycleaction = required_param('action', PARAM_ALPHA);
     $userid = required_param('userid', PARAM_INT);
+
+    $PAGE->set_context($context);
+    $renderer = $PAGE->get_renderer('block_course_recycle');
 
     if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id))) {
         $oldrec->userid = $userid;
@@ -49,6 +55,8 @@ if ($action == 'change') {
         $rec->recycleaction = $recycleaction;
         $DB->insert_record('block_course_recycle', $rec);
     }
+    echo $renderer->recyclebutton($recycleaction);
+    die;
 }
 if ($action == 'stopnotify') {
     $courseid = required_param('id', PARAM_INT);
