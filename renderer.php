@@ -48,7 +48,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         $config = get_config('block_course_recycle');
 
         $suffix = '';
-        if ($config->block-state == 'locked') {
+        if (@$config->blockstate == 'locked') {
             $suffix = '_locked';
         }
 

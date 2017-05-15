@@ -34,5 +34,39 @@ $tasks = array(
         'month' => '*',
         'dayofweek' => '*',
         'disabled' => 1,
-    )
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\lock_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '15',
+        'month' => '7',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\reset_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '2',
+        'month' => '9',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\show_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '0',
+        'day' => '15',
+        'month' => '5',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
+
 );

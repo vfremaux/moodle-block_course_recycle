@@ -68,3 +68,9 @@ seront envoyées à 15 jours d\'intervalle.';
 $string['confignotificationtext'] = 'Texte de notification ';
 $string['confignotificationtext_desc'] = 'Le texte à envoyer. Ce texte peut utiliser les emplacements %NOTIF% pour le numéro
 de notification, %REMAININGNOTIFS% pour le nombre de notifications restantes et %TASKDATE% pour indiquer la date de traitement.';
+
+$string['configblockstate_desc'] = 'Cette variable d\'état contrôle le cycle de fonctionnement du recyclage de cours quelque soit le cours.
+Le composant a un automate unique valable pour tout le site qui affecte la phase de fonctionnement de toutes les instances de ce bloc.
+Les administrateurs peuvent changer l\'état pour une mise en place. Les états sont ensuite modifiés par la programmation de tâches
+programmées associées au module.
+';

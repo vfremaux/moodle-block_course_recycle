@@ -25,13 +25,13 @@ if ($ADMIN->fulltree) {
     $key = 'block_course_recycle/blockstate';
     $label = get_string('configblockstate', 'block_course_recycle');
     $desc = get_string('configblockstate_desc', 'block_course_recycle');
-    $states = array('active' => get_string('active' => 'block_course_recycle'),
-                    'remind1' => get_string('remind1', 'block_course_recycle')),
-                    'remind2' => get_string('remind2', 'block_course_recycle')),
-                    'remind3' => get_string('remind3', 'block_course_recycle')),
-                    'locked' => get_string('locked', 'block_course_recycle')),
-                    'inactive' => get_string('inavtice', 'block_course_recycle'));
-    $settings->add(new admin_setting_configselect($key, $label, $desc, $states, 'visible'));
+    $states = array('active' => get_string('active', 'block_course_recycle'),
+                    'remind1' => get_string('reminded1', 'block_course_recycle'),
+                    'remind2' => get_string('reminded2', 'block_course_recycle'),
+                    'remind3' => get_string('reminded3', 'block_course_recycle'),
+                    'locked' => get_string('locked', 'block_course_recycle'),
+                    'inactive' => get_string('inactive', 'block_course_recycle'));
+    $settings->add(new admin_setting_configselect($key, $label, $desc,'visible', $states));
 
     $actionoptions = array(
         '0' => get_string('keep', 'block_course_recycle'),
@@ -42,7 +42,7 @@ if ($ADMIN->fulltree) {
 
     $key = 'block_course_recycle/defaultaction';
     $label = get_string('configdefaultaction', 'block_course_recycle');
-    $desc = get_string('configshowdate_desc', 'block_course_recycle');
+    $desc = get_string('configdefaultaction_desc', 'block_course_recycle');
     $settings->add(new admin_setting_configselect($key, $label, $desc, 1, $actionoptions));
 
     $numberoptions = array(

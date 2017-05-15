@@ -53,6 +53,10 @@ class block_course_recycle extends block_base {
         $renderer = $PAGE->get_renderer('block_course_recycle');
         $config = get_config('block_course_recycle');
 
+        if (!isset($config->blockstate)) {
+            $config->blockstate = 'active';
+        }
+
         $blockcontext = context_block::instance($this->instance->id);
 
         $recycleaction = optional_param('recycleaction', false, PARAM_TEXT);
@@ -94,10 +98,14 @@ class block_course_recycle extends block_base {
 
         $this->content->footer = '';
 
-        if ($config->blockstate != 'locked') {
-            $this->context->footer .= get_string('opentill', 'block_course_recycle');
-        } else {
-            $this->context->footer .= get_string('choicelocked', 'block_course_recycle');
+        $task = \core\task\manager::get_scheduled_task('\\block_course_recycle\\task\\lock_task');
+        if (!$task->get_disabled()) {
+            if ($config->blockstate != 'locked') {
+                $taskdate = $task->get_next_run_time();
+                $this->content->footer .= get_string('opentill', 'block_course_recycle', userdate($taskdate));
+            } else {
+                $this->content->footer .= get_string('choicelocked', 'block_course_recycle');
+            }
         }
 
         $contextsystem = context_system::instance();

@@ -68,3 +68,8 @@ will be performed on this course at this date. If you do NOT choose, your course
 
 Browse <a href="%COURSEURL%">in your course</a> to choose the course action or to stop notifications.
 ';
+
+$string['configblockstate_desc'] = 'This state variable controls the overall behaviour cycle of the block in any course. the block has a single site
+wide internal workflow that will affect all block instances in the site. Administrators may change the state for setup. State changes are
+driven by course recycle associated scheduled tasks.
+';
