@@ -44,8 +44,19 @@ class reset_task extends \core\task\scheduled_task {
     public function execute() {
         global $DB;
 
+        $config = get_config('block_course_recycle');
+
         set_config('blockstate', 'inactive', 'block_course_recycle');
 
-        $DB->delete_records('block_course_recycle');
+        $instances = $DB->get_records('block_instances', array('blockname' => 'course_recycle'));
+        if ($instances) {
+            foreach ($înstances as $instancerec) {
+                $bi = block_instance('course_recycle', $instancerec);
+                $bi->config->recycleaction = $config->defaultaction;
+                $bi->config->choicedone = false;
+                $bi->config->stopnotify = false;
+                $bi->instance_config_save();
+            }
+        }
     }
 }

@@ -93,7 +93,7 @@ class block_course_recycle extends block_base {
 
         $this->content->text = '';
         $this->content->text .= $OUTPUT->box_start('', 'block-recycle-state');
-        $this->content->text .= $renderer->recyclebutton($this->config->recycleaction);
+        $this->content->text .= $renderer->recyclebutton($this->config->recycleaction, $this->instance->id);
         $this->content->text .= $OUTPUT->box_end();
 
         $this->content->footer = '';
@@ -111,7 +111,7 @@ class block_course_recycle extends block_base {
         $contextsystem = context_system::instance();
         if (has_capability('moodle/site:config', $contextsystem)) {
             $this->content->footer .= '<br/>';
-            $indexurl = new moodle_url('/block/courserecycle/index.php', array('courseid' => $COURSE->id));
+            $indexurl = new moodle_url('/blocks/course_recycle/index.php', array('courseid' => $COURSE->id));
             $this->content->footer .= '<a href="'.$indexurl.'">'.get_string('recycle', 'block_course_recycle').'</a>';
         }
 

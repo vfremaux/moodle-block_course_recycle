@@ -23,7 +23,7 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-function block_recycle_get_instances(&$globals) {
+function block_course_recycle_get_instances(&$globals) {
     global $DB;
 
     $page = optional_param('page', 0, PARAM_INT);
@@ -47,16 +47,32 @@ function block_recycle_get_instances(&$globals) {
 
     $instances = $DB->get_records_sql($sql, array());
 
+    $globalconfig = get_config('block_course_recycle');
+
     $globals['throw'] = 0;
+    $globals['archive'] = 0;
     $globals['keep'] = 0;
     $globals['reset'] = 0;
     $globals['unset'] = 0;
     foreach ($instances as $id => $instance) {
         $config = unserialize(base64_decode($instance->configdata));
-        $instances[$id]->recycle = $config->recycleaction;
-        switch ($config->recycleaction) {
+
+        if ($config) {
+            $recycleaction = $config->recycleaction;
+        } else {
+            $recycleaction = $globalconfig->defaultaction;
+        }
+
+        $instances[$id]->recycle = $recycleaction;
+
+        switch ($recycleaction) {
             case 'throw': {
                 $globals['throw']++;
+                break;
+            }
+
+            case 'archive': {
+                $globals['archive']++;
                 break;
             }
 

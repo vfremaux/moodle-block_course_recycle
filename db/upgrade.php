@@ -30,6 +30,5 @@ defined('MOODLE_INTERNAL') || die();
  * @param object $block
  */
 function xmldb_block_course_recycle_upgrade($oldversion) {
-
     return true;
 }
