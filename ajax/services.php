@@ -29,14 +29,14 @@ $id = required_param('id', PARAM_INT); // Block id.
 $course = required_param('course', PARAM_INT); // Course id.
 
 if (!$course = $DB->get_record('course', array('id' => $course))) {
-    die;
+    die("No course");
 }
 
 if (!$blockrec = $DB->get_record('block_instances', array('id' => $id))) {
-    die;
+    die("No block");
 }
 
-$context = context_block::instance($course->id);
+$context = context_block::instance($id);
 $coursecontext = context_course::instance($course->id);
 
 require_login($course);
@@ -44,7 +44,7 @@ require_login($course);
 $action = required_param('what', PARAM_ALPHA); // MCD command.
 
 if ($action == 'change') {
-    $recycleaction = required_param('action', PARAM_ALPHA);
+    $recycleaction = required_param('state', PARAM_ALPHA);
 
     $PAGE->set_context($coursecontext);
     $renderer = $PAGE->get_renderer('block_course_recycle');
@@ -52,15 +52,15 @@ if ($action == 'change') {
     $block = block_instance('course_recycle', $blockrec);
     $block->config->recycleaction = $recycleaction;
     $block->config->choicedone = true;
-    $block->instance_save_config($block->config);
+    $block->instance_config_save($block->config);
 
-    echo $renderer->recyclebutton($recycleaction);
+    echo $renderer->recyclebutton($recycleaction, $id);
     die;
 }
 if ($action == 'stopnotify') {
     $block = block_instance('course_recycle', $blockrec);
     $block->config->stopnotify = true;
-    $block->instance_save_config($block->config);
+    $block->instance_config_save($block->config);
     die;
 }
 if ($action == 'stopnotifyall') {
