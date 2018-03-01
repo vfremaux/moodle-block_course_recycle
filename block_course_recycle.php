@@ -47,6 +47,16 @@ class block_course_recycle extends block_base {
         return false;
     }
 
+    public function hide_header() {
+        $config = get_config('block_course_recycle');
+
+        $systemcontext = context_system::instance();
+
+        if ($config->blockstate == 'inactive' && !has_capability('moodle/site:config', $systemcontext)) {
+            return true;
+        }
+    }
+
     public function get_content() {
         global $PAGE, $OUTPUT, $COURSE;
 
@@ -152,6 +162,9 @@ class block_course_recycle extends block_base {
         $PAGE->requires->js('/blocks/course_recycle/js/recycle.js');
     }
 
+    /*
+     * Obsolete using programmed task for global scheduling
+     *
     public static function compare_date($d1, $d2) {
 
         $date1 = get_date($d1);
@@ -180,5 +193,49 @@ class block_course_recycle extends block_base {
         if ($date1['hours'] < $date2['hours']) {
             return false;
         }
+    }
+    */
+
+    public function crontask() {
+        global $DB;
+
+        $recycles = $DB->get_records('block_instances', array('blockname' => 'course_recycle'));
+
+        if (!empty($recycles)) {
+            foreach ($recycle as $rc) {
+                $blockconfig = base64_decode($rc->configdata);
+
+                if ($blockconfig->choicedone) {
+                    switch ($blockconfig) {
+                        case 'throw': {
+                            // Get the course :
+                            $context = context::get_from_id($blockconfig->parentcontextid);
+                            $course = $DB->get_record('course', array('id' => $context->instanceid));
+                            // Delete.
+                            course_delete_course($course, false); // Do not show feedback.
+                            break;
+                        }
+
+                        case 'reset': {
+                            $data = new StdClass;
+                            // ... TODO : Fill all resetdata subkeys. (As many as possible)
+                            $data->courseid = $course->id;
+                            reset_course_userdata($data);
+                            break;
+                        }
+
+                        case 'keep': {
+                            break;
+                        }
+
+                        case 'archive': {
+                            // Activate the archive active plugin strategy.
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -44,6 +44,11 @@ class recycle_task extends \core\task\scheduled_task {
     public function execute() {
         global $CFG;
 
+        /* Actually performs the recycle operations.
+         * This task should be limited in processing duration/amount of units processed. It will 
+         * run again until all block instances have not been processed.
+         */
+
         require_once($CFG->dirroot.'/blocks/course_recycle/block_course_recycle.php');
         \block_course_recycle::crontask();
     }

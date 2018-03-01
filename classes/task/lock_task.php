@@ -42,6 +42,7 @@ class lock_task extends \core\task\scheduled_task {
      * Do the job.
      */
     public function execute() {
+        // Turns on all blocks to lock state.
         set_config('blockstate', 'locked', 'block_course_recycle');
     }
 }
