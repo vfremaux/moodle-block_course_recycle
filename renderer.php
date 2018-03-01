@@ -64,34 +64,34 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         switch ($recycleaction) {
             case 'throw': {
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'keep\');';
-                $title = get_string('throw', 'block_course_recycle');
-                $pix = $this->output->pix_icon('throw'.$suffix, $title, 'block_course_recycle');
-                $str .= '<center><a href="'.$ajax.'" title="'.$title.'">'.$pix.'</a></center>';
+                $pixurl = $this->output->pix_url('throw'.$suffix, 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('throw', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
             }
 
             case 'keep': {
-                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'reset\');';
-                $title = get_string('keep', 'block_course_recycle');
-                $pix = $this->output->pix_icon('keep'.$suffix, $title, 'block_course_recycle');
-                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></center>';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'archive\');';
+                $pixurl = $this->output->pix_url('keep'.$suffix, 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('keep', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
             }
 
             case 'archive': {
-                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'archive\');';
-                $title = get_string('archive', 'block_course_recycle');
-                $pix = $this->output->pix_icon('archive'.$suffix, $title, 'block_course_recycle');
-                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></center>';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'reset\');';
+                $pixurl = $this->output->pix_url('archive'.$suffix, 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('archive', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
                 break;
             }
 
             case 'reset':
             default :
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'throw\');';
-                $title = get_string('reset', 'block_course_recycle');
-                $pix = $this->output->pix_url('reset'.$suffix, $title, 'block_course_recycle');
-                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></center>';
+                $pixurl = $this->output->pix_url('reset'.$suffix, 'block_course_recycle');
+                $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('reset', 'block_course_recycle').'"/>';
+                $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
         }
 
         return $str;
