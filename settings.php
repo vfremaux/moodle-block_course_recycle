@@ -31,7 +31,7 @@ if ($ADMIN->fulltree) {
                     'remind3' => get_string('reminded3', 'block_course_recycle'),
                     'locked' => get_string('locked', 'block_course_recycle'),
                     'inactive' => get_string('inactive', 'block_course_recycle'));
-    $settings->add(new admin_setting_configselect($key, $label, $desc,'visible', $states));
+    $settings->add(new admin_setting_configselect($key, $label, $desc, 'inactive', $states));
 
     $actionoptions = array(
         '0' => get_string('keep', 'block_course_recycle'),
@@ -61,4 +61,10 @@ if ($ADMIN->fulltree) {
     $desc = get_string('confignotificationtext_desc', 'block_course_recycle');
     $default = get_string('defaultnotification_tpl', 'block_course_recycle');
     $settings->add(new admin_setting_configtextarea($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/instancesperrun';
+    $label = get_string('configinstancesperrun', 'block_course_recycle');
+    $desc = get_string('configinstancesperrun_desc', 'block_course_recycle');
+    $default = 20;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
 }
