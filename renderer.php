@@ -20,15 +20,15 @@ class block_course_recycle_renderer extends plugin_renderer_base {
 
     public function globalstable(&$globals) {
 
-        $throwstr = get_string('throw', 'block_course_recycle');
-        $archivestr = get_string('archive', 'block_course_recycle');
-        $keepstr = get_string('keep', 'block_course_recycle');
-        $resetstr = get_string('reset', 'block_course_recycle');
-        $unsetstr = get_string('unset', 'block_course_recycle');
+        $throwstr = get_string('throwhdr', 'block_course_recycle');
+        $archivestr = get_string('archivehdr', 'block_course_recycle');
+        $keepstr = get_string('keephdr', 'block_course_recycle');
+        $resetstr = get_string('resethdr', 'block_course_recycle');
+        $unsetstr = get_string('unsethdr', 'block_course_recycle');
 
         $str = '';
 
-        $str .= '<table><tr>';
+        $str .= '<table class="generaltable"><tr>';
         $str .= '<th class="header">'.$throwstr.'</th>';
         $str .= '<th class="header">'.$archivestr.'</th>';
         $str .= '<th class="header">'.$keepstr.'</th>';
@@ -41,6 +41,12 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         $str .= '<td class="header">'.$globals['reset'].'</td>';
         $str .= '<td class="header">'.$globals['unset'].'</td>';
         $str .= '</tr></table>';
+
+        return $str;
+    }
+
+    public function recyclestates($recycleinstances) {
+        return "Still in development";
     }
 
     public function recyclebutton($recycleaction, $blockid) {
@@ -65,7 +71,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             }
 
             case 'keep': {
-                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'reset\');';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'archive\');';
                 $pixurl = $this->output->pix_url('keep'.$suffix, 'block_course_recycle');
                 $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('keep', 'block_course_recycle').'"/>';
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';
@@ -73,7 +79,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             }
 
             case 'archive': {
-                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'archive\');';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'reset\');';
                 $pixurl = $this->output->pix_url('archive'.$suffix, 'block_course_recycle');
                 $pix = '<img width="30%" src="'.$pixurl.'" title="'.get_string('archive', 'block_course_recycle').'"/>';
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></centrer>';

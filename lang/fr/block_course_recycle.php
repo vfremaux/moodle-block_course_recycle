@@ -36,6 +36,8 @@ $string['configdefaultaction'] = 'Action par défaut ';
 $string['confignumberofnotifications'] = 'Notifications ';
 $string['configrecycleaction'] = 'Action de recyclage ';
 $string['configchoicedone'] = 'Choix enregistré';
+$string['configstopnotify'] = 'Ne plus envoyer de rappels';
+$string['configinstancesperrun'] = 'Nombre de cours par cron.';
 $string['inactive'] = 'Caché';
 $string['keep'] = 'En fin de période, conserver sans aucune modification';
 $string['locked'] = 'Verrouilé';
@@ -54,6 +56,12 @@ $string['task_show'] = 'Recyclage des cours : Activation des choix';
 $string['task_reset'] = 'Recyclage des cours : Réinitialisation';
 $string['task_lock'] = 'Recyclage des cours : Verrouillage des choix';
 $string['throw'] = 'En fin de période, supprimer';
+
+$string['throwhdr'] = 'Supprimer';
+$string['resethdr'] = 'Réinitialiser';
+$string['archivehdr'] = 'Archiver';
+$string['keephdr'] = 'Conserver tel quel';
+$string['unsethdr'] = 'Non déterminé';
 
 $string['defaultnotification_title_tpl'] = 'Avis de fin de période %NOTIF% : %COURSE%';
 $string['defaultnotification_tpl'] = 'Ce cours va devoir être recyclé le %TASKDATE%. Vous pouvez encore choisir quelle action sera
@@ -76,3 +84,5 @@ Le composant a un automate unique valable pour tout le site qui affecte la phase
 Les administrateurs peuvent changer l\'état pour une mise en place. Les états sont ensuite modifiés par la programmation de tâches
 programmées associées au module.
 ';
+
+$string['configinstancesperrun_desc'] = 'Nombre de cours recyclés par exécution de cron.';

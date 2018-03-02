@@ -15,21 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
  * @package     block_course_recycle
  * @category    blocks
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   1999 onwards Martin Dougiamas  http://dougiamas.com
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017051600;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2016120500;        // Requires this Moodle version.
-$plugin->component = 'block_course_recycle'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '(3.2.0 (Build 2017051600)';
-$plugin->maturity = MATURITY_STABLE;
-
-// Non moodle attributes.
-$plugin->codeincrement = '3.2.0000';
+/**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function block_course_recycle_supports_feature($feature) {
+    assert(1);
+}

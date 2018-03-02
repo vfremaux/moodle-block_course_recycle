@@ -62,7 +62,7 @@ if ($countinstances > $pagesize) {
 }
 
 echo '<center>';
-$buttonurl = new moodle_url('/couse/view.php', array('id' => $courseid));
+$buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
 echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
 echo '</center>';
 
