@@ -90,7 +90,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             default :
                 $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$blockid.', '.$USER->id.', \'throw\');';
                 $title = get_string('reset', 'block_course_recycle');
-                $pix = $this->output->pix_url('reset'.$suffix, $title, 'block_course_recycle');
+                $pix = $this->output->pix_icon('reset'.$suffix, $title, 'block_course_recycle');
                 $str .= '<center><a href="'.$ajax.'">'.$pix.'</a></center>';
         }
 
