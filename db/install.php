@@ -15,21 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
- *
- * @package     block_course_recycle
- * @category    blocks
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package block_course_recycle
+ * @category blocks
+ * @author Valery Fremaux (valery.fremaux@gmail.com)
+ * @license http://www.gnu.org/copyleft/gpl.html GNU GPL
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017051600;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2016051900;        // Requires this Moodle version.
-$plugin->component = 'block_course_recycle'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '(3.1.0 (Build 2017051600)';
-$plugin->maturity = MATURITY_STABLE;
-
-// Non moodle attributes.
-$plugin->codeincrement = '3.1.0000';
+/**
+ * Setup initial value of global state.
+ *
+ */
+function xmldb_block_course_recycle_install() {
+    // Set the initial state for all bloc instances.
+    set_config('blockstate', 'inactive', 'block_course_recycle');
+}

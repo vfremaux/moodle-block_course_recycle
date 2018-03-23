@@ -38,11 +38,20 @@ class block_course_recycle_edit_form extends block_edit_form {
 
         $options = array(
             'throw' => get_string('throw', 'block_course_recycle'),
+            'archive' => get_string('archive', 'block_course_recycle'),
             'reset' => get_string('reset', 'block_course_recycle'),
             'keep' => get_string('keep', 'block_course_recycle'),
         );
         $label = get_string('configrecycleaction', 'block_course_recycle');
         $mform->addElement('select', 'config_recycleaction', $label, $options, 'reset');
+
+        $label = get_string('configstopnotify', 'block_course_recycle');
+        $default = false;
+        $mform->addElement('checkbox', 'config_stopnotify', $label, $default);
+
+        $label = get_string('configchoicedone', 'block_course_recycle');
+        $default = false;
+        $mform->addElement('checkbox', 'config_choicedone', $label, $default);
     }
 
 }

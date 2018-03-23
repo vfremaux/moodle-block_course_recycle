@@ -25,52 +25,43 @@ define('AJAX_SCRIPT', 1);
 
 require('../../../config.php');
 
-$id = required_param('id', PARAM_INT); // Course id.
+$id = required_param('id', PARAM_INT); // Block id.
+$course = required_param('course', PARAM_INT); // Course id.
 
-if (!$course = $DB->get_record('course', array('id' => $id))) {
-    die;
+if (!$course = $DB->get_record('course', array('id' => $course))) {
+    die("No course");
 }
 
-$context = context_course::instance($course->id);
+if (!$blockrec = $DB->get_record('block_instances', array('id' => $id))) {
+    die("No block");
+}
+
+$context = context_block::instance($id);
+$coursecontext = context_course::instance($course->id);
 
 require_login($course);
 
 $action = required_param('what', PARAM_ALPHA); // MCD command.
 
 if ($action == 'change') {
-    $recycleaction = required_param('action', PARAM_ALPHA);
-    $userid = required_param('userid', PARAM_INT);
+    $recycleaction = required_param('state', PARAM_ALPHA);
 
-    $PAGE->set_context($context);
+    $PAGE->set_context($coursecontext);
     $renderer = $PAGE->get_renderer('block_course_recycle');
 
-    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id))) {
-        $oldrec->userid = $userid;
-        $oldrec->recycleaction = $recycleaction;
-        $DB->update_record('block_course_recycle', $oldrec);
-    } else {
-        $rec = new StdClass;
-        $rec->userid = $userid;
-        $rec->courseid = $course->id;
-        $rec->recycleaction = $recycleaction;
-        $DB->insert_record('block_course_recycle', $rec);
-    }
-    echo $renderer->recyclebutton($recycleaction);
+    $block = block_instance('course_recycle', $blockrec);
+    $block->config->recycleaction = $recycleaction;
+    $block->config->choicedone = true;
+    $block->instance_config_save($block->config);
+
+    echo $renderer->recyclebutton($recycleaction, $id);
     die;
 }
 if ($action == 'stopnotify') {
-    $courseid = required_param('id', PARAM_INT);
-    if ($oldrec = $DB->get_record('block_course_recycle', array('courseid' => $course->id))) {
-        $oldrec->stopnotify = true;
-        $DB->update_record('block_course_recycle', $oldrec);
-    } else {
-        $rec = new StdClass;
-        $rec->userid = $userid;
-        $rec->courseid = $courseid;
-        $rec->recycleaction = $recycleaction;
-        $oldrec->stopnotify = true;
-        $DB->insert_record('block_course_recycle', $rec);
-    }
+    $block = block_instance('course_recycle', $blockrec);
+    $block->config->stopnotify = true;
+    $block->instance_config_save($block->config);
+    die;
 }
 if ($action == 'stopnotifyall') {
     // Stop notifications for this user.

@@ -29,6 +29,7 @@ $string['course_recycle:admin'] = 'Administrate Course Recycling';
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ensure an instance is available in all courses';
 $string['archive'] = 'At end of session, archive the course';
+$string['backtocourse'] = 'Return to course';
 $string['atendofsession'] = 'At end of session';
 $string['choicelocked'] = 'Choice are now closed. Contact our administrators.';
 $string['configblockstate'] = 'Block state';
@@ -38,6 +39,10 @@ $string['configlockdate'] = 'Date of choice lock';
 $string['confignotificationtext'] = 'Notification text ';
 $string['confignumberofnotifications'] = 'Notifications ';
 $string['configrecycleaction'] = 'Recycling action ';
+$string['configinstancesperrun'] = 'Instances per run';
+$string['configchoicedone'] = 'Choice done';
+$string['configstopnotify'] = 'Stop notify';
+$string['unset'] = 'Unset';
 $string['inactive'] = 'Hidden';
 $string['keep'] = 'At end of session, keep unchanged';
 $string['locked'] = 'Locked';
@@ -54,6 +59,12 @@ $string['task_lock'] = 'Recycle lock choices';
 $string['task_show'] = 'Recycle activate blocks';
 $string['task_reset'] = 'Recycle process cycle reset';
 $string['throw'] = 'At end of session, delete the course';
+
+$string['throwhdr'] = 'Delete';
+$string['resethdr'] = 'Reinitialize';
+$string['archivehdr'] = 'Archive';
+$string['keephdr'] = 'Keep without change';
+$string['unsethdr'] = 'Not set';
 
 $string['confignumberofnotifications_desc'] = 'The amount of messages that will be sent to the course editing teachers
 before the task scheduling date. Notifications will be sent at 15 days interval.';
@@ -73,3 +84,5 @@ $string['configblockstate_desc'] = 'This state variable controls the overall beh
 wide internal workflow that will affect all block instances in the site. Administrators may change the state for setup. State changes are
 driven by course recycle associated scheduled tasks.
 ';
+
+$string['configinstancesperrun_desc'] = 'Number of courses instances being recycled per cron run.';

@@ -22,10 +22,12 @@
  * @copyright 1999 onwards Martin Dougiamas (http://dougiamas.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 require('../../config.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
 
-$url = new moodle_url('/blocks/course_recycle/index.php');
+$courseid = required_param('courseid', PARAM_INT);
+
+$url = new moodle_url('/blocks/course_recycle/index.php', array('courseid' => $courseid));
 $PAGE->set_url($url);
 
 $context = context_system::instance();
@@ -34,7 +36,7 @@ $PAGE->set_context($context);
 // Security.
 
 require_login();
-require_capability('block/recycle:admin');
+require_capability('moodle/site:config', $context);
 
 $PAGE->set_heading(get_string('pluginname', 'block_course_recycle'));
 $PAGE->set_title(get_string('pluginname', 'block_course_recycle'));
@@ -43,11 +45,11 @@ $countinstances = $DB->count_records('block_instances', array('blockname' => 'co
 
 $pagesize = 40;
 
-$recycleinstances = block_recycle_get_instances($globals);
+$recycleinstances = block_course_recycle_get_instances($globals);
 
 $renderer = $PAGE->get_renderer('block_course_recycle');
 
-echo $PAGE->header();
+echo $OUTPUT->header();
 
 echo $renderer->globalstable($globals);
 
@@ -59,4 +61,9 @@ if ($countinstances > $pagesize) {
     echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
 }
 
-echo $PAGE->footer();
+echo '<center>';
+$buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
+echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
+echo '</center>';
+
+echo $OUTPUT->footer();

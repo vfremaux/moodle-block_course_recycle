@@ -42,6 +42,7 @@ class show_task extends \core\task\scheduled_task {
      * Do the job.
      */
     public function execute() {
+        // Set all blocs to active state (showing).
         set_config('blockstate', 'active', 'block_course_recycle');
     }
 }

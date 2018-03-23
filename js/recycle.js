@@ -3,10 +3,14 @@
  */
 // jshint undef:false, unused:false
 
-function ajax_recycle_change_action(courseid, userid, action) {
+function ajax_recycle_change_action(courseid, blockid, userid, state) {
 
     var url = M.cfg.wwwroot + '/blocks/course_recycle/ajax/services.php?';
-    url += 'id=' + courseid + '&userid=' + userid + '&what=change&action=' + action;
+    url += 'course=' + courseid;
+    url += '&id=' + blockid;
+    url += '&userid=' + userid;
+    url += '&what=change';
+    url += '&state=' + state;
 
     $.get(url, function(data) {
         $('#block-recycle-state').html(data);
