@@ -14,16 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
- * locallib.php - Component local library
- * @package    block_course_recycle
- * @category   blocks
- * @author Valery Fremaux (valery.fremaux@gmail.com)
- * @copyright  1999 onwards Martin Dougiamas  http://dougiamas.com
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     block_course_recycle
+ * @category    blocks
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2013 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 function block_recycle_get_instances(&$globals) {
     global $DB;

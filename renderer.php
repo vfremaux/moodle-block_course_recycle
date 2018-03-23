@@ -14,6 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package     block_course_recycle
+ * @category    blocks
+ * @author      Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright   2013 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 defined('MOODLE_INTERNAL') || die();
 
 class block_course_recycle_renderer extends plugin_renderer_base {
@@ -45,21 +52,27 @@ class block_course_recycle_renderer extends plugin_renderer_base {
 
         $str = '<div id="block-recycle-state">';
 
-        switch($theblock->config->recycleaction) {
+        switch ($theblock->config->recycleaction) {
             case 'throw':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'keep\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('throw', 'block_course_recycle').'" title="'.get_string('throw', 'block_course_recycle').'"/></a></centrer>';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'keep\');';
+                $pixurl = $OUTPUT->pix_url('throw', 'block_course_recycle');
+                $title = get_string('throw', 'block_course_recycle');
+                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$pixurl.'" title="'.$title.'"/></a></centrer>';
                 break;
-    
+
             case 'keep':
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'reset\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('keep', 'block_course_recycle').'" title="'.get_string('keep', 'block_course_recycle').'"/></a></centrer>';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'reset\');';
+                $pixurl = $OUTPUT->pix_url('keep', 'block_course_recycle');
+                $title = get_string('keep', 'block_course_recycle');
+                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$pixurl.'" title="'.$title.'"/></a></centrer>';
                 break;
-    
+
             case 'reset':
             default :
-                $ajax = 'javascript:ajax_recycle_change_action(\''.$CFG->wwwroot.'\', '.$COURSE->id.', '.$USER->id.', \'throw\');';
-                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$OUTPUT->pix_url('reset', 'block_course_recycle').'" title="'.get_string('reset', 'block_course_recycle').'"/></a></centrer>';
+                $ajax = 'javascript:ajax_recycle_change_action('.$COURSE->id.', '.$USER->id.', \'throw\');';
+                $pixurl = $OUTPUT->pix_url('reset', 'block_course_recycle');
+                $title = get_string('reset', 'block_course_recycle');
+                $str .= '<center><a href="'.$ajax.'"><img width="30%" src="'.$pixurl.'" title="'.$title.'"/></a></centrer>';
         }
 
         return $str;

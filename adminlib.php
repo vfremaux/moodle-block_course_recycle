@@ -59,7 +59,7 @@ class admin_setting_configdatetime extends \admin_setting {
     public function get_setting() {
         $result = $this->config_read($this->name);
 
-        $datearr = getdate($result);
+        $datearr = getdate(0 + $result);
 
         $data = array('h' => $datearr['hours'],
             'm' => $datearr['minutes'],
@@ -80,7 +80,7 @@ class admin_setting_configdatetime extends \admin_setting {
             return '';
         }
 
-        $datetime = mktime($data['h'], $data['m'], 0, $data['M'], $data['d'], $data['y']);
+        $datetime = mktime(0 + $data['h'], 0 + $data['m'], 0, 0 + $data['M'], 0 + $data['d'], 0 + $data['y']);
 
         $result = $this->config_write($this->name, $datetime);
         return ($result ? '' : get_string('errorsetting', 'admin'));
@@ -116,7 +116,8 @@ class admin_setting_configdatetime extends \admin_setting {
         if (empty($this->options['ymask'])) {
             $return .= '<select id="'.$this->get_id().'y" name="'.$this->get_full_name().'[y]">';
             for ($i = 2010; $i < 2030; $i++) {
-                $return .= '<option value="'.$i.'"'.($i == $data['y'] ? ' selected="selected"' : '').'>'.$i.'</option>';
+                $selected = ($i == $data['y']) ? ' selected="selected"' : '';
+                $return .= '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
             }
         } else {
             // We do not care really of the year, but need one to record the date in settings.
@@ -126,26 +127,30 @@ class admin_setting_configdatetime extends \admin_setting {
 
         $return .= '<select id="'.$this->get_id().'M" name="'.$this->get_full_name().'[M]">';
         for ($i = 1; $i <= 12; $i++) {
-            $return .= '<option value="'.$i.'"'.($i == $data['M'] ? ' selected="selected"' : '').'>'.sprintf('%02d', $i).'</option>';
+            $selected = ($i == $data['M']) ? ' selected="selected" ' : '';
+            $return .= '<option value="'.$i.'" '.$selected.'>'.sprintf('%02d', $i).'</option>';
         }
         $return .= '</select>';
 
         $return .= '<select id="'.$this->get_id().'d" name="'.$this->get_full_name().'[d]">';
         for ($i = 1; $i <= 31; $i++) {
-            $return .= '<option value="'.$i.'"'.($i == $data['d'] ? ' selected="selected"' : '').'>'.sprintf('%02d', $i).'</option>';
+            $selected = ($i == $data['d']) ? ' selected="selected"' : '';
+            $return .= '<option value="'.$i.'"'.$selected.'>'.sprintf('%02d', $i).'</option>';
         }
         $return .= '</select>';
 
         if (empty($this->options['tmask'])) {
             $return .= '<select id="'.$this->get_id().'h" name="'.$this->get_full_name().'[h]">';
             for ($i = 0; $i < 24; $i++) {
-                $return .= '<option value="'.$i.'"'.($i == $data['h'] ? ' selected="selected"' : '').'>'.$i.'</option>';
+                $selected = ($i == $data['h']) ? ' selected="selected"' : '';
+                $return .= '<option value="'.$i.'" '.$selected.'>'.$i.'</option>';
             }
             $return .= '</select>';
 
             $return .= ':<select id="'.$this->get_id().'m" name="'.$this->get_full_name().'[m]">';
             for ($i = 0; $i < 60; $i += 5) {
-                $return .= '<option value="'.$i.'"'.($i == $data['m'] ? ' selected="selected"' : '').'>'.$i.'</option>';
+                $selected = ($i == $data['m']) ? ' selected="selected"' : '';
+                $return .= '<option value="'.$i.'"'.$selected.'>'.$i.'</option>';
             }
             $return .= '</select>';
         } else {
