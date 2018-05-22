@@ -67,4 +67,37 @@ if ($ADMIN->fulltree) {
     $desc = get_string('configinstancesperrun_desc', 'block_course_recycle');
     $default = 20;
     $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/archivestrategy';
+    $label = get_string('configarchivestrategy', 'block_course_recycle');
+    $desc = get_string('configarchivestrategy_desc', 'block_course_recycle');
+    $archiveoptions = array('backup' => get_string('backup'));
+    if (is_dir($CFG->dirroot.'/blocks/publishflow')) {
+        $archiveoptions['publishflow'] = get_string('pluginname', 'block_publishflow');
+    }
+    $default = 'backup';
+    $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $archiveoptions));
+
+    if (is_dir($CFG->dirroot.'/blocks/publishflow')) {
+        include_once($CFG->dirroot.'/blocks/publishflow/xlib.php');
+        $key = 'block_course_recycle/archivefactory';
+        $label = get_string('configarchivefactory', 'block_course_recycle');
+        $desc = get_string('configarchivefactory_desc', 'block_course_recycle');
+        $archivefactoryoptions = block_publishflow_get_factories();
+        if ($archivefactoryoptions) {
+            $settings->add(new admin_setting_configselect($key, $label, $desc, '', $archivefactoryoptions));
+        }
+    }
+
+    $key = 'block_course_recycle/archivesbackupdir';
+    $label = get_string('configarchivesbackupdir', 'block_course_recycle');
+    $desc = get_string('configarchivesbackupdir_desc', 'block_course_recycle');
+    $default = '';
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/recyclelogfile';
+    $label = get_string('configlogfile', 'block_course_recycle');
+    $desc = get_string('configlogfile_desc', 'block_course_recycle');
+    $default = '%DATAROOT%/recycle.log';
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
 }

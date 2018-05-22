@@ -34,7 +34,6 @@ $string['atendofsession'] = 'At end of session';
 $string['choicelocked'] = 'Choice are now closed. Contact our administrators.';
 $string['configblockstate'] = 'Block state';
 $string['configdefaultaction'] = 'Default action ';
-$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
 $string['configlockdate'] = 'Date of choice lock';
 $string['confignotificationtext'] = 'Notification text ';
 $string['confignumberofnotifications'] = 'Notifications ';
@@ -42,6 +41,15 @@ $string['configrecycleaction'] = 'Recycling action ';
 $string['configinstancesperrun'] = 'Instances per run';
 $string['configchoicedone'] = 'Choice done';
 $string['configstopnotify'] = 'Stop notify';
+$string['configarchivestrategy'] = 'Archiving strategy';
+$string['configarchivefactory'] = 'Archiving factory';
+$string['configarchivesbackupdir'] = 'Log file';
+$string['configlogfile'] = 'Log file';
+$string['configarchivestrategy_desc'] = 'Archiving strategy';
+$string['configarchivefactory_desc'] = 'Archiving factory';
+$string['configarchivesbackupdir_desc'] = 'Log file';
+$string['configlogfile_desc'] = 'Log file';
+$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
 $string['unset'] = 'Unset';
 $string['inactive'] = 'Hidden';
 $string['keep'] = 'At end of session, keep unchanged';
@@ -86,3 +94,16 @@ driven by course recycle associated scheduled tasks.
 ';
 
 $string['configinstancesperrun_desc'] = 'Number of courses instances being recycled per cron run.';
+
+$string['configarchivestrategy_desc'] = 'Archiving strategy for courses. The default strategy backup the courses into
+an archiving dedicated location on the filesystem. Other plugins may provide alternative archiving strategies
+(e.g. publisflow block)';
+
+$string['configarchivefactory_desc'] = 'If the Publishflow block is used, chooses one available factory as archiving moodle instance.';
+
+$string['configarchivesbackupdir_desc'] = 'A file system location where to save archive course backups. It should be given as an absolute path
+in the local file system and the recycle task should be able to write and create files inside.';
+
+$string['configlogfile_desc'] = 'the location of an optional log file for recycling operations. If empty,
+then no log will be performed. the path is usually an absolute path to a writable directory, but can be given relatively to moodle\'s
+file storage by prefixing the path with %DATAROOT%';
