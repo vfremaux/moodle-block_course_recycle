@@ -38,6 +38,13 @@ $string['configrecycleaction'] = 'Action de recyclage ';
 $string['configchoicedone'] = 'Choix enregistré';
 $string['configstopnotify'] = 'Ne plus envoyer de rappels';
 $string['configinstancesperrun'] = 'Nombre de cours par cron.';
+<<<<<<< HEAD
+=======
+$string['configarchivestrategy'] = 'Stratégie d\'archivage';
+$string['configarchivefactory'] = 'Plate-forme d\'archive';
+$string['configarchivesbackupdir'] = 'Répertoire de stockage des archives';
+$string['configlogfile'] = 'Fichier journal du recyclage';
+>>>>>>> MOODLE_35_STABLE
 $string['inactive'] = 'Caché';
 $string['keep'] = 'En fin de période, conserver sans aucune modification';
 $string['locked'] = 'Verrouilé';
@@ -86,3 +93,19 @@ programmées associées au module.
 ';
 
 $string['configinstancesperrun_desc'] = 'Nombre de cours recyclés par exécution de cron.';
+<<<<<<< HEAD
+=======
+
+$string['configarchivestrategy_desc'] = 'Stratégie d\'archivage des cours. La stratégie par défaut est la génération d\'une sauvegarde
+particulière dans un répertoire dédié aux archives. D\'autres plugins tiers peuvent proposer des méthodes d\'archivage alternatives
+(C.f. bloc publisflow)';
+
+$string['configarchivefactory_desc'] = 'Si le bloc Publishflow est installé, une des "fabriques" disponibles servant de plate-forme d\'archives.';
+
+$string['configarchivesbackupdir_desc'] = 'Un répertoire système où stocker les sauvegardes d\'archive pour la stratégie standard. Il doit être
+indiqué par son chemin absolu dans le système eet doit être inscriptible par le propriétaire de la tâche de recyclage.';
+
+$string['configlogfile_desc'] = 'L\'emplacement d\'un éventuel fichier journal pour logger le résultat du recyclage. Si il est vide, 
+aucune journalisation ne sera faite. Le chemin peut être déterminé relativement au répertoire de fichiers de Moodle en commençant le chemin
+par %DATAROOT%';
+>>>>>>> MOODLE_35_STABLE

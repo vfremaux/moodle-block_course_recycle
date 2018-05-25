@@ -199,6 +199,14 @@ class block_course_recycle extends block_base {
     public function crontask() {
         global $DB;
 
+        $config = get_config('block_course_recycle');
+
+        $f = null;
+        if (!empty($config->logfile)) {
+            $config->logfile = str_replace('%DATAROOT%', $CFG->dataroot, $config->logfile);
+            $f = fopen($logfile, 'w');
+        }
+
         $recycles = $DB->get_records('block_instances', array('blockname' => 'course_recycle'));
 
         if (!empty($recycles)) {
@@ -212,7 +220,14 @@ class block_course_recycle extends block_base {
                             $context = context::get_from_id($blockconfig->parentcontextid);
                             $course = $DB->get_record('course', array('id' => $context->instanceid));
                             // Delete.
+                            if ($f) {
+                                fputs($f, 'RECYCLE DELETE course '.$context->instanceid."\n");
+                            }
                             course_delete_course($course, false); // Do not show feedback.
+                            if ($f) {
+                                fputs($f, "Deleted.\n");
+                            }
+
                             break;
                         }
 
@@ -220,21 +235,62 @@ class block_course_recycle extends block_base {
                             $data = new StdClass;
                             // ... TODO : Fill all resetdata subkeys. (As many as possible)
                             $data->courseid = $course->id;
+
+                            if ($f) {
+                                fputs($f, 'RECYCLE RESETTING course '.$context->instanceid."\n");
+                            }
                             reset_course_userdata($data);
+                            if ($f) {
+                                fputs($f, "Reset.\n");
+                            }
+
                             break;
                         }
 
                         case 'keep': {
+
+                            if ($f) {
+                                fputs($f, 'RECYCLE KEEPING course '.$context->instanceid."\n");
+                                fputs($f, "No op.\n");
+                            }
+
                             break;
                         }
 
                         case 'archive': {
                             // Activate the archive active plugin strategy.
+
+                            if ($config->archivestrategy == 'backup') {
+                                // Standard backup automation.
+                            } else if ($config->archivestrategy == 'publishflow') {
+                                // Pushes the course to a publishflow equiped platform.
+                                include_once($CFG->dirroot.'/blocks/publishflow/xlib.php');
+                                if ($f) {
+                                    fputs($f, 'RECYCLE ARCHIVING course '.$context->instanceid.' with '.$config->archivestrategy."\n");
+                                }
+                                $whereid = $config->archivefactory;
+                                $where = $DB->get_record('mnet_host', array('id' => $config->archivefactory));
+                                if ($where) {
+                                    block_publishflow_retrofit_course($context->instanceid, $where->wwwroot);
+                                    if ($f) {
+                                        fputs($f, "Backup.\n");
+                                    }
+                                } else {
+                                    if ($f) {
+                                        fputs($f, "Failed, empty or null archiving moodle.\n");
+                                    }
+                                }
+                            }
+
                             break;
                         }
                     }
                 }
             }
+        }
+
+        if ($f) {
+            fclose($f);
         }
 
     }
