@@ -24,6 +24,9 @@ $string['course_recycle:addinstance'] = 'Ajouter un bloc Recyclage du Cours';
 $string['course_recycle:view'] = 'Voir le bloc Recyclage du cours';
 $string['course_recycle:admin'] = 'Administrer le recyclage des cours';
 
+// Privacy
+$string['privacy:metadata'] = 'Bien que l\'enseignant puisse modifier l\'option de recyclage, cette donnée est dans la portée du cours et non de l\'utilisateur.';
+
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ajouter une instance à tous les cours';
 $string['archive'] = 'En fin de période, archiver';
