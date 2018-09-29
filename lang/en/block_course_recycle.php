@@ -26,6 +26,9 @@ $string['course_recycle:addinstance'] = 'Add a new Course Recycle block';
 $string['course_recycle:view'] = 'View the Course Recycle block';
 $string['course_recycle:admin'] = 'Administrate Course Recycling';
 
+// Privacy
+$string['privacy:metadata'] = 'Although the teacher will drive the recycle option, the recycle option belongs to the course scope and not the user scope.';
+
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ensure an instance is available in all courses';
 $string['archive'] = 'At end of session, archive the course';
