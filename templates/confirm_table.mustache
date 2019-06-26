@@ -1,0 +1,85 @@
+
+
+<!-- block_course_recycle/confirm_table -->
+
+{{#emptylist}}
+{{{nocoursenotification}}}
+{{/emptylist}}
+
+{{^emptylist}}
+
+{{{pager}}}
+
+<table class="block-course-recycle-confirmlist generaltable">
+<tr>
+    <th id="confirm-list-shortname" width="20%">
+        {{#str}}shortname{{/str}}
+    </th>
+
+    <th id="confirm-list-fullname">
+        {{#str}}fullname{{/str}}
+    </th>
+
+    <th id="confirm-list-editor-num">
+        {{#str}}directeditorsnum, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-reason-of-request">
+        {{#str}}reason, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-status">
+        {{#str}}recycleaction, block_course_recycle{{/str}}
+    </th>
+</tr>
+
+{{#courses}}
+<tr valign="top">
+    <td class="issue-list-shortname">
+        <a href="{{{courseurl}}}">{{{shortname}}}</a>
+    </td>
+
+    <td class="confirm-list-fullname">
+        {{{fullname}}}
+    </td>
+
+    <td class="confirm-list-editor-num">
+        {{editorcount}}
+    </td>
+
+    <td class="confirm-list-reason">
+        {{{reason}}}
+    </td>
+
+    <td class="confirm-list-status-{{id}} status-{{{status.code}}}"  style="max-width: 120px;width:120px">
+        {{> block_course_recycle/listformstatuspart }}
+    </td>
+
+</tr>
+{{/courses}}
+</table>
+
+{{{pager}}}
+
+{{/emptylist}}
+
+</form>
+
+<div id="recyclelist-edit-form" class="modal fade" tabindex="-1" aria-labelledby="recyclelist-edit-formLabel" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{#str}}updateaction, block_course_recycle{{/str}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{#str}}cancel{{/str}}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="recyclelist-edit-inner-form"></div>
+      <div class="modal-footer">
+        <button id="modal-status-save" data-course="" type="button" class="btn btn-primary">{{#str}}update{{/str}}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{#str}}cancel{{/str}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /block_course_recycle/confirm_table -->

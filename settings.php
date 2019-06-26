@@ -100,4 +100,59 @@ if ($ADMIN->fulltree) {
     $desc = get_string('configlogfile_desc', 'block_course_recycle');
     $default = '%DATAROOT%/recycle.log';
     $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $options = array(
+        'standard' => get_string('standardmoodle', 'block_course_recycle'),
+        'archive' => get_string('archivemoodle', 'block_course_recycle'),
+    );
+    $key = 'block_course_recycle/moodletype';
+    $label = get_string('configmoodletype', 'block_course_recycle');
+    $desc = get_string('configmoodletype_desc', 'block_course_recycle');
+    $default = '';
+    $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $options));
+
+    $settings->add(new admin_setting_heading('finishedsettings', get_string('finishedcoursessettings', 'block_course_recycle'), ''));
+
+    $key = 'block_course_recycle/mininactivedaystofinish';
+    $label = get_string('configmininactivedaystofinish', 'block_course_recycle');
+    $desc = get_string('configmininactivedaystofinish_desc', 'block_course_recycle');
+    $default = 30;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/minactiveaccesstomaintain';
+    $label = get_string('configminactiveaccesstomaintain', 'block_course_recycle');
+    $desc = get_string('configminactiveaccesstomaintain_desc', 'block_course_recycle');
+    $default = 3;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/minhitstomaintain';
+    $label = get_string('configminhitstomaintain', 'block_course_recycle');
+    $desc = get_string('configminhitstomaintain_desc', 'block_course_recycle');
+    $default = 50;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $options = [
+        0 => get_string('rfannone', 'block_course_recycle'),
+        1 => get_string('rfanoldestet', 'block_course_recycle'),
+        2 => get_string('rfanallets', 'block_course_recycle')
+    ];
+    $key = 'block_course_recycle/requestforarchivenotification';
+    $label = get_string('configrequestforarchivenotification', 'block_course_recycle');
+    $desc = get_string('configrequestforarchivenotification_desc', 'block_course_recycle');
+    $default = 0;
+    $settings->add(new admin_setting_configselect($key, $label, $desc, $default, $options));
+
+    $settings->add(new admin_setting_heading('archiversettings', get_string('archiversettings', 'block_course_recycle'), ''));
+
+    $key = 'block_course_recycle/sourcewwwroot';
+    $label = get_string('configsourcewwwroot', 'block_course_recycle');
+    $desc = get_string('configsourcewwwroot_desc', 'block_course_recycle');
+    $default = '';
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/sourcetoken';
+    $label = get_string('configsourcewstoken', 'block_course_recycle');
+    $desc = get_string('configsourcewstoken_desc', 'block_course_recycle');
+    $default = '';
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
 }

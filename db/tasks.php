@@ -19,7 +19,7 @@
  *
  * @package   block_course_recycle
  * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
@@ -69,4 +69,25 @@ $tasks = array(
         'disabled' => 1,
     ),
 
+    array(
+        'classname' => 'block_course_recycle\task\discover_finished_courses_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '30',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 0,
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\pull_and_archive_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '30',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 0,
+    ),
 );

@@ -28,9 +28,9 @@ require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class
 
 use \block_course_recycle\course_recycler;
 
-$courseid = required_param('courseid', PARAM_INT);
+$id = required_param('courseid', PARAM_INT);
 
-$url = new moodle_url('/blocks/course_recycle/index.php', array('courseid' => $courseid));
+$url = new moodle_url('/blocks/course_recycle/detect.php', array('courseid' => $id));
 $PAGE->set_url($url);
 
 $context = context_system::instance();
@@ -54,19 +54,15 @@ $renderer = $PAGE->get_renderer('block_course_recycle');
 
 echo $OUTPUT->header();
 
-echo $renderer->globalstable($globals);
+echo '<pre>';
 
-if ($countinstances > $pagesize) {
-    echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
+mtrace("Starting discovering...");
 
-    echo $renderer->recyclestates($recycleinstances);
+course_recycler::task_discover_finished(true); // Run in mode interactive.
 
-    echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
-}
+echo '</pre>';
 
-echo '<center>';
-
-$buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
+$buttonurl = new moodle_url('/course/view.php', array('id' => $id));
 echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
 echo '</center>';
 

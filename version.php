@@ -25,11 +25,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2017051600;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2019061800;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2018042700;        // Requires this Moodle version.
 $plugin->component = 'block_course_recycle'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '(3.5.0 (Build 2017051600)';
+$plugin->release = '(3.5.0 (Build 2019061800)';
 $plugin->maturity = MATURITY_STABLE;
 
 // Non moodle attributes.
-$plugin->codeincrement = '3.5.0000';
+$plugin->codeincrement = '3.5.0003';

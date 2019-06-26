@@ -22,12 +22,14 @@
  */
 namespace block_course_recycle\task;
 
+require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Recycle processing for courses.
  */
-class recycle_task extends \core\task\scheduled_task {
+class discover_finished_courses_task extends \core\task\scheduled_task {
 
     /**
      * Get a descriptive name for this task (shown to admins).
@@ -35,21 +37,14 @@ class recycle_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('task_recycle', 'block_course_recycle');
+        return get_string('task_discover_finished', 'block_course_recycle');
     }
 
     /**
      * Do the job.
      */
     public function execute() {
-        global $CFG;
-
-        /* Actually performs the recycle operations.
-         * This task should be limited in processing duration/amount of units processed. It will 
-         * run again until all block instances have not been processed.
-         */
-
-        include_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
-        block_course_recycle_task_recycle();
+        // Turns on all blocks to lock state.
+        block_course_recycle_task_discover_finished();
     }
 }
