@@ -38,14 +38,12 @@ use block_course_recycle\course_recycler;
  */
 
 /**
- *
  * Implement :
  *
  * get_archivable_courses()
- *
  * update_course_status($cid, $status)
- *
  */
+
 /**
  * Recycle block external functions
  *
@@ -57,35 +55,77 @@ use block_course_recycle\course_recycler;
  */
 class block_course_recycle_external extends external_api {
 
-
     /* source side Web Services */
 
     public static function get_archivable_courses_parameters() {
-        return new external_function_parameters([]);
+        return new external_function_parameters([
+            'alldates' => new external_value(PARAM_BOOL, 'All dates required', VALUE_OPTIONAL)
+        ]);
     }
 
     /**
      * retrieves the list of archivable courses for running an archive pull.
      * When the pull is finished, the archive operation will send a status update
      * to the source platform with the original status to perform callback local tasks on course.
+     * @params bool $alldates true if all dates are required, even if not processable NOW.
      */
-    public static function get_archivable_courses() {
+    public static function get_archivable_courses($alldates = false) {
         global $DB;
+
+        $config = get_config('block_course_recycle');
+
+        $params = [];
+
+        $delayedactionclause = '';
+        $processable = '1 as processable';
+        $timeprocessabledelay = 0 + @$config->actiondelay * DAYSECS;
+        if (!empty($config->actiondelay) && !$alldates) {
+            $delayedactionclause = " AND bcr.timemodified < ? ";
+            $processabledate = time() - ($config->actiondelay * DAYSECS);
+            $params[] = $processabledate;
+            $processable = "(bcr.timemodified < $processabledate) as processable ";
+        }
 
         $sql = "
             SELECT
                 c.id,
                 c.shortname,
-                bcr.status
+                c.fullname,
+                c.idnumber,
+                bcr.status,
+                bcr.timemodified,
+                bcr.timemodified + {$timeprocessabledelay} as timeprocessable,
+                {$processable}
             FROM
                 {course} c,
                 {block_course_recycle} bcr
             WHERE
                 c.id = bcr.courseid AND
-                bcr.status LIKE '%Archive%'
+                bcr.status LIKE '%Archive%' AND
+                bcr.status != 'RequestForArchive'
+                {$delayedactionclause}
         ";
 
-        $result = array_values($DB->get_records_sql($sql));
+        $archivables = $DB->get_records_sql($sql, $params);
+        if (empty($archivables)) {
+            return [];
+        }
+
+        // Compute the full path category.
+        foreach (array_keys($archivables) as $aid) {
+            $catpathelms = [];
+            // Get full categorypath for the course and add it to record.
+            $cat = $DB->get_record('course_categories', ['id' => $a->category], 'id,parent,name');
+            array_unshift($catpathelms, $cat->name);
+            while ($parent = $cat->parent) {
+                $cat = $DB->get_record('course_categories', ['id' => $a->category], 'id,parent,name');
+                array_unshift($catpathelms, $cat->name);
+            }
+            $archivables[$aid]->sourcecategorypath = implode('/', $catpathelms);
+        }
+
+        $result = array_values($archivables);
+
         return $result;
     }
 
@@ -101,7 +141,13 @@ class block_course_recycle_external extends external_api {
                 array(
                     'id' => new external_value(PARAM_INT, 'course ID'),
                     'shortname' => new external_value(PARAM_TEXT, 'Course shortname'),
+                    'fullname' => new external_value(PARAM_TEXT, 'Course fullname'),
+                    'sourcecategorypath' => new external_value(PARAM_TEXT, 'Course full names category slashed path'),
+                    'idnumber' => new external_value(PARAM_TEXT, 'Course idnumber'),
                     'status' => new external_value(PARAM_TEXT, 'Course original status'),
+                    'timemodified' => new external_value(PARAM_INT, 'Last change date'),
+                    'timeprocessable' => new external_value(PARAM_INT, 'Time for processing action'),
+                    'processable' => new external_value(PARAM_BOOL, 'Is processable for archiving'),
                 )
             )
         );
@@ -110,7 +156,7 @@ class block_course_recycle_external extends external_api {
     // Course status
 
     /**
-     * Get course status
+     * Get course status parameters
      */
     public static function update_course_status_parameters() {
         return new external_function_parameters(
@@ -124,14 +170,14 @@ class block_course_recycle_external extends external_api {
     }
 
     /**
-     * Updates the course status
+     * Updates the course status and processes locally to the postactions.
      * @param string $courseidfield
      * @param int|string $courseid
      * @param string $status
      * @param string $postaction
      */
     public static function update_course_status($courseidfield, $courseid, $status, $postaction = '') {
-        global $DB;
+        global $DB, $USER;
 
         $course = self::validate_course_parameters(self::update_course_status_parameters(),
                         array(
@@ -146,28 +192,16 @@ class block_course_recycle_external extends external_api {
         }
 
         $rec->status = $status;
+        if (preg_match('/Archive/', $postaction)) {
+            $rec->timearchived = time();
+            $rec->lastuserid = $USER->id;
+        }
         $DB->update_record('block_course_recycle', $rec);
 
         if ($status == 'Done') {
-            $DB->set_field('block_course_recycle', 'archived', 1, ['id' => $rec->id]);
             $DB->set_field('block_course_recycle', 'timearchived', time(), ['id' => $rec->id]);
-            // Launch a $postaction
             if (!empty($postaction)) {
-                switch ($postaction) {
-                    // Give old status before archive to determine what needs to be done.
-                    case "Archive" :
-                        break;
-                    case "CloneArchiveAndReset" :
-                        // Clone the local course.
-                        // Reset the cloned course.
-                        break;
-                    case "ArchiveAndReset" :
-                        // Reset the local course.
-                        break;
-                    case "ArchiveAndDelete" :
-                        // Delete the local course.
-                        break;
-                }
+                course_recycler::process_action($course, $postaction);
             }
             return true;
         }

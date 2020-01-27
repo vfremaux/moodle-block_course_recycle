@@ -31,6 +31,14 @@
     <th id="confirm-list-status">
         {{#str}}recycleaction, block_course_recycle{{/str}}
     </th>
+
+    <th id="confirm-list-nextstatus">
+        {{#str}}nextaction, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-nextdate">
+        {{#str}}nextdate, block_course_recycle{{/str}}
+    </th>
 </tr>
 
 {{#courses}}
@@ -55,6 +63,14 @@
         {{> block_course_recycle/listformstatuspart }}
     </td>
 
+    <td class="confirm-list-nextstate">
+        {{{nextstate}}}
+    </td>
+
+    <td class="confirm-list-nextdate">
+        {{{nextdate}}}
+        {{#daystorun}}{{daystorun}} {{#str}}days{{/str}}{{/daystorun}}
+    </td>
 </tr>
 {{/courses}}
 </table>

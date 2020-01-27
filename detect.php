@@ -62,8 +62,8 @@ course_recycler::task_discover_finished(true); // Run in mode interactive.
 
 echo '</pre>';
 
-$buttonurl = new moodle_url('/course/view.php', array('id' => $id));
-echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
+$buttonurl = new moodle_url('/blocks//course_recycle/confirmmycourses.php', array('fromcourse' => $id));
+echo $OUTPUT->single_button($buttonurl, get_string('backtoreport', 'block_course_recycle'));
 echo '</center>';
 
 echo $OUTPUT->footer();

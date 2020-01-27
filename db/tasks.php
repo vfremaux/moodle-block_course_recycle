@@ -74,10 +74,10 @@ $tasks = array(
         'blocking' => 0,
         'minute' => '0',
         'hour' => '2',
-        'day' => '30',
+        'day' => '20',
         'month' => '*',
         'dayofweek' => '*',
-        'disabled' => 0,
+        'disabled' => 1,
     ),
 
     array(
@@ -88,6 +88,6 @@ $tasks = array(
         'day' => '30',
         'month' => '*',
         'dayofweek' => '*',
-        'disabled' => 0,
+        'disabled' => 1,
     ),
 );

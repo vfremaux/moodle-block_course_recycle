@@ -28,6 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 use \StdClass;
 use \context;
 use \context_block;
+use \context_system;
 
 require_once($CFG->dirroot.'/blocks/course_recycle/lib.php');
 
@@ -111,6 +112,8 @@ class course_recycler {
 
             $fullstatuslist = [
                 RECYCLE_RQFA => get_string('RequestForArchive', 'block_course_recycle'),
+                RECYCLE_DONE => get_string('Done', 'block_course_recycle'),
+                RECYCLE_FAILED => get_string('Failed', 'block_course_recycle'),
                 RECYCLE_STAY => get_string('Stay', 'block_course_recycle'),
                 RECYCLE_RESET => get_string('Reset', 'block_course_recycle'),
                 RECYCLE_CLONE => get_string('Clone', 'block_course_recycle'),
@@ -183,124 +186,191 @@ class course_recycler {
     public static function task_discover_finished($interactive = false) {
         global $DB, $USER;
 
+        self::discover_finished_courses($interactive);
+        self::process_undecided_courses($interactive);
+    }
+
+    public static function discover_finished_courses($interactive) {
+        // Discover using several heuristics.
+
         $config = get_config('block_course_recycle');
+        $systemcontext = context_system::instance();
 
         $finished = [];
         $notifieduserids = [];
 
-        if ($interactive) {
-            mtrace("Checking by end date...");
+        if (!empty($config->policyenddate)) {
+
+            if ($interactive) {
+                mtrace("Checking by end date...");
+            }
+
+            // Check end date of the course (explicit)
+            $sql = "
+                SELECT
+                    c.id,
+                    c.shortname,
+                    c.enddate,
+                    'bydate' AS reason
+                FROM
+                    {course} c
+                LEFT JOIN
+                    {block_course_recycle} bcr
+                ON
+                    c.id = bcr.courseid
+                WHERE
+                    bcr.id IS NULL AND
+                    c.enddate > 0 AND
+                    c.enddate < ?
+            ";
+            $finishedcourses = $DB->get_records_sql($sql, [time()]);
+        } else {
+            $finishedcourses = [];
         }
 
-        // Check end date of the course (explicit)
-        $sql = "
-            SELECT
-                c.id,
-                c.shortname,
-                c.enddate,
-                'bydate' AS reason
-            FROM
-                {course} c
-            LEFT JOIN
-                {block_course_recycle} bcr
-            ON
-                c.id = bcr.courseid
-            WHERE
-                bcr.id IS NULL AND
-                c.enddate > 0 AND
-                c.enddate < ?
-        ";
-        $finishedcourses = $DB->get_records_sql($sql, [time()]);
+        $assumedfinishedcourses =  [];
 
-        if ($interactive) {
-            mtrace("Checking by enrolments...");
-        }
+        if (!empty($config->policyenrols)) {
 
-        // Check all user_enrolments have ended
-        $sql = "
-            SELECT
-                c.id,
-                c.shortname,
-                c.enddate,
-                SUM(CASE WHEN ue.timeend = 0 OR ue.timeend >= ? THEN 1 ELSE 0 END) as actives,
-                'byenrols' AS reason
-            FROM
-                {user_enrolments} ue,
-                {enrol} e,
-                {course} c
-            LEFT JOIN
-                {block_course_recycle} bcr
-            ON
-                c.id = bcr.courseid
-            WHERE
-                c.id = e.courseid AND
-                e.id = ue.enrolid AND
-                bcr.id IS NULL
-            GROUP BY
-                c.id
-            HAVING actives = 0
-        ";
-        $finishedbyenrolcourses = $DB->get_records_sql($sql, [time()]);
+            if ($interactive) {
+                mtrace("Checking by enrolments...");
+            }
 
-        if (!empty($finishedbyenrolcourses)) {
-            foreach ($finishedbyenrolcourses as $cid => $fbec) {
-                if (!array_key_exists($cid, $finishedcourses)) {
-                    $finishedcourses[$cid] = $fbec;
+            // Check where all student marked user_enrolments have ended.
+            $sql = "
+                SELECT
+                    c.id,
+                    c.shortname,
+                    c.enddate,
+                    SUM(CASE WHEN ue.timeend = 0 OR ue.timeend >= ? THEN 1 ELSE 0 END) as actives,
+                    'byenrols' AS reason
+                FROM
+                    {user_enrolments} ue
+                JOIN
+                    {enrol} e
+                ON
+                    e.id = ue.enrolid
+                JOIN
+                    {course} c
+                ON
+                    c.id = e.courseid
+                JOIN
+                    {context} ctx
+                ON
+                    ctx.instanceid = c.id AND
+                    ctx.contextlevel = ".CONTEXT_COURSE."
+                JOIN
+                    {role_assignments} ra
+                ON
+                    ra.contextid = ctx.id
+                JOIN
+                    {role_capabilities} rc
+                ON
+                    ra.roleid = rc.roleid
+                LEFT JOIN
+                    {block_course_recycle} bcr
+                ON
+                    c.id = bcr.courseid
+                WHERE
+                    ra.userid = ue.userid AND
+                    rc.capability = ? AND
+                    (rc.contextid = ".$systemcontext->id." OR rc.contextid = ctx.id) AND
+                    bcr.id IS NULL
+                GROUP BY
+                    c.id
+                HAVING actives = 0
+            ";
+            $params = [time(), 'block/course_recycle:student'];
+
+            $finishedbyenrolcourses = $DB->get_records_sql($sql, $params);
+
+            if (!empty($finishedbyenrolcourses)) {
+                foreach ($finishedbyenrolcourses as $cid => $fbec) {
+                    if (!array_key_exists($cid, $assumedfinishedcourses)) {
+                        $assumedfinishedcourses[$cid] = $fbec;
+                    }
                 }
             }
         }
 
-        if ($interactive) {
-            mtrace("Checking by access log...");
-        }
+        if (!empty($config->policylastaccess)) {
 
-        // Check latests user_last_access
-            // confirm by number of hits since X days.
-        $sql = "
-            SELECT
-                c.id,
-                c.shortname,
-                c.enddate,
-                SUM(1) as actives,
-                'byaccess' AS reason
-            FROM
-                {user_lastaccess} ula,
-                {course} c
-            LEFT JOIN
-                {block_course_recycle} bcr
-            ON
-                c.id = bcr.courseid
-            WHERE
-                ula.courseid = c.id AND
-                ula.timeaccess > ? AND
-                bcr.id IS NULL
-            HAVING
-                actives <= ?
-        ";
-        $enddatefromnow = time() - DAYSECS * $config->mininactivedaystofinish;
-        $finishedbyaccess = $DB->get_records_sql($sql, [$enddatefromnow, $config->minactiveaccesstomaintain]);
+            if ($interactive) {
+                mtrace("Checking by last_access date...");
+            }
 
-        if (!empty($finishedbyaccess)) {
-            foreach ($finishedbyaccess as $cid => $fba) {
-                $select = ['timecreated' > $enddatefromnow, 'courseid' => $cid];
-                $logs = $DB->count_records('logstore_standard_log', $select);
-                if ($logs < $config->minhitstomaintain) {
-                    if (!array_key_exists($cid, $finishedcourses)) {
-                        $finishedcourses[$cid] = $fba;
+            // Check latests user_last_access
+                // confirm by number of hits since X days.
+            $sql = "
+                SELECT
+                    c.id,
+                    c.shortname,
+                    c.enddate,
+                    ula.userid as ulau,
+                    ra.userid as rau,
+                    ctx.id as ctxid,
+                    SUM(CASE WHEN ula.userid IS NULL THEN 0 ELSE 1 END) as actives,
+                    'byaccess' AS reason
+                FROM
+                    mdl_course c
+                LEFT JOIN
+                    mdl_user_lastaccess ula
+                ON
+                    ula.courseid = c.id
+                JOIN
+                    mdl_context ctx
+                ON
+                    ctx.instanceid = ula.courseid AND
+                    ctx.contextlevel = 50
+                LEFT JOIN
+                    mdl_role_assignments ra
+                ON
+                    ra.contextid = ctx.id
+                LEFT JOIN
+                    mdl_role_capabilities rc
+                ON
+                    ra.roleid = rc.roleid AND
+                    rc.capability = ?
+                LEFT JOIN
+                    mdl_block_course_recycle bcr
+                ON
+                    c.id = bcr.courseid
+                WHERE
+                    1 OR
+                    (ula.id IS NULL OR (ula.userid = ra.userid AND ula.timeaccess < ?)) AND
+                    bcr.id IS NULL
+                GROUP BY c.id
+            ";
+
+            $enddatefromnow = time() - DAYSECS * $config->mininactivedaystofinish;
+            $params = ['block/course_recycle:student', $enddatefromnow, $config->minactiveaccesstomaintain];
+            $finishedbyaccess = $DB->get_records_sql($sql, $params);
+
+            if (!empty($finishedbyaccess)) {
+                foreach ($finishedbyaccess as $cid => $fba) {
+                    $select = ['timecreated' => $enddatefromnow, 'courseid' => $cid];
+                    $logs = $DB->count_records('logstore_standard_log', $select);
+                    if ($logs < $config->minhitstomaintain) {
+                        if (!array_key_exists($cid, $assumedfinishedcourses)) {
+                            $assumedfinishedcourses[$cid] = $fba;
+                        }
                     }
                 }
             }
         }
 
         // => Update status to "RequestForArchive".
+        $nocourses = true;
         if (!empty($finishedcourses)) {
             foreach ($finishedcourses as $c) {
                 $rec = new StdClass;
                 $rec->courseid = $c->id;
-                $rec->status = 'RequestForArchive';
+                $rec->status = $config->defaultactionfinishedcourses;
                 $rec->reason = $c->reason;
                 $rec->timemodified = time();
                 $rec->lastuserid = $USER->id;
+                $rec->timearchived = 0;
+                $rec->stopnotify = 0;
                 $DB->insert_record('block_course_recycle', $rec);
 
                 if ($interactive) {
@@ -324,9 +394,91 @@ class course_recycler {
                     }
                 }
             }
-        } else {
+            $nocourses = false;
+        }
+
+        if (!empty($assumedfinishedcourses)) {
+            foreach ($assumedfinishedcourses as $c) {
+                $rec = new StdClass;
+                $rec->courseid = $c->id;
+                $rec->status = 'RequestForArchive';
+                $rec->reason = $c->reason;
+                $rec->timemodified = time();
+                $rec->lastuserid = $USER->id;
+                $rec->timearchived = 0;
+                $rec->stopnotify = 0;
+                $DB->insert_record('block_course_recycle', $rec);
+
+                if ($interactive) {
+                    mtrace("Detected course $c->id ($c->shortname) as finished. Reason was : ".$c->reason."\n");
+                }
+
+                // Guess all unique users having editing capability for notification.
+                if (!empty($config->requestforarchivenotification)) {
+                    // Examine all editing teachers (or first of them).
+                    $courseeditingteachers = block_course_recycle_get_editingteachers($c);
+                    foreach ($courseeditingteachers as $cet) {
+                        if (!in_array($cet->id, $notifieduserids)) {
+                            // Notify once per scan.
+                            $notifieduserids[] = $cet->id;
+                            $user = $DB->get_record('user', ['id' => $cet->id]);
+                            if ($interactive) {
+                                mtrace("Notifying user ".$cet->id.' '.fullname($user)."\n");
+                            }
+                            block_course_recycle_notify_requestforarchive($user);
+                        }
+                    }
+                }
+                $nocourses = false;
+            }
+        }
+
+        if (!empty($nocourses)) {
             if ($interactive) {
                 mtrace("Nothing new was found.");
+            }
+        }
+    }
+
+    public static function process_undecided_courses($interactive) {
+        global $DB;
+
+        $config = get_config('block_course_recycle');
+
+        // process long time waiting courses if default action is defined.
+        if (!empty($config->defaultaction) && $config->decisiondelay > 0) {
+            $select = " status  = ? AND timemodified >= ? ";
+            $params = [ 'RequestForArchive', time() - $config->decisiondelay * DAYSECS ];
+            $undecidedcourses = $DB->get_records_select('block_course_recycle', $select, $params);
+            if (!empty($undecidedcourses)) {
+                foreach ($undecidedcourses as $rec) {
+                    // Mark the default action.
+                    $rec->status = $config->defaultaction;
+                    $rec->timemodified = time();
+                    $DB->update_record('block_course_recycle', $rec);
+
+                    // If default action has "Retire", and a retire category has been set, retire course to 
+                    // hidden trashbin.
+                    if (preg_match('/Retire/', $config->defaultaction)) {
+                        if (!empty($config->retirecategory)) {
+                            $course = $DB->get_record('course', ['id' => $rec->courseid]);
+                            $course->category = $config->retirecategory;
+                            $course->visible = 0;
+                            $DB->update_record('course', $course);
+                        }
+                    }
+
+                    // Send notification to owners we have decided for them.
+                    // Send management panel url to let them change their mind.
+                    $courseeditingteachers = block_course_recycle_get_editingteachers($c);
+                    foreach ($courseeditingteachers as $cet) {
+                        $user = $DB->get_record('user', ['id' => $cet->id]);
+                        if ($interactive) {
+                            mtrace("Notifying user ".$cet->id.' '.fullname($user)."\n");
+                        }
+                        block_course_recycle_notify_defaultaction($user);
+                    }
+                }
             }
         }
     }
@@ -371,6 +523,10 @@ class course_recycler {
         return $archivablecourses;
     }
 
+    /**
+     * Task for the local recycling actions.
+     * OBSOLETE ? 
+     */
     public static function task_recycle() {
         global $DB;
 
@@ -484,54 +640,144 @@ class course_recycler {
      *
      */
     public static function task_pull_and_archive_courses() {
-        global $CFG;
+        global $CFG, $DB;
+        global $verbose;
 
-        if (is_dir($CFG->dirroot.'/blocks/import_courses')) {
-            include_once($CFG->dirroot.'/blocks/import_courses/xlib.php');
+        $recycleconfig = get_config('block_course_recycle');
+
+        if (is_dir($CFG->dirroot.'/blocks/import_course')) {
+            include_once($CFG->dirroot.'/blocks/import_course/xlib.php');
             $pullcomponent = 'block_import_courses';
+            $config = get_config('block_import_course');
+            if ($verbose) {
+                echo "Using import_course block for transport\n";
+            }
         } else {
             if (is_dir($CFG->dirroot.'/blocks/publishflow')) {
                 include_once($CFG->dirroot.'/blocks/publishflow/xlib.php');
                 $pullcomponent = 'block_publishflow';
+            }
+            if ($verbose) {
+                echo "Using publishflow block for transport\n";
             }
         }
 
         $archivables = course_recycler::get_archivables();
 
         if (!empty($archivables)) {
-            foreach ($archivable as $arch) {
+            foreach ($archivables as $arch) {
                 // Trigger a pull.
+                if ($verbose) {
+                    echo "Archiving $arch->id ($arch->shortname) \n";
+                }
                 if ($pullcomponent == 'block_import_courses') {
                     try {
-                        $courseid = block_import_course_import($arch->id);
+                        if (empty($recycleconfig->preservesourcecategory)) {
+                            $targetcategoryid = $DB->get_field('course_categories', 'id', ['name' => $config->targetcategory]);
+                            if (empty($targetcategoryid)) {
+                                throw new moodle_exception('Target category was not found.');
+                            }
+                        } else {
+                            $categorypath = $arch->sourcecategorypath;
+                            $targetcategoryid = self::check_category_path($categorypath);
+                        }
+                        $courseid = block_import_course_import($config->teachingurl, $config->teachingtoken, $targetcategoryid, $arch->id, [], 1);
                     } catch (Exception $e) {
+                        if ($verbose) {
+                            echo "Archiving {$arch->id} Failed. \n";
+                        }
                         debug_trace("Import of source course {$arch->id} backup has failed for some reason. Notify failed.");
                         self::notify_source($arch->id, 'Failed', $arch->status);
                         continue;
                     }
 
+                    if ($verbose) {
+                        echo "Archiving complete. \n";
+                    }
                     // Notifiy.
                     self::notify_source($arch->id, 'Done', $arch->status);
                 }
+                // Publishflow transport is not implemented yet.
+            }
+        } else {
+            if ($verbose) {
+                echo "Nothing found to archive \n";
             }
         }
     }
 
+    /**
+     * Process some actions after an eventual remote archiving. This function is called
+     * as part of the "update_course_status" webseervice call from an archiving node, but
+     * can be invoked locally by local tasks when course recycling process has only local
+     * actions to do.
+     * @param object $course a course to process (local)
+     * @param string $postaction a post action to perform
+     */
+    public static function process_postactions($course, $postaction) {
+        // Launch a $postaction
+        if (!empty($postaction)) {
+            switch ($postaction) {
+                // Give old status before archive to determine what needs to be done.
+                case "Archive" :
+                    // Nothing to do. Archive action has been processed the other side in archiving node.
+                    break;
+                case "Reset" :
+                    // Build a "reset everything" structure and execute.
+                    $data = course_recycler::build_reset_data($course);
+                    reset_course_userdata($data);
+                    break;
+                case "CloneArchiveAndReset" :
+                    // Clone the local course.
+                    $newcourse = course_recycler::clone_course($course);
+                    // Build a "reset everything" structure and execute.
+                    if ($newcourse) {
+                        $data = course_recycler::build_reset_data($newcourse);
+                        reset_course_userdata($data);
+                    }
+                    break;
+                case "ArchiveAndReset" :
+                    // Build a "reset everything" structure and execute.
+                    $data = course_recycler::build_reset_data($course);
+                    reset_course_userdata($data);
+                    break;
+                case "ArchiveAndDelete" :
+                    // Delete the local course. Archiving has been processed by remote node.
+                    delete_course($course->id);
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Get all archivable courses from a remote moodle (works on archive node only).
+     */
     public static function get_archivables() {
 
         $config = get_config('block_course_recycle');
 
         $url = $config->sourcewwwroot;
-        $url .= '/webservice/rest/simpleserver.php';
+        $url .= '/webservice/rest/server.php';
         $url .= '?wsfunction=block_course_recycle_get_archivable_courses';
         $url .= '&wstoken='.$config->sourcetoken;
+        $url .= '&moodlewsrestformat=json';
+        $url .= '&alldates=1';
 
         $res = curl_init($url);
         self::set_proxy($res, $url);
         curl_setopt($res, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($res, CURLOPT_POST, false);
 
+        global $verbose;
+        if ($verbose) {
+            echo "Firing CURL : $url \n";
+        }
         $result = curl_exec($res);
+        if ($verbose) {
+            if ($result) {
+                echo "$result \n";
+            }
+        }
 
         // Get result content and status.
         if ($result) {
@@ -548,28 +794,37 @@ class course_recycler {
      * Notify source that course restore is done and ask for postactions.
      */
     public static function notify_source($courseid, $newstatus, $originalstatus) {
+        global $verbose;
 
         $config = get_config('block_course_recycle');
 
         $url = $config->sourcewwwroot;
-        $url .= '/webservice/rest/simpleserver.php';
+        $url .= '/webservice/rest/server.php';
         $url .= '?wsfunction=block_course_recycle_update_course_status';
         $url .= '&wstoken='.$config->sourcetoken;
+        $url .= '&moodlewsrestformat=json';
         $url .= '&courseidfield=id';
         $url .= '&courseid='.$courseid;
         $url .= '&status='.$newstatus;
-        $url .= '&postactions='.$originalstatus;
+        $url .= '&postaction='.$originalstatus;
 
         $res = curl_init($url);
         self::set_proxy($res, $url);
         curl_setopt($res, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($res, CURLOPT_POST, false);
 
+        if ($verbose) {
+            echo "Firing Notify CURL : $url \n";
+        }
+
         $result = curl_exec($res);
 
         // Get result content and status.
         if (!$result) {
             debug_trace("Failed notifying");
+            if ($verbose) {
+                echo "Failed notifying\n";
+            }
         }
 
         return false;
@@ -586,7 +841,7 @@ class course_recycler {
                     curl_setopt($res, CURLOPT_PROXYTYPE, CURLPROXY_SOCKS5);
                 } else {
                     curl_close($res);
-                    print_error('socksnotsupported','mnet');
+                    print_error('socksnotsupported', 'mnet');
                 }
             }
 
@@ -606,5 +861,181 @@ class course_recycler {
                 }
             }
         }
+    }
+
+    /**
+     * Builds a reset control data structure trying to reset everything in course unless
+     * editing teacher affectations.
+     */
+    public static function build_reset_data($course) {
+        global $CFG, $DB;
+
+        $data = [];
+        $data['reset_start_date'] = 1;
+        $data['reset_end_date'] = 1;
+
+        // Processing events.
+        $data['reset_events'] = 1;
+
+        // Processing completion.
+        $data['reset_completion'] = 1;
+
+        // Processing blog associations.
+        $data['delete_blog_associations'] = 1;
+
+        // Processing logs.
+        $data['reset_logs'] = 1;
+
+        // Processing notes.
+        $data['reset_notes'] = 1;
+
+        // Processing comments.
+        $data['reset_comments'] = 1;
+
+        // Processing local role assigns and overrides.
+        $data['reset_roles_local'] = 1;
+        $data['reset_roles_overrides'] = 1;
+
+        // Processing grades.
+        $data['reset_gradebook_items'] = 1;
+        $data['reset_gradebook_grades'] = 1;
+
+        // Processing role assignations.
+        $roles = $DB->get_records('role');
+        $context = context_course::instance($course->id);
+        $preserveroles = get_roles_with_capability('moodle/course:manageactivities', CAP_ALLOW, $context);
+        $preserveroleids = array_keys($preserveroles);
+        foreach ($roles as $role) {
+            if (!in_array($role->id, $preserveroleids)) {
+                $data['unenrol_users'][] = $role->id;
+            }
+        }
+
+        // Processing groups.
+        $data['reset_groups_remove'] = 1;
+        $data['reset_groups_members'] = 1;
+
+        // Processing groupings.
+        $data['reset_groupings_remove'] = 1;
+        $data['reset_groupings_members'] = 1;
+
+        // Processing course modules.
+        if ($allmods = $DB->get_records('modules') ) {
+            $modmap = array();
+            $modlist = array();
+            $allmodsname = array();
+            foreach ($allmods as $mod) {
+                $modname = $mod->name;
+                $allmodsname[$modname] = 1;
+                if (!$DB->count_records($modname, array('course' => $data['id']))) {
+                    // Skip mods with no instances.
+                    continue;
+                }
+                $modlist[$modname] = 1;
+                $modfile = $CFG->dirroot."/mod/$modname/lib.php";
+                $modresetcourseformdefaults = $modname.'_reset_course_form_defaults';
+                $modresetuserdata = $modname.'_reset_userdata';
+                if (file_exists($modfile)) {
+                    include_once($modfile);
+                    if (function_exists($modresetcourseformdefaults)) {
+                        /*
+                         * Now we get the real internal defaults from module implementation.
+                         */
+                        $modmap[$modname] = $modresetcourseformdefaults($data['id']);
+                    }
+                } else {
+                    debugging('Missing lib.php in '.$modname.' module');
+                }
+            }
+        }
+
+        // Scan to build mod keys.
+        $availablemods = [];
+        foreach ($modmap as $modname => $mod) {
+            foreach ($mod as $key => $value) {
+                $availablemods[$modname][$key] = $value;
+            }
+        }
+        $data['reset_forum_all'] = 1;
+        $data['reset_forum_subscriptions'] = 1;
+        $data['reset_glossary_all'] = 1;
+        $data['reset_chat'] = 1;
+        $data['reset_data'] = 1;
+        $data['reset_slots'] = 1;
+        $data['reset_apointments'] = 1;
+        $data['reset_assignment_submissions'] = 1;
+        $data['reset_assign_submissions'] = 1;
+        $data['reset_survey_answers'] = 1;
+        $data['reset_lesson'] = 1;
+        $data['reset_choice'] = 1;
+        $data['reset_scorm'] = 1;
+        $data['reset_quiz_attempts'] = 1;
+
+        // Unsure code. does this suits to all cases and modules ? 
+        // TODO : Needs deeper observation.
+        foreach ($availablemods as $modname => $fcts) {
+            foreach ($fcts as $fct => $value) {
+                $data[$fct] = $value;
+            }
+        }
+
+        $data = (object) $data;
+
+        return $data;
+    }
+
+    /**
+     * Full clone a course by backup => restore process
+     * TODO : Implement backup/restore automation.
+     */
+    public static function clone_course($course) {
+        return null;
+    }
+
+    /**
+     * Scans a category path and create missing nodes in the tree if needed.
+     * @param string $categorypath
+     * @return int leaf category id.
+     */
+    public static function check_category_path($categorypath) {
+        global $DB;
+
+        $categories = explode('/', $categorypath);
+
+        // Always starts at tree root.
+        $parentcategoryid = 0;
+
+        while ($catname = array_shift($categories)) {
+
+            $catdata = new \Stdclass;
+            $catdata->parent = $parentcategoryid;
+            $catdata->name = trim($catname);
+
+            $updated = false;
+            // idnumber is the only external unique identification.
+            $params = array('parent' => $parentcategoryid, 'name' => $catdata->name);
+            if ($oldcat = $DB->get_record('course_categories', $params)) {
+                $cat = $oldcat;
+                debug_trace("Category {$oldcat->id} exists ");
+            } else {
+                $cat = \core_course_category::create($catdata);
+                if ($parentcategoryid) {
+                    $parentcat = $DB->get_field('course_categories', 'name', array('id' => $parentcategoryid));
+                    if (function_exists('debug_trace')) {
+                        debug_trace('Category '.$catdata->name.' added to parent cat '.$parentcat);
+                    }
+                } else {
+                    if (function_exists('debug_trace')) {
+                        debug_trace('Category '.$catdata->name.' added to root cat ');
+                    }
+                }
+            }
+
+            // For next turn.
+            $parentcategoryid = $cat->id;
+        }
+
+        // Returns the lowest leaf cat id.
+        return $cat->id;
     }
 }

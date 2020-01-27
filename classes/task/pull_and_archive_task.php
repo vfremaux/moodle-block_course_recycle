@@ -23,8 +23,11 @@
 namespace block_course_recycle\task;
 
 require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
 defined('MOODLE_INTERNAL') || die();
+
+use \block_course_recycle\course_recycler;
 
 /**
  * Recycle processing for courses.
@@ -44,7 +47,7 @@ class pull_and_archive_task extends \core\task\scheduled_task {
      * Do the job.
      */
     public function execute() {
-        // Turns on all blocks to lock state.
+        echo "Calling archiver task\n";
         course_recycler::task_pull_and_archive_courses();
     }
 }

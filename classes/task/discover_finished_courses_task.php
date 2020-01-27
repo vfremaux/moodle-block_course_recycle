@@ -23,6 +23,9 @@
 namespace block_course_recycle\task;
 
 require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
+
+use \block_course_recycle\course_recycler;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -45,6 +48,6 @@ class discover_finished_courses_task extends \core\task\scheduled_task {
      */
     public function execute() {
         // Turns on all blocks to lock state.
-        block_course_recycle_task_discover_finished();
+        course_recycler::task_discover_finished();
     }
 }
