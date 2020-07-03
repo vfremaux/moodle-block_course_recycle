@@ -29,9 +29,10 @@ require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class
 use \block_course_recycle\course_recycler;
 
 $id = optional_param('fromcourse', SITEID, PARAM_INT);
+$topcatid = optional_param('topcatid', 0, PARAM_INT);
 $page = optional_param('page', 1, PARAM_INT);
 
-$url = new moodle_url('/blocks/course_recycle/confirmmycourses.php', ['id' => $id]);
+$url = new moodle_url('/blocks/course_recycle/confirmmycourses.php', ['id' => $id, 'topcatid' => $topcatid]);
 $PAGE->set_url($url);
 
 $context = context_system::instance();
@@ -59,7 +60,21 @@ if (!has_capability('moodle/site:config', $context)) {
     $authoredcourses = block_course_recycle_get_user_capability_course($capability, $USER->id, false, '', 'cc.sortorder, c.sortorder');
     $authoredcourseids = array_keys($authoredcourses);
 } else {
-    $allcourses = $DB->get_records('course');
+    // Get all courses in and below a top category.
+    if ($topcatid) {
+        $catpath = $DB->get_field('course_categories', 'path', ['id' => $topcatid]);
+        $select = $DB->sql_like('path', ':path');
+        $catcourses = $DB->get_records('course', ['category', $topcatid]);
+        $allcourses = $DB->get_records_select('course', ['path' => $catpath.'/%']);
+        if ($catcourses && $allcourses) {
+            $allcourses = $catcourses + $allcourses;
+        } else if ($catcourses) {
+            $allcourses = $catcourses;
+        }
+    } else {
+        // Get all courses
+        $allcourses = $DB->get_records('course');
+    }
     $authoredcourseids = array_keys($allcourses);
 }
 
@@ -72,6 +87,10 @@ if ($totalcount > $pagesize) {
 // Start print page.
 
 echo $OUTPUT->header();
+
+if (has_capability('moodle/site:config', $context)) {
+    echo $renderer->category_filter($id, $topcatid);
+}
 
 echo $renderer->confirm_table($mycandidatecourses);
 

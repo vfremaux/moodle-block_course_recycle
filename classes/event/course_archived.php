@@ -15,34 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   block_course_recycle
- * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * This file contains an event for when a  activity is viewed.
+ *
+ * @package    block_course_recycle
+ * @copyright  2013 Ankit Agarwal
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace block_course_recycle\task;
-
+namespace block_course_recycle\event;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Recycle processing for courses.
+ * Event for when an archived course activity is viewed.
  */
-class lock_task extends \core\task\scheduled_task {
+class course_archived extends \core\event\course_deleted {
 
     /**
-     * Get a descriptive name for this task (shown to admins).
-     *
-     * @return string
+     * Init method.
      */
-    public function get_name() {
-        return get_string('task_lock', 'block_course_recycle');
-    }
-
-    /**
-     * Do the job.
-     */
-    public function execute() {
-        // Turns on all blocks to lock state.
-        set_config('blockstate', 'locked', 'block_course_recycle');
+    protected function init() {
+        $this->data['crud'] = 'd';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'course';
     }
 }
+

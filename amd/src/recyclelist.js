@@ -8,6 +8,7 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
         init: function() {
             $(".recycle-course-edit-handle").bind('click', this.load_change_form);
             $("#modal-status-save").bind('click', this.submit_change_form);
+            $("#menutopcatid").bind('change', this.reload_category);
             log.debug('AMD Course Recycle List initialized');
         },
 
@@ -41,7 +42,9 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
             url += '?what=changerecycle';
             url += '&id=' + courseid;
             var radioname = 'recycleaction';
-            url += '&status=' + $('[name='+ radioname +']:checked').val();
+            var statusvalue = $('[name='+ radioname +']:checked').val();
+            url += '&status=' + statusvalue;
+            url += '&postactions=' + courserecyclelist.get_postactions_code(statusvalue);
 
             $.get(url, function(data) {
                 if (data.result === 'success') {
@@ -64,10 +67,35 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
                 'Delete',
                 'Archive',
                 'CloneAndReset',
+                'ArchiveAndDelete',
+                'ArchiveAndReset',
+                'ArchiveAndRetire',
                 'CloneArchiveAndReset'
             ];
 
             return statuscodes[statusix];
+        },
+
+        get_postactions_code: function (statusix) {
+            var postactionscodes = {
+                'RequestForArchive': '',
+                'Stay': '',
+                'Reset': '',
+                'Clone': '',
+                'Delete': '',
+                'Archive': '',
+                'CloneAndReset': '',
+                'ArchiveAndDelete': 'Delete',
+                'ArchiveAndReset': 'Reset',
+                'ArchiveAndRetire': 'Retire',
+                'CloneArchiveAndReset': 'CloneAndReset'
+            };
+
+            return postactionscodes[statusix];
+        },
+
+        reload_category: function() {
+            $('#recycle-confirm-category-filter-form').submit();
         }
 
     };

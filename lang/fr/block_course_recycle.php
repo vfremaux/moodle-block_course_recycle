@@ -25,14 +25,17 @@ $string['course_recycle:myaddinstance'] = 'Ajouter un bloc Recyclage de Cours su
 $string['course_recycle:view'] = 'Voir le bloc Recyclage du cours';
 $string['course_recycle:admin'] = 'Administrer le recyclage des cours';
 $string['course_recycle:archive'] = 'Peut archiver les cours';
+$string['course_recycle:student'] = 'Marque les rôles étudiants pour le recyclage';
 
 // Privacy
 $string['privacy:metadata'] = 'Bien que l\'enseignant puisse modifier l\'option de recyclage, cette donnée est dans la portée du cours et non de l\'utilisateur.';
 
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ajouter une instance à tous les cours';
-$string['archive'] = 'En fin de période, archiver';
+$string['archive'] = 'Archiver';
+$string['ask'] = 'Demander au propriétaire';
 $string['backtocourse'] = 'Revenir au cours';
+$string['backtoreport'] = 'Revenir au rapport';
 $string['backtodashboard'] = 'Revenir au tableau de bord';
 $string['atendofsession'] = 'En fin de période';
 $string['blockname'] = 'Recyclage du cours';
@@ -63,11 +66,22 @@ $string['configsourcewwwroot_desc'] = 'Racine web de la plate-forme source des c
 $string['configsourcewstoken'] = 'Token de la source';
 $string['configsourcewstoken_desc'] = 'Token de web services de la plate-forme source des cours à archiver';
 $string['confirmmycourses'] = 'Confirmer les actions de clôture du cours';
+$string['configretirecategory'] = 'Catégorie des cours retirés';
+$string['configretirecategory_desc'] = 'Une catégorie (à cacher) de cours retirés de l\'exploitation avant archivage.';
+$string['configdefaultactionfinishedcourses'] = 'Action par défaut pour les cours détectés comme terminés';
+$string['configdefaultactionfinishedcourses_desc'] = 'L\'action impérative qui sera prise lorsque la condition explicite de fin de cours (par date de fin) est détectée.';
+$string['configdecisiondelay'] = 'Délai de décision max';
+$string['configactiondelay_desc'] = 'Le délai (en jours) avant que le recyclage n\'applique l\'action par défaut';
+$string['configactiondelay'] = 'Délai d\'action';
+$string['configdecisiondelay_desc'] = 'Le délai (en jours) pour exécuter l\'action de recyclage choisie';
 $string['detectcourses'] = 'Chercher les cours terminés';
 $string['stateyourcourses'] = 'Programmer la fermeture des cours';
 $string['rfannone'] = 'Pas de notification';
 $string['rfanoldestet'] = 'A l\'enseignant éditeur le plus ancien';
 $string['rfanallets'] = 'A tous les enseignants éditeurs';
+$string['nextactions'] = 'Prochaines actions';
+$string['nextdate'] = 'Le';
+$string['retire'] = 'Retirer le cours';
 $string['nocourses'] = 'Aucun cours à archiver';
 $string['bydate'] = 'Par date de fin';
 $string['byenrols'] = 'Par inscriptions';
@@ -76,16 +90,19 @@ $string['bydate'] = 'Par date de fin';
 $string['updateaction'] = 'Mettre à jour l\'action de recyclage';
 $string['reason'] = 'Raison';
 $string['inactive'] = 'Caché';
-$string['keep'] = 'En fin de période, conserver sans aucune modification';
+$string['keep'] = 'Conserver sans aucune modification';
 $string['locked'] = 'Verrouilé';
 $string['nonotifications'] = 'Pas de notifications';
 $string['opentill'] = 'Vous pouvez encore changer l\'opération de fin d\'année jusqu\'au {$a}.';
+$string['directeditorsnum'] = 'Utilisateurs éditeurs';
 $string['pluginname'] = 'Recyclage du cours';
 $string['recycle'] = 'Gérer le recyclage';
 $string['reminded1'] = 'Premier rappel émis';
 $string['reminded2'] = 'Deuxième rappel émis';
 $string['reminded3'] = 'Troisième rappel émis';
-$string['reset'] = 'En fin de période, réinitialiser';
+$string['recycleaction'] = 'Actions';
+$string['reset'] = 'Réinitialiser';
+$string['retire'] = 'Remiser';
 $string['stopallnotifications'] = 'Ne plus m\'envoyer de rappel pour aucun cours';
 $string['stopnotifications'] = 'Ne plus me rappeler pour ce cours';
 $string['task_recycle'] = 'Recyclage des cours : nettoyage';
@@ -94,17 +111,44 @@ $string['task_reset'] = 'Recyclage des cours : Réinitialisation';
 $string['task_lock'] = 'Recyclage des cours : Verrouillage des choix';
 $string['task_discover_finished'] = 'Détection des cours terminés';
 $string['task_pull_and_archive'] = 'Import et archivage des cours';
-$string['throw'] = 'En fin de période, supprimer';
+$string['throw'] = 'Supprimer';
 $string['notificationstopped'] = 'Notifications désactivées';
+$string['dorecycle'] = 'Lancer la tâche d\'archivage';
+$string['interactivesettings'] = 'Réglages du mode interactif';
+$string['interactivesettingshelp'] = 'Les paramètres qui suivent impactent l\'usage interactif de la fonction de recyclage lorsqu\'elle est utilisée directement dans les cours.';
+
+$string['archiversettings'] = 'Réglage du Moodle d\'archive';
+$string['configsourcewwwroot'] = 'Url racine des sources';
+$string['configsourcewwwroot_desc'] = 'URL Racine du moodle à archiver';
+$string['configsourcetoken'] = 'Token de la source';
+$string['configsourcetoken_desc'] = 'Token de web service du service de recyclage des cours';
+$string['configpolicyenddate'] = 'Détecter par date de fin';
+$string['configpolicyenddate_desc'] = 'Détecte les cours terminés par leur date de fin';
+$string['configpolicyenrols'] = 'Detecter par les inscriptions';
+$string['configpolicyenrols_desc'] = 'Détecte les cours terminés lorsqu\'ils n\'ont plus d\'inscriptions actives.';
+$string['configpolicylastaccess'] = 'Detecter sur dernier access';
+$string['configpolicylastaccess_desc'] = 'Déctecte les cours finis sur la base des enregsitrements de "dernier accès au cours"';
+$string['configpreservesourcecategory'] = 'Préserver la catégorie d\'origine';
+$string['configpreservesourcecategory_desc'] = 'Si activé, les archives seront stockées dans une catégorie similaire à celle
+de leur plate-forme d\'origine. Les catégories non existantes seront ajoutées au premier archivage. Sinon, c\'est la politique du plugin de transport de cours 
+associé à la fonction d\'archivage qui est respectée.';
+
+$string['nocoursestoarchive'] = 'Aucun cours à archiver';
 
 $string['RequestForArchive'] = 'Archivage envisagé';
+$string['Done'] = 'Traitement terminé';
+$string['Failed'] = 'Echec de l\'archivage';
 $string['Stay'] = 'Ne rien faire';
 $string['Reset'] = 'Réinitialiser';
 $string['Clone'] = 'Cloner';
 $string['CloneAndReset'] = 'Cloner et réinitialiser la copie';
-$string['Archive'] = 'Archiver et supprimer';
+$string['Archive'] = 'Archiver et conserver';
+$string['ArchiveAndDelete'] = 'Archiver et supprimer';
+$string['ArchiveAndReset'] = 'Archiver puis réinitialiser';
+$string['ArchiveAndRetire'] = 'Archiver et remiser';
 $string['CloneArchiveAndReset'] = 'Archiver l\'original, cloner et réinitialiser la copie';
 $string['Delete'] = 'Supprimer totalement le cours (définitif)';
+$string['Retire'] = 'Déplacer le cours dans une catégorie cachée (remiser)';
 
 $string['throwhdr'] = 'Supprimer';
 $string['resethdr'] = 'Réinitialiser';
@@ -126,6 +170,12 @@ choisir l\'action d\'archivage qui sera conduite sur ces cours.
 Visitez l\'url <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> pour faire part de votre décision.
 ';
 
+$string['defaultaction_title_tpl'] = '[<%%SITENAME%%>] : Un de vos cours va être recyclé';
+$string['defaultaction_tpl'] = '
+<p>Le cours [<%%SHORTNAME%%>] <%%FULLNAME%%> que vous détenez va être recyclé avec une action <%%ACTION%%>.</p>
+
+<p>Vous pouvez encore visiter l\'URL <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> pour changer la destination du cours.</p>
+';
 $string['configdefaultaction_desc'] = 'ce qu\'il adviendra du cours lorsque la tâche de fin d\'année est exécutée.';
 
 $string['confignumberofnotifications_desc'] = 'Le nombre de notifications à envoyer avant la date d\'éxécution. Les notifications

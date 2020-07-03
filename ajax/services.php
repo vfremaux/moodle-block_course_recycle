@@ -25,13 +25,18 @@ define('AJAX_SCRIPT', 1);
 
 require('../../../config.php');
 
+$blockid = optional_param('blockid', 0, PARAM_INT); // Block id.
 $id = required_param('id', PARAM_INT); // Course id.
 
 if (!$course = $DB->get_record('course', array('id' => $id))) {
     die("No course");
 }
 
-$context = context_block::instance($id);
+if (!empty($blockid)) {
+    $blockcontext = context_block::instance($id);
+    $blockrec = $DB->get_record('block_instances', ['id' => $blockid]);
+}
+
 $coursecontext = context_course::instance($course->id);
 
 require_login($course);
@@ -48,6 +53,7 @@ if ($action == 'getmodalform') {
 }
 
 if ($action == 'changerecycle') {
+    // Site level service.
     $recycleaction = required_param('status', PARAM_ALPHA);
 
     $PAGE->set_context($coursecontext);
@@ -79,6 +85,7 @@ if ($action == 'changerecycle') {
 }
 
 if ($action == 'change') {
+    // Site level service.
     $recycleaction = required_param('status', PARAM_ALPHA);
 
     $PAGE->set_context($coursecontext);

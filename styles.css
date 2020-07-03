@@ -2,3 +2,15 @@
 .block.block_course_recycle .footer {
     font-size: 0.8em;
 }
+
+.future {
+    color: red;
+}
+
+.processable {
+    color: green;
+}
+
+#recycle-confirm-category-filter-form {
+    margin: 20px;
+}

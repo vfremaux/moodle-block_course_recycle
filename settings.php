@@ -22,6 +22,9 @@ use \block\course_recycle\admin_setting_configdatetime;
 
 if ($ADMIN->fulltree) {
 
+    $help = get_string('interactivesettingshelp', 'block_course_recycle');
+    $settings->add(new admin_setting_heading('interactivesettings', get_string('interactivesettings', 'block_course_recycle'), $help));
+
     $key = 'block_course_recycle/blockstate';
     $label = get_string('configblockstate', 'block_course_recycle');
     $desc = get_string('configblockstate_desc', 'block_course_recycle');
@@ -34,16 +37,17 @@ if ($ADMIN->fulltree) {
     $settings->add(new admin_setting_configselect($key, $label, $desc, 'inactive', $states));
 
     $actionoptions = array(
-        '0' => get_string('keep', 'block_course_recycle'),
-        '1' => get_string('reset', 'block_course_recycle'),
-        '2' => get_string('archive', 'block_course_recycle'),
-        '3' => get_string('throw', 'block_course_recycle')
+        'Stay' => get_string('keep', 'block_course_recycle'),
+        'Retire' => get_string('retire', 'block_course_recycle'),
+        'Reset' => get_string('reset', 'block_course_recycle'),
+        'Archive' => get_string('archive', 'block_course_recycle'),
+        'Delete' => get_string('throw', 'block_course_recycle'),
     );
 
     $key = 'block_course_recycle/defaultaction';
     $label = get_string('configdefaultaction', 'block_course_recycle');
     $desc = get_string('configdefaultaction_desc', 'block_course_recycle');
-    $settings->add(new admin_setting_configselect($key, $label, $desc, 1, $actionoptions));
+    $settings->add(new admin_setting_configselect($key, $label, $desc, 'Stay', $actionoptions));
 
     $numberoptions = array(
         '0' => get_string('nonotifications', 'block_course_recycle'),
@@ -113,6 +117,62 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('finishedsettings', get_string('finishedcoursessettings', 'block_course_recycle'), ''));
 
+    $actionoptions = array(
+        'RequestForArchive' => get_string('ask', 'block_course_recycle'), // means "Do nothing but ask to owner (put in re cycle register for request)"
+        'Stay' => get_string('keep', 'block_course_recycle'), // means "Do nothing at all"
+        'Retire' => get_string('retire', 'block_course_recycle'), // means "keep and move to retired category"
+        'Reset' => get_string('reset', 'block_course_recycle'), // means "keep then reset"
+        'Archive' => get_string('archive', 'block_course_recycle'), // means "archive then delete"
+        'Delete' => get_string('throw', 'block_course_recycle'), // means "delete with no archiving"
+    );
+
+    $key = 'block_course_recycle/defaultactionfinishedcourses';
+    $label = get_string('configdefaultactionfinishedcourses', 'block_course_recycle');
+    $desc = get_string('configdefaultactionfinishedcourses_desc', 'block_course_recycle');
+    $settings->add(new admin_setting_configselect($key, $label, $desc, 'Stay', $actionoptions));
+
+    // If 0, no decision delay. the course remains.
+    $key = 'block_course_recycle/decisiondelay';
+    $label = get_string('configdecisiondelay', 'block_course_recycle');
+    $desc = get_string('configdecisiondelay_desc', 'block_course_recycle');
+    $default = 14;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    // If 0, no decision delay. the course remains.
+    $key = 'block_course_recycle/actiondelay';
+    $label = get_string('configactiondelay', 'block_course_recycle');
+    $desc = get_string('configactiondelay_desc', 'block_course_recycle');
+    $default = 14;
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+
+    // Post 2.5.
+    include_once($CFG->dirroot.'/lib/coursecatlib.php');
+    $catlist = \coursecat::make_categories_list();
+
+    $key = 'block_course_recycle/retirecategory';
+    $label = get_string('configretirecategory', 'block_course_recycle');
+    $desc = get_string('configretirecategory_desc', 'block_course_recycle');
+    $default = '';
+    $settings->add(new admin_setting_configselect($key, $label, $desc, '', $catlist));
+
+    $key = 'block_course_recycle/policyenddate';
+    $label = get_string('configpolicyenddate', 'block_course_recycle');
+    $desc = get_string('configpolicyenddate_desc', 'block_course_recycle');
+    $default = 1;
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/policyenrols';
+    $label = get_string('configpolicyenrols', 'block_course_recycle');
+    $desc = get_string('configpolicyenrols_desc', 'block_course_recycle');
+    $default = 0;
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
+
+    $key = 'block_course_recycle/policylastaccess';
+    $label = get_string('configpolicylastaccess', 'block_course_recycle');
+    $desc = get_string('configpolicylastaccess_desc', 'block_course_recycle');
+    $default = 0;
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
+
     $key = 'block_course_recycle/mininactivedaystofinish';
     $label = get_string('configmininactivedaystofinish', 'block_course_recycle');
     $desc = get_string('configmininactivedaystofinish_desc', 'block_course_recycle');
@@ -148,11 +208,17 @@ if ($ADMIN->fulltree) {
     $label = get_string('configsourcewwwroot', 'block_course_recycle');
     $desc = get_string('configsourcewwwroot_desc', 'block_course_recycle');
     $default = '';
-    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default, PARAM_TEXT));
 
     $key = 'block_course_recycle/sourcetoken';
-    $label = get_string('configsourcewstoken', 'block_course_recycle');
-    $desc = get_string('configsourcewstoken_desc', 'block_course_recycle');
+    $label = get_string('configsourcetoken', 'block_course_recycle');
+    $desc = get_string('configsourcetoken_desc', 'block_course_recycle');
     $default = '';
-    $settings->add(new admin_setting_configtext($key, $label, $desc, $default));
+    $settings->add(new admin_setting_configtext($key, $label, $desc, $default, PARAM_TEXT));
+
+    $key = 'block_course_recycle/preservesourcecategory';
+    $label = get_string('configpreservesourcecategory', 'block_course_recycle');
+    $desc = get_string('configpreservesourcecategory_desc', 'block_course_recycle');
+    $default = 1;
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
 }

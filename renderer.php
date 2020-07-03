@@ -17,19 +17,15 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/compatlib.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
 use \block_course_recycle\course_recycler;
+use \block\course_recycle\compat;
 
 class block_course_recycle_renderer extends plugin_renderer_base {
 
     public function globalstable(&$globals) {
-
-        $throwstr = get_string('throwhdr', 'block_course_recycle');
-        $archivestr = get_string('archivehdr', 'block_course_recycle');
-        $keepstr = get_string('keephdr', 'block_course_recycle');
-        $resetstr = get_string('resethdr', 'block_course_recycle');
-        $unsetstr = get_string('unsethdr', 'block_course_recycle');
 
         $template = new StdClass;
 
@@ -42,6 +38,11 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         return "Still in development";
     }
 
+    /**
+     * Use in scheduled running mode.
+     * @param string $recycleaction
+     * @param integer $blockid
+     */
     public function recyclebutton($recycleaction, $blockid) {
         global $COURSE, $USER;
 
@@ -90,6 +91,12 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         return $str;
     }
 
+    public function recycletaskbutton($courseid) {
+
+        $buttonurl = new moodle_url('/blocks/course_recycle/index.php', ['confirm' => 1, 'courseid' => $courseid]);
+        echo $this->output->single_button($buttonurl, get_string('dorecycle', 'block_course_recycle'));
+    }
+
     public function status_listform_part($course, $state, $context) {
 
         $fullkeys = course_recycler::get_status_list();
@@ -116,10 +123,17 @@ class block_course_recycle_renderer extends plugin_renderer_base {
     public function modal_form($courseid) {
         global $DB;
 
+        $config = get_config('block_course_recycle');
+
         $systemcontext = context_system::instance();
 
         $state = $DB->get_field('block_course_recycle', 'status', ['id' => $courseid]);
         $template = new Stdclass;
+
+        $template->canretire = false;
+        if (!empty($config->retirecategory)) {
+            $template->canretire = true;
+        }
 
         $str = $this->output->render_from_template('block_course_recycle/modal_edit_form', $template);
         return $str;
@@ -131,6 +145,8 @@ class block_course_recycle_renderer extends plugin_renderer_base {
      */
     public function confirm_table($mycourses) {
         global $DB;
+
+        $config = get_config('block_course_recycle');
 
         $template = new Stdclass;
 
@@ -149,12 +165,69 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             $state = $DB->get_record('block_course_recycle', ['courseid' => $coursetpl->id]);
             $coursetpl->reason = get_string($state->reason, 'block_course_recycle');
             $coursetpl->fullname = $DB->get_field('course', 'fullname', ['id' => $coursetpl->id]);
+            $coursetpl->courseurl = new moodle_url('/course/view.php', ['id' => $coursetpl->id]);
+
             $coursetpl->status = $this->status_listform_part($coursetpl, $state, $context);
+
+            $coursetpl->nextstate = '';
+            $coursetpl->nextdate = '';
+            $coursetpl->daystorun = '';
+            if (empty($state->postactions) && !empty($config->defaultaction)) {
+                $coursetpl->nextstate = get_string($config->defaultaction, 'block_course_recycle');
+
+                if ($config->decisiondelay > 0) {
+                    $nextdate = $state->timemodified + $config->actiondelay * DAYSECS;
+                    $daystorun = round((time() - $nextdate) / DAYSECS);
+                    if ($daystorun < 0) {
+                        $coursetpl->daystorun = $daystorun;
+                    }
+                    $coursetpl->nextdate = userdate($nextdate);
+                } else {
+                    $coursetpl->nextdate = userdate(time());
+                    $coursetpl->daystorun = 0;
+                }
+            }
+            $coursetpl->nextstate = $state->postactions;
+
             $label = get_string('notificationstopped', 'block_course_recycle');
             $coursetpl->notify = ($state->stopnotify) ? $OUTPUT->pix_icon('stopnotify', $label, 'block_course_recycle') : '' ;
+
             $template->courses[] = $coursetpl;
         }
 
         return $this->output->render_from_template('block_course_recycle/confirm_table', $template);
+    }
+
+    public function list_archivables($archivables) {
+        $template = new StdClass;
+
+
+        if (empty($archivables)) {
+            $template->emptylist = true;
+            $template->nocoursetoarchivenotification = $this->output->notification(get_string('nocoursestoarchive', 'block_course_recycle'));
+            return $this->output->render_from_template('block_course_recycle/archivables_table', $template);
+        }
+
+        $template->emptylist = false;
+        foreach ($archivables as $arch) {
+            $archivabletpl = $arch;
+            if (empty($arch->timeprocessable)) {
+                $arch->timeprocessable = time();
+            }
+            $archivabletpl->actiondate = userdate($arch->timeprocessable);
+
+            $template->archivables[] = $archivabletpl;
+        }
+        return $this->output->render_from_template('block_course_recycle/archivables_table', $template);
+    }
+
+    public function category_filter($id, $topcatid) {
+
+        $cats = compat::get_catlist();
+        $template = new Stdclass();
+        $template->id = $id;
+        $template->select = html_writer::select($cats, 'topcatid', $topcatid, ['' => '...']);
+
+        return $this->output->render_from_template('block_course_recycle/catfilter', $template);
     }
 }

@@ -84,7 +84,7 @@ class block_course_recycle extends block_base {
 
         if ($COURSE->id > SITEID) {
 
-            $oldstate = $DB->get_field('block_course_recycle', 'status', ['id' => $COURSE->id]);
+            $oldstate = $DB->get_field('block_course_recycle', 'status', ['courseid' => $COURSE->id]);
             if ($oldstate) {
                 $state = $oldstate;
 
@@ -136,12 +136,14 @@ class block_course_recycle extends block_base {
             }
         }
 
-        if (block_course_recycle_has_capability_somewhere('moodle/course:manageactivities', false, true, true, CONTEXT_COURSE)) {
-            $this->content->footer .= '<br/>';
-            $indexurl = new moodle_url('/blocks/course_recycle/confirmmycourses.php');
-            $this->content->footer .= '<a href="'.$indexurl.'">'.get_string('stateyourcourses', 'block_course_recycle').'</a>';
+        if ($config->moodletype == 'standard') {
+            if (block_course_recycle_has_capability_somewhere('moodle/course:manageactivities', false, true, true, CONTEXT_COURSE)) {
+                $this->content->footer .= '<br/>';
+                $stateurl = new moodle_url('/blocks/course_recycle/confirmmycourses.php');
+                $this->content->footer .= '<a href="'.$stateurl.'">'.get_string('stateyourcourses', 'block_course_recycle').'</a>';
+            }
         }
-
+        // Archive node.
         $contextsystem = context_system::instance();
         if (has_capability('moodle/site:config', $contextsystem)) {
             $this->content->footer .= '<br/>';
@@ -151,7 +153,6 @@ class block_course_recycle extends block_base {
 
         return $this->content;
     }
-
 
     /**
      * Serialize and store config data

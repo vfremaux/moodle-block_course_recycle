@@ -26,6 +26,8 @@ require('../../config.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
+global $verbose;
+
 use \block_course_recycle\course_recycler;
 
 $courseid = required_param('courseid', PARAM_INT);
@@ -35,6 +37,8 @@ $PAGE->set_url($url);
 
 $context = context_system::instance();
 $PAGE->set_context($context);
+
+$config = get_config('block_course_recycle');
 
 // Security.
 
@@ -54,18 +58,46 @@ $renderer = $PAGE->get_renderer('block_course_recycle');
 
 echo $OUTPUT->header();
 
-echo $renderer->globalstable($globals);
+if ($config->moodletype == 'standard') {
 
-if ($countinstances > $pagesize) {
-    echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
+    echo $renderer->globalstable($globals);
 
-    echo $renderer->recyclestates($recycleinstances);
+    if ($countinstances > $pagesize) {
+        echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
 
-    echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
+        echo $renderer->recyclestates($recycleinstances);
+
+        echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
+    }
+} else {
+    $confirm = optional_param('confirm', false, PARAM_BOOL);
+    if ($confirm == 1) {
+
+        $verbose = true;
+
+        include_once($CFG->dirroot.'/blocks/course_recycle/classes/task/pull_and_archive_task.php');
+        $task = new \block_course_recycle\task\pull_and_archive_task();
+
+        echo "<pre>";
+        echo "Starting archivage task...\n";
+        $task->execute();
+        echo "</pre>";
+    } else {
+
+        $verbose = false;
+
+        $archivables = course_recycler::get_archivables(true); // Ask for all dates, processable or NOT.
+
+        echo $renderer->list_archivables($archivables);
+    }
+
+    echo $OUTPUT->box_start('', 'block-recycle-task');
+    echo $renderer->recycletaskbutton($courseid);
+    echo $OUTPUT->box_end();
 }
 
-echo '<center>';
 
+echo '<center>';
 $buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
 echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
 echo '</center>';

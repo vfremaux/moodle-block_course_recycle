@@ -35,7 +35,7 @@ function xmldb_block_course_recycle_upgrade($oldversion) {
     $dbman = $DB->get_manager();
 
     if ($oldversion < 2019061000) { //New version in version.php
-        // Define table block_teams_requests to be created.
+        // Define table block_course_recycle to be created.
         $table = new xmldb_table('block_course_recycle');
 
         // Adding fields to table block_course_recycle.
@@ -62,5 +62,30 @@ function xmldb_block_course_recycle_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2019061000, 'course_recycle');
     }
 
+    if ($oldversion < 2019092600) { //New version in version.php
+        $table = new xmldb_table('block_course_recycle');
+
+        $field = new xmldb_field('status', XMLDB_TYPE_CHAR, '32', null, XMLDB_NOTNULL, null, null);
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->change_field_precision($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2019092600, 'course_recycle');
+    }
+
+    if ($oldversion < 2019121600) { //New version in version.php
+        // Define table block_course_recycle to be created.
+        $table = new xmldb_table('block_course_recycle');
+
+        // Adding fields to table block_course_recycle.
+        $field = new xmldb_field('postactions', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'status');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_block_savepoint(true, 2019121600, 'course_recycle');
+    }
     return true;
 }

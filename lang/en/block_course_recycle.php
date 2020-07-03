@@ -27,13 +27,16 @@ $string['course_recycle:myaddinstance'] = 'Add a new Course Recycle block on My 
 $string['course_recycle:view'] = 'View the Course Recycle block';
 $string['course_recycle:admin'] = 'Administrate Course Recycling';
 $string['course_recycle:archive'] = 'Archive courses';
+$string['course_recycle:student'] = 'Mark student roles for course recycling';
 
 // Privacy
 $string['privacy:metadata'] = 'Although the teacher will drive the recycle option, the recycle option belongs to the course scope and not the user scope.';
 
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ensure an instance is available in all courses';
-$string['archive'] = 'At end of session, archive the course';
+$string['archive'] = 'Archive the course';
+$string['ask'] = 'Ask the owner';
+$string['backtoreport'] = 'Return to report';
 $string['backtocourse'] = 'Return to course';
 $string['backtodashboard'] = 'Return to dashboard';
 $string['atendofsession'] = 'At end of session';
@@ -67,6 +70,20 @@ $string['configminactiveaccesstomaintain'] = 'Minimum number of active users';
 $string['configminactiveaccesstomaintain_desc'] = 'The minimal number of active users under which will be considered there is no activity in the course.';
 $string['configrequestforarchivenotification'] = 'Request for archive notification';
 $string['configrequestforarchivenotification_desc'] = 'If enabled, will send a notification to editing teachers';
+$string['configpolicyenddate'] = 'Detect end date';
+$string['configpolicyenddate_desc'] = 'Detect finished courses by end date';
+$string['configpolicyenrols'] = 'Detect expired enrols';
+$string['configpolicyenrols_desc'] = 'Detect finished courses by examinating enrols of significant users to see if they are still actives';
+$string['configpolicylastaccess'] = 'Detect last access';
+$string['configpolicylastaccess_desc'] = 'Detect finished courses by examinating last access dates on significant users';
+$string['configretirecategory'] = 'Category where to move trashed courses';
+$string['configretirecategory_desc'] = 'A course category designated to move finished courses in.';
+$string['configdefaultactionfinishedcourses'] = 'Default action for detected finished courses';
+$string['configdefaultactionfinishedcourses_desc'] = 'This is the imperative action that will be taken for courses that have an explicit "end of course" condition (by end date)';
+$string['configdecisiondelay'] = 'Decision delay';
+$string['configdecisiondelay_desc'] = 'A delay (in days) the teacher has to take position on course archiving action.';
+$string['configactiondelay'] = 'Action delay';
+$string['configactiondelay_desc'] = 'A delay (in days) after which the recycling action will be effectively handled.';
 $string['confirmmycourses'] = 'Confirm my course end action(s)';
 $string['detectcourses'] = 'Scan for finished courses';
 $string['rfannone'] = 'No notification';
@@ -74,19 +91,23 @@ $string['rfanoldestet'] = 'First enrolled editing teacher';
 $string['rfanallets'] = 'All editing teacher';
 $string['archivemoodle'] = 'Archive moodle instance';
 $string['standardmoodle'] = 'Standard moodle instance';
+$string['nocoursestoarchive'] = 'No courses to archive';
 $string['unset'] = 'Unset';
 $string['inactive'] = 'Hidden';
-$string['keep'] = 'At end of session, keep unchanged';
+$string['keep'] = 'Keep unchanged';
+$string['retire'] = 'Retire';
 $string['locked'] = 'Locked';
 $string['nonotifications'] = 'No notifications';
 $string['nocourses'] = 'No courses to recycle';
+$string['nextactions'] = 'Next actions';
+$string['nextdate'] = 'On';
 $string['opentill'] = 'You can still change the course recycling action till {$a}.';
 $string['pluginname'] = 'Course Recycle';
 $string['recycle'] = 'Manage the recycling process';
 $string['reminded1'] = 'First reminder sent';
 $string['reminded2'] = 'Second reminder sent';
 $string['reminded3'] = 'Third reminder sent';
-$string['reset'] = 'At end of session, reset the course';
+$string['reset'] = 'Reset the course';
 $string['stateyourcourses'] = 'State your courses';
 $string['task_recycle'] = 'Recycling process end of year cleanup';
 $string['task_lock'] = 'Recycle lock choices';
@@ -97,27 +118,39 @@ $string['task_pull_and_archive'] = 'Pull and archive courses';
 $string['recycleaction'] = 'Recycle action';
 $string['directeditorsnum'] = 'Course editors';
 $string['reason'] = 'Reason';
-$string['throw'] = 'At end of session, delete the course';
+$string['throw'] = 'Delete the course';
 $string['bydate'] = 'By end date';
 $string['byenrols'] = 'By enrols';
 $string['byaccess'] = 'By access';
 $string['updateaction'] = 'Update recycling action';
 $string['notificationstopped'] = 'Notifications disabled';
+$string['dorecycle'] = 'Launch the recycling task';
+$string['interactivesettings'] = 'Interactive mode settings';
+$string['interactivesettingshelp'] = 'The following parameters impact the recycle block when used interactively in courses.';
 
 $string['archiversettings'] = 'Archiver Moodle settings';
 $string['configsourcewwwroot'] = 'Archive source wwwroot';
 $string['configsourcewwwroot_desc'] = 'Root url of the source moodle to archive';
-$string['configsourcewstoken'] = 'Archive source WS Token';
-$string['configsourcewstoken_desc'] = 'WS Token of the source moodle to archive';
+$string['configsourcetoken'] = 'Archive source WS Token';
+$string['configsourcetoken_desc'] = 'WS Token of the source moodle to archive (course_recycle service)';
+$string['configpreservesourcecategory'] = 'Preserve source category';
+$string['configpreservesourcecategory_desc'] = 'If enabled, the backups will be stored in a similar category path it has in the source moodle.
+Missing paths will be created on first archive. If not enabled, the course tranport associated plugin destination policy is respected.';
 
 $string['RequestForArchive'] = 'Requested for archive';
+$string['Done'] = 'Done';
+$string['Failed'] = 'Failed';
 $string['Stay'] = 'Do nothing';
 $string['Reset'] = 'Reset course';
 $string['Clone'] = 'Clone course';
 $string['CloneAndReset'] = 'Clone and reset the new course';
-$string['Archive'] = 'Archive and remove';
+$string['Archive'] = 'Archive and keep';
+$string['ArchiveAndDelete'] = 'Archive and delete';
+$string['ArchiveAndReset'] = 'Archive and reset';
+$string['ArchiveAndRetire'] = 'Archive and retire';
 $string['CloneArchiveAndReset'] = 'Clone then archive original and reset it';
 $string['Delete'] = 'Destroy completely the course with no saving';
+$string['Retire'] = 'Retire course in a hidden category';
 
 $string['throwhdr'] = 'Delete';
 $string['resethdr'] = 'Reinitialize';
@@ -140,10 +173,18 @@ Browse <a href="%COURSEURL%">in your course</a> to choose the course action or t
 ';
 
 $string['requestforarchive_title_tpl'] = '[<%%SITENAME%%>] : You have new reqests for course archiving ';
-$string['requestforarchive_tpl'] = 'The archiving course crawler has detected some courses that seem being finished
-and awaiting your decision for recycle action.
+$string['requestforarchive_tpl'] = '
+<p>The archiving course crawler has detected some courses that seem being finished
+and awaiting your decision for recycle action.</p>
 
-Please visit <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> to mark your decision.
+<p>Please visit <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> to mark your decision.</p>
+';
+
+$string['defaultaction_title_tpl'] = '[<%%SITENAME%%>] : Some courses will be recycled ';
+$string['defaultaction_tpl'] = '
+<p>The course <%%FULLNAME%%> you are editing will be recycled with the default action <%%ACTION%%>.</p>
+
+<p>You can still visit <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> to change the destination.</p>
 ';
 
 $string['configblockstate_desc'] = 'This state variable controls the overall behaviour cycle of the block in any course. the block has a single site

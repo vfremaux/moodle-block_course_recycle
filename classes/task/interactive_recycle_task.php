@@ -17,7 +17,7 @@
 /**
  * @package   block_course_recycle
  * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_course_recycle\task;
@@ -25,9 +25,10 @@ namespace block_course_recycle\task;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Recycle processing for courses.
+ * Recycle processing for courses. Tis task is triggered at the end of a recycling period to
+ * actually perform all choosen recycle actions in each recycling block instance.
  */
-class show_task extends \core\task\scheduled_task {
+class interactive_recycle_task extends \core\task\scheduled_task {
 
     /**
      * Get a descriptive name for this task (shown to admins).
@@ -35,14 +36,21 @@ class show_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('task_show', 'block_course_recycle');
+        return get_string('task_recycle', 'block_course_recycle');
     }
 
     /**
      * Do the job.
      */
     public function execute() {
-        // Set all blocs to active state (showing).
-        set_config('blockstate', 'active', 'block_course_recycle');
+        global $CFG;
+
+        /* Actually performs the recycle operations.
+         * This task should be limited in processing duration/amount of units processed. It will 
+         * run again until all block instances have not been processed.
+         */
+
+        include_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+        block_course_recycle_task_recycle();
     }
 }

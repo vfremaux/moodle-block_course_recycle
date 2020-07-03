@@ -17,22 +17,18 @@
 /**
  * @package   block_course_recycle
  * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_course_recycle\task;
 
-require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
-require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
-
 defined('MOODLE_INTERNAL') || die();
 
-use \block_course_recycle\course_recycler;
-
 /**
- * Recycle processing for courses.
+ * Recycle processing for courses. this task is triggered once per period to
+ * reset state of all interactive recycle blocks.
  */
-class pull_and_archive_task extends \core\task\scheduled_task {
+class interactive_reset_task extends \core\task\scheduled_task {
 
     /**
      * Get a descriptive name for this task (shown to admins).
@@ -40,14 +36,28 @@ class pull_and_archive_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('task_pull_and_archive', 'block_course_recycle');
+        return get_string('task_reset', 'block_course_recycle');
     }
 
     /**
      * Do the job.
      */
     public function execute() {
-        echo "Calling archiver task\n";
-        course_recycler::task_pull_and_archive_courses();
+        global $DB;
+
+        $config = get_config('block_course_recycle');
+
+        set_config('blockstate', 'inactive', 'block_course_recycle');
+
+        $instances = $DB->get_records('block_instances', array('blockname' => 'course_recycle'));
+        if ($instances) {
+            foreach ($înstances as $instancerec) {
+                $bi = block_instance('course_recycle', $instancerec);
+                $bi->config->recycleaction = $config->defaultaction;
+                $bi->config->choicedone = false;
+                $bi->config->stopnotify = false;
+                $bi->instance_config_save();
+            }
+        }
     }
 }
