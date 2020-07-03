@@ -15,6 +15,13 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This task is used at the archive side.
+ * 
+ * Synopsys : 
+ * -- get the list of pullable courses (courses to archive on the remote side)
+ * -- pulls courses and deploy them in archive location
+ * -- asynchronously give back status to the remote side when done.
+ *
  * @package   block_course_recycle
  * @category  blocks
  * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>

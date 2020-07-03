@@ -24,6 +24,9 @@
 define('AJAX_SCRIPT', 1);
 
 require('../../../config.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
+
+use block_course_recycle\course_recycler;
 
 $blockid = optional_param('blockid', 0, PARAM_INT); // Block id.
 $id = required_param('id', PARAM_INT); // Course id.
@@ -67,12 +70,14 @@ if ($action == 'changerecycle') {
         $state = new Stdclass;
         $state->courseid = $COURSE->id;
         $state->status = $recycleaction;
+        $state->postactions = course_recycler::get_post_action($state->status);
         $state->timemodified = time();
         $state->lastuserid = $USER->id;
         $DB->insert_record('block_course_recycle', $state);
     } else {
         $state->status = $recycleaction;
         $state->timemodified = time();
+        $state->postactions = course_recycler::get_post_action($state->status);
         $state->lastuserid = $USER->id;
         $DB->update_record('block_course_recycle', $state);
     }

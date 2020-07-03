@@ -3,6 +3,10 @@
 <!-- block_course_recycle/modal_edit_form -->
 <div class="recycle-options">
     <div class="recycle-option">
+        {{#isadmin}}
+        <input id="modal-ask" type="radio" name="recycleaction" value="Ask" class="hidden-input">
+            <label for="modal-ask"><img src="{{{askpixurl}}}" alt="{{#str}}Ask, block_course_recycle{{/str}}"></label><br/>
+        {{/isadmin}}
         <input id="modal-stay" type="radio" name="recycleaction" value="Stay" class="hidden-input">
             <label for="modal-stay"><img src="{{{nothingpixurl}}}" alt="{{#str}}Stay, block_course_recycle{{/str}}"></label><br/>
         {{#canretire}}
@@ -17,8 +21,12 @@
             <label for="modal-cloneandreset"><img src="{{{cloneandresetpixurl}}}" alt="{{#str}}CloneAndReset, block_course_recycle{{/str}}"></label><br/>
         <input id="modal-archive" type="radio" name="recycleaction" value="Archive" class="hidden-input">
             <label for="modal-archive"><img src="{{{archivepixurl}}}" alt="{{#str}}Archive, block_course_recycle{{/str}}"></label><br/>
-        <input id="modal-clonearchiveandreset" type="radio" name="recycleaction" value="CloneArchiveAndReset" class="hidden-input">
-            <label for="modal-clonearchiveandreset"><img src="{{{clonearchiveandresetpixurl}}}" alt="{{#str}}CloneArchiveAndReset, block_course_recycle{{/str}}"></label><br/>
+        <input id="modal-archiveandreset" type="radio" name="recycleaction" value="ArchiveAndReset" class="hidden-input">
+            <label for="modal-archiveandreset"><img src="{{{archiveandresetpixurl}}}" alt="{{#str}}ArchiveAndReset, block_course_recycle{{/str}}"></label><br/>
+        <input id="modal-archivecloneandreset" type="radio" name="recycleaction" value="ArchiveCloneAndReset" class="hidden-input">
+            <label for="modal-archivecloneandreset"><img src="{{{archivecloneandresetpixurl}}}" alt="{{#str}}ArchiveCloneAndReset, block_course_recycle{{/str}}"></label><br/>
+        <input id="modal-archiveanddelete" type="radio" name="recycleaction" value="ArchiveAndDelete" class="hidden-input">
+            <label for="modal-archiveanddelete"><img src="{{{archiveanddeletepixurl}}}" alt="{{#str}}ArchiveAndDelete, block_course_recycle{{/str}}"></label><br/>
         <input id="modal-delete" type="radio" name="recycleaction" value="Delete" class="hidden-input">
             <label for="modal-delete"><img src="{{{deletepixurl}}}" alt="{{#str}}Delete, block_course_recycle{{/str}}"></label><br/>
     </div>

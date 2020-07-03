@@ -25,14 +25,19 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/blocks/course_recycle/mailtemplatelib.php');
 
-define('RECYCLE_RQFA', 'RequestForArchive');
 define('RECYCLE_STAY', 'Stay');
 define('RECYCLE_RESET', 'Reset');
+define('RECYCLE_RETIRE', 'Retire');
 define('RECYCLE_CLONE', 'Clone');
 define('RECYCLE_CLONETANDRESET', 'CloneAndReset');
 define('RECYCLE_ARCHIVE', 'Archive');
-define('RECYCLE_CLONEARCHIVEANDRESET', 'CloneArchiveAndReset');
+define('RECYCLE_ARCHIVEANDRESET', 'ArchiveAndReset');
+define('RECYCLE_ARCHIVEANDDELETE', 'ArchiveAndDelete');
+define('RECYCLE_ARCHIVECLONEANDRESET', 'CloneArchiveAndReset');
 define('RECYCLE_DELETE', 'Delete');
+
+define('RECYCLE_ASK', 'Ask');
+define('RECYCLE_RQFA', 'RequestForArchive');
 define('RECYCLE_DONE', 'Done'); // This is an extra
 define('RECYCLE_FAILED', 'Failed'); // This is an extra
 

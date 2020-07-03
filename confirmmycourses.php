@@ -63,11 +63,15 @@ if (!has_capability('moodle/site:config', $context)) {
     // Get all courses in and below a top category.
     if ($topcatid) {
         $catpath = $DB->get_field('course_categories', 'path', ['id' => $topcatid]);
+        $catcourses = $DB->get_records('course', ['category' => $topcatid]);
         $select = $DB->sql_like('path', ':path');
-        $catcourses = $DB->get_records('course', ['category', $topcatid]);
-        $allcourses = $DB->get_records_select('course', ['path' => $catpath.'/%']);
-        if ($catcourses && $allcourses) {
-            $allcourses = $catcourses + $allcourses;
+        $subcats = $DB->get_records_select('course_categories', $select, ['path' => $catpath.'/%']);
+        $subcourses = false;
+        if ($subcats) {
+            $subcourses = $DB->get_records_list('course', 'category', array_keys($subcats));
+        }
+        if ($catcourses && $subcourses) {
+            $allcourses = $catcourses + $subcourses;
         } else if ($catcourses) {
             $allcourses = $catcourses;
         }
@@ -87,6 +91,8 @@ if ($totalcount > $pagesize) {
 // Start print page.
 
 echo $OUTPUT->header();
+
+echo $OUTPUT->heading(get_string('confirmboard', 'block_course_recycle'));
 
 if (has_capability('moodle/site:config', $context)) {
     echo $renderer->category_filter($id, $topcatid);

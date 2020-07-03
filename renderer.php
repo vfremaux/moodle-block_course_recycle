@@ -135,6 +135,8 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             $template->canretire = true;
         }
 
+        $template->isadmin = has_capability('moodle/site:config', $systemcontext);
+
         $str = $this->output->render_from_template('block_course_recycle/modal_edit_form', $template);
         return $str;
     }
@@ -172,11 +174,15 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             $coursetpl->nextstate = '';
             $coursetpl->nextdate = '';
             $coursetpl->daystorun = '';
-            if (empty($state->postactions) && !empty($config->defaultaction)) {
-                $coursetpl->nextstate = get_string($config->defaultaction, 'block_course_recycle');
 
-                if ($config->decisiondelay > 0) {
-                    $nextdate = $state->timemodified + $config->actiondelay * DAYSECS;
+            // If we have a default action set... and no status or requesting expired status, take default action.
+
+            $coursetpl->nextstate = course_recycler::get_current_action($state->status);
+
+            if ($state->status == RECYCLE_RQFA) {
+                // If ask to owner is the current status.
+                if ($config->decisiondelay > 0 || $config->actiondelay) {
+                    $nextdate = $state->timemodified + $config->decisiondelay + $config->actiondelay * DAYSECS;
                     $daystorun = round((time() - $nextdate) / DAYSECS);
                     if ($daystorun < 0) {
                         $coursetpl->daystorun = $daystorun;
@@ -186,8 +192,22 @@ class block_course_recycle_renderer extends plugin_renderer_base {
                     $coursetpl->nextdate = userdate(time());
                     $coursetpl->daystorun = 0;
                 }
+            } else {
+                // For all other status that have a next action.
+                if ($nextation = course_recycler::get_post_action($state->status)) {
+                    if ($config->actiondelay > 0) {
+                        $nextdate = $state->timemodified + $config->actiondelay * DAYSECS;
+                        $daystorun = round((time() - $nextdate) / DAYSECS);
+                        if ($daystorun < 0) {
+                            $coursetpl->daystorun = $daystorun;
+                        }
+                        $coursetpl->nextdate = userdate($nextdate);
+                    } else {
+                        $coursetpl->nextdate = userdate(time());
+                        $coursetpl->daystorun = 0;
+                    }
+                }
             }
-            $coursetpl->nextstate = $state->postactions;
 
             $label = get_string('notificationstopped', 'block_course_recycle');
             $coursetpl->notify = ($state->stopnotify) ? $OUTPUT->pix_icon('stopnotify', $label, 'block_course_recycle') : '' ;

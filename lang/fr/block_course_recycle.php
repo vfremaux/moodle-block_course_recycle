@@ -33,7 +33,6 @@ $string['privacy:metadata'] = 'Bien que l\'enseignant puisse modifier l\'option 
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ajouter une instance à tous les cours';
 $string['archive'] = 'Archiver';
-$string['ask'] = 'Demander au propriétaire';
 $string['backtocourse'] = 'Revenir au cours';
 $string['backtoreport'] = 'Revenir au rapport';
 $string['backtodashboard'] = 'Revenir au tableau de bord';
@@ -74,6 +73,7 @@ $string['configdecisiondelay'] = 'Délai de décision max';
 $string['configactiondelay_desc'] = 'Le délai (en jours) avant que le recyclage n\'applique l\'action par défaut';
 $string['configactiondelay'] = 'Délai d\'action';
 $string['configdecisiondelay_desc'] = 'Le délai (en jours) pour exécuter l\'action de recyclage choisie';
+$string['confirmboard'] = 'Relevé des cours à recycler';
 $string['detectcourses'] = 'Chercher les cours terminés';
 $string['stateyourcourses'] = 'Programmer la fermeture des cours';
 $string['rfannone'] = 'Pas de notification';
@@ -122,6 +122,9 @@ $string['configsourcewwwroot'] = 'Url racine des sources';
 $string['configsourcewwwroot_desc'] = 'URL Racine du moodle à archiver';
 $string['configsourcetoken'] = 'Token de la source';
 $string['configsourcetoken_desc'] = 'Token de web service du service de recyclage des cours';
+$string['configaskowner'] = 'Demander au propriétaire';
+$string['configaskowner_desc'] = 'Si activé, lors de la détection d\'un cours candidat au recyclage, on demande au propriétaire l\'action à effectuer
+sur le cours (pendant un certain temps) avant d\'appliquer l\action par défaut';
 $string['configpolicyenddate'] = 'Détecter par date de fin';
 $string['configpolicyenddate_desc'] = 'Détecte les cours terminés par leur date de fin';
 $string['configpolicyenrols'] = 'Detecter par les inscriptions';
@@ -135,6 +138,7 @@ associé à la fonction d\'archivage qui est respectée.';
 
 $string['nocoursestoarchive'] = 'Aucun cours à archiver';
 
+$string['Ask'] = 'Demander au propriétaire';
 $string['RequestForArchive'] = 'Archivage envisagé';
 $string['Done'] = 'Traitement terminé';
 $string['Failed'] = 'Echec de l\'archivage';
@@ -146,9 +150,9 @@ $string['Archive'] = 'Archiver et conserver';
 $string['ArchiveAndDelete'] = 'Archiver et supprimer';
 $string['ArchiveAndReset'] = 'Archiver puis réinitialiser';
 $string['ArchiveAndRetire'] = 'Archiver et remiser';
-$string['CloneArchiveAndReset'] = 'Archiver l\'original, cloner et réinitialiser la copie';
+$string['ArchiveCloneAndReset'] = 'Archiver l\'original, cloner et réinitialiser la copie';
 $string['Delete'] = 'Supprimer totalement le cours (définitif)';
-$string['Retire'] = 'Déplacer le cours dans une catégorie cachée (remiser)';
+$string['Retire'] = 'Déplacer le cours dans la catégorie {$a}';
 
 $string['throwhdr'] = 'Supprimer';
 $string['resethdr'] = 'Réinitialiser';

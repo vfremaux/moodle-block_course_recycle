@@ -117,15 +117,68 @@ class course_recycler {
                 RECYCLE_FAILED => get_string('Failed', 'block_course_recycle'),
                 RECYCLE_STAY => get_string('Stay', 'block_course_recycle'),
                 RECYCLE_RESET => get_string('Reset', 'block_course_recycle'),
+                RECYCLE_RETIRE => get_string('Retire', 'block_course_recycle'),
                 RECYCLE_CLONE => get_string('Clone', 'block_course_recycle'),
                 RECYCLE_CLONETANDRESET => get_string('CloneAndReset', 'block_course_recycle'),
                 RECYCLE_ARCHIVE => get_string('Archive', 'block_course_recycle'),
-                RECYCLE_CLONEARCHIVEANDRESET => get_string('CloneArchiveAndReset', 'block_course_recycle'),
-                RECYCLE_DELETE => get_string('CloneArchiveAndReset', 'block_course_recycle')
+                RECYCLE_ARCHIVEANDRESET => get_string('ArchiveAndReset', 'block_course_recycle'),
+                RECYCLE_ARCHIVEANDDELETE => get_string('ArchiveAndDelete', 'block_course_recycle'),
+                RECYCLE_ARCHIVECLONEANDRESET => get_string('ArchiveCloneAndReset', 'block_course_recycle'),
+                RECYCLE_DELETE => get_string('Delete', 'block_course_recycle')
             ];
         }
 
         return $fullstatuslist;
+    }
+
+    public static function get_current_action($status) {
+        static $curentstatusmap;
+
+        if (is_null($curentstatusmap)) {
+
+            $curentstatusmap = [
+                RECYCLE_ASK => RECYCLE_ASK,
+                RECYCLE_RQFA => RECYCLE_RQFA,
+                RECYCLE_DONE => '',
+                RECYCLE_FAILED => '',
+                RECYCLE_STAY => '',
+                RECYCLE_RESET => RECYCLE_RESET,
+                RECYCLE_RETIRE => RECYCLE_RETIRE,
+                RECYCLE_DELETE => RECYCLE_DELETE,
+                RECYCLE_CLONE => RECYCLE_CLONE,
+                RECYCLE_CLONETANDRESET => RECYCLE_CLONETANDRESET,
+                RECYCLE_ARCHIVE => RECYCLE_ARCHIVE,
+                RECYCLE_ARCHIVEANDRESET => RECYCLE_ARCHIVE,
+                RECYCLE_ARCHIVEANDELETE => RECYCLE_ARCHIVE,
+                RECYCLE_ARCHIVECLONEANDRESET => RECYCLE_ARCHIVE
+            ];
+        }
+    }
+
+    public static function get_post_action($status) {
+        static $fullstatuslist;
+
+        if (is_null($fullstatuslist)) {
+
+            $fullstatuslist = [
+                RECYCLE_ASK => '',
+                RECYCLE_RQFA => '',
+                RECYCLE_DONE => '',
+                RECYCLE_FAILED => '',
+                RECYCLE_STAY => '',
+                RECYCLE_RESET => '',
+                RECYCLE_RETIRE => '',
+                RECYCLE_CLONE => '',
+                RECYCLE_CLONETANDRESET => '',
+                RECYCLE_ARCHIVE => '',
+                RECYCLE_ARCHIVEANDRESET => RECYCLE_RESET,
+                RECYCLE_ARCHIVEANDELETE => RECYCLE_DELETE,
+                RECYCLE_ARCHIVECLONEANDRESET => RECYCLE_CLONEANDRESET,
+                RECYCLE_DELETE => ''
+            ];
+        }
+
+        return $fullstatuslist[$status];
     }
 
     public static function add_to_courses() {

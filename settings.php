@@ -117,18 +117,41 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('finishedsettings', get_string('finishedcoursessettings', 'block_course_recycle'), ''));
 
+    $key = 'block_course_recycle/askowner';
+    $label = get_string('configaskowner', 'block_course_recycle');
+    $desc = get_string('configaskowner_desc', 'block_course_recycle');
+    $default = 0;
+    $settings->add(new admin_setting_configcheckbox($key, $label, $desc, $default));
+
     $actionoptions = array(
-        'RequestForArchive' => get_string('ask', 'block_course_recycle'), // means "Do nothing but ask to owner (put in re cycle register for request)"
-        'Stay' => get_string('keep', 'block_course_recycle'), // means "Do nothing at all"
-        'Retire' => get_string('retire', 'block_course_recycle'), // means "keep and move to retired category"
-        'Reset' => get_string('reset', 'block_course_recycle'), // means "keep then reset"
-        'Archive' => get_string('archive', 'block_course_recycle'), // means "archive then delete"
-        'Delete' => get_string('throw', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_STAY => get_string('Stay', 'block_course_recycle'), // means "Do nothing at all"
+        RECYCLE_RETIRE => get_string('Retire', 'block_course_recycle'), // means "keep and move to retired category"
+        RECYCLE_RESET => get_string('Reset', 'block_course_recycle'), // means "keep then reset"
+        RECYCLE_ARCHIVE => get_string('Archive', 'block_course_recycle'), // means "archive then delete"
+        RECYCLE_DELETE => get_string('Delete', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_CLONE => get_string('Clone', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_CLONEANDRESET => get_string('CloneAndReset', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_ARCHIVEANDDELETE => get_string('ArchiveAndDelete', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_ARCHIVEANDRESET => get_string('ArchiveAndReset', 'block_course_recycle'), // means "delete with no archiving"
+        RECYCLE_ARCHIVECLONEANDRESET => get_string('ArchiveCloneAndReset', 'block_course_recycle'), // means "delete with no archiving"
     );
 
     $key = 'block_course_recycle/defaultactionfinishedcourses';
     $label = get_string('configdefaultactionfinishedcourses', 'block_course_recycle');
     $desc = get_string('configdefaultactionfinishedcourses_desc', 'block_course_recycle');
+    $settings->add(new admin_setting_configselect($key, $label, $desc, 'Stay', $actionoptions));
+
+    $actionoptions = array(
+        RECYCLE_STAY => get_string('keep', 'block_course_recycle'), // means "Do nothing at all"
+        RECYCLE_RETIRE => get_string('retire', 'block_course_recycle'), // means "keep and move to retired category"
+        RECYCLE_RESET => get_string('reset', 'block_course_recycle'), // means "keep then reset"
+        RECYCLE_ARCHIVE => get_string('archive', 'block_course_recycle'), // means "archive then delete"
+        RECYCLE_DELETE => get_string('throw', 'block_course_recycle'), // means "delete with no archiving"
+    );
+
+    $key = 'block_course_recycle/defaultinteractiveactionfinishedcourses';
+    $label = get_string('configdefaultiafcourses', 'block_course_recycle');
+    $desc = get_string('configdefaultiafcourses_desc', 'block_course_recycle');
     $settings->add(new admin_setting_configselect($key, $label, $desc, 'Stay', $actionoptions));
 
     // If 0, no decision delay. the course remains.

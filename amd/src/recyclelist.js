@@ -60,6 +60,7 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
 
         get_status_code: function (statusix) {
             var statuscodes = [
+                'Ask',
                 'RequestForArchive',
                 'Stay',
                 'Reset',
@@ -70,7 +71,7 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
                 'ArchiveAndDelete',
                 'ArchiveAndReset',
                 'ArchiveAndRetire',
-                'CloneArchiveAndReset'
+                'ArchiveCloneAndReset'
             ];
 
             return statuscodes[statusix];
@@ -78,6 +79,7 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
 
         get_postactions_code: function (statusix) {
             var postactionscodes = {
+                'Ask': '',
                 'RequestForArchive': '',
                 'Stay': '',
                 'Reset': '',
@@ -88,7 +90,7 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
                 'ArchiveAndDelete': 'Delete',
                 'ArchiveAndReset': 'Reset',
                 'ArchiveAndRetire': 'Retire',
-                'CloneArchiveAndReset': 'CloneAndReset'
+                'ArchiveCloneAndReset': 'CloneAndReset'
             };
 
             return postactionscodes[statusix];
