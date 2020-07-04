@@ -21,7 +21,7 @@ require_once($CFG->dirroot.'/blocks/course_recycle/compatlib.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
 use \block_course_recycle\course_recycler;
-use \block\course_recycle\compat;
+use \block_course_recycle\compat;
 
 class block_course_recycle_renderer extends plugin_renderer_base {
 
@@ -149,13 +149,21 @@ class block_course_recycle_renderer extends plugin_renderer_base {
         global $DB;
 
         $config = get_config('block_course_recycle');
+        $statuslist = course_recycler::get_status_list();
 
         $template = new Stdclass;
+
+        $template->confirmurl = new moodle_url('/blocks/course_recycle/confirmmycourses.php');
 
         if (empty($mycourses)) {
             $template->emptylist = true;
             $template->nocoursenotification = $this->output->notification(get_string('nocourses', 'block_course_recycle'));
             return $this->output->render_from_template('block_course_recycle/confirm_table', $template);
+        }
+
+        if (5 < count($mycourses)) {
+            $template->hasmany = true;
+            $template->changeselect = html_writer::select($statuslist, 'changestatus', '', ['' => 'choose']);
         }
 
         foreach ($mycourses as $coursetpl) {
@@ -165,6 +173,11 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             $powerusers = get_users_by_capability($context, 'moodle/course:manageactivities', $fields);
             $coursetpl->editorcount = count($powerusers);
             $state = $DB->get_record('block_course_recycle', ['courseid' => $coursetpl->id]);
+
+            if ($coursetpl->editorcount == 0 && $state->status == RECYCLE_ASK) {
+                $coursetpl->nopeerwarning = true;
+            }
+
             $coursetpl->reason = get_string($state->reason, 'block_course_recycle');
             $coursetpl->fullname = $DB->get_field('course', 'fullname', ['id' => $coursetpl->id]);
             $coursetpl->courseurl = new moodle_url('/course/view.php', ['id' => $coursetpl->id]);
@@ -178,11 +191,16 @@ class block_course_recycle_renderer extends plugin_renderer_base {
             // If we have a default action set... and no status or requesting expired status, take default action.
 
             $coursetpl->nextstate = course_recycler::get_current_action($state->status);
+            $coursetpl->nextstatestr = $statuslist[$coursetpl->nextstate];
 
-            if ($state->status == RECYCLE_RQFA) {
+            if ($state->status == RECYCLE_ASK) {
+
+                $coursetpl->nextstate = $config->defaultactionfinishedcourses;
+                $coursetpl->nextstatestr = $statuslist[$coursetpl->nextstate];
+
                 // If ask to owner is the current status.
-                if ($config->decisiondelay > 0 || $config->actiondelay) {
-                    $nextdate = $state->timemodified + $config->decisiondelay + $config->actiondelay * DAYSECS;
+                if ($config->decisiondelay > 0 || $config->actiondelay > 0) {
+                    $nextdate = $state->timemodified + ($config->decisiondelay + $config->actiondelay) * DAYSECS;
                     $daystorun = round((time() - $nextdate) / DAYSECS);
                     if ($daystorun < 0) {
                         $coursetpl->daystorun = $daystorun;
@@ -194,7 +212,7 @@ class block_course_recycle_renderer extends plugin_renderer_base {
                 }
             } else {
                 // For all other status that have a next action.
-                if ($nextation = course_recycler::get_post_action($state->status)) {
+                if (!in_array($state->status, [RECYCLE_STAY, RECYCLE_DONE, RECYCLE_FAILED, RECYCLE_ASK])) {
                     if ($config->actiondelay > 0) {
                         $nextdate = $state->timemodified + $config->actiondelay * DAYSECS;
                         $daystorun = round((time() - $nextdate) / DAYSECS);

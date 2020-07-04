@@ -37,7 +37,6 @@ define('RECYCLE_ARCHIVECLONEANDRESET', 'CloneArchiveAndReset');
 define('RECYCLE_DELETE', 'Delete');
 
 define('RECYCLE_ASK', 'Ask');
-define('RECYCLE_RQFA', 'RequestForArchive');
 define('RECYCLE_DONE', 'Done'); // This is an extra
 define('RECYCLE_FAILED', 'Failed'); // This is an extra
 

@@ -99,6 +99,7 @@ $string['retire'] = 'Retire';
 $string['locked'] = 'Locked';
 $string['nonotifications'] = 'No notifications';
 $string['nocourses'] = 'No courses to recycle';
+$string['nopeer'] = 'No one will decide !';
 $string['nextactions'] = 'Next actions';
 $string['nextdate'] = 'On';
 $string['opentill'] = 'You can still change the course recycling action till {$a}.';
@@ -125,6 +126,9 @@ $string['byaccess'] = 'By access';
 $string['updateaction'] = 'Update recycling action';
 $string['notificationstopped'] = 'Notifications disabled';
 $string['dorecycle'] = 'Launch the recycling task';
+$string['withselection'] = 'With the selection';
+$string['selectall'] = 'Select all';
+$string['unselectall'] = 'Unselect all';
 $string['interactivesettings'] = 'Interactive mode settings';
 $string['interactivesettingshelp'] = 'The following parameters impact the recycle block when used interactively in courses.';
 

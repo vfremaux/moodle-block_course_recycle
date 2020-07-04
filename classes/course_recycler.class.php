@@ -29,7 +29,9 @@ use \StdClass;
 use \context;
 use \context_block;
 use \context_system;
+use \block_course_recycle\compat;
 
+require_once($CFG->dirroot.'/blocks/course_recycle/compatlib.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/lib.php');
 require_once($CFG->dirroot.'/lib/coursecatlib.php'); // until 3.5
 
@@ -111,13 +113,14 @@ class course_recycler {
 
         if (is_null($fullstatuslist)) {
 
+            $retirecategory = get_config('block_course_recycle', 'retirecategory');
+
             $fullstatuslist = [
-                RECYCLE_RQFA => get_string('RequestForArchive', 'block_course_recycle'),
+                RECYCLE_ASK => get_string('Ask', 'block_course_recycle'),
                 RECYCLE_DONE => get_string('Done', 'block_course_recycle'),
                 RECYCLE_FAILED => get_string('Failed', 'block_course_recycle'),
                 RECYCLE_STAY => get_string('Stay', 'block_course_recycle'),
                 RECYCLE_RESET => get_string('Reset', 'block_course_recycle'),
-                RECYCLE_RETIRE => get_string('Retire', 'block_course_recycle'),
                 RECYCLE_CLONE => get_string('Clone', 'block_course_recycle'),
                 RECYCLE_CLONETANDRESET => get_string('CloneAndReset', 'block_course_recycle'),
                 RECYCLE_ARCHIVE => get_string('Archive', 'block_course_recycle'),
@@ -126,6 +129,11 @@ class course_recycler {
                 RECYCLE_ARCHIVECLONEANDRESET => get_string('ArchiveCloneAndReset', 'block_course_recycle'),
                 RECYCLE_DELETE => get_string('Delete', 'block_course_recycle')
             ];
+
+            if ($retirecategory) {
+                $cat = compat::get_category($retirecategory);
+                $fullstatuslist[RECYCLE_RETIRE] = get_string('Retire', 'block_course_recycle', format_string($cat->name));
+            }
         }
 
         return $fullstatuslist;
@@ -136,14 +144,14 @@ class course_recycler {
 
         if (is_null($curentstatusmap)) {
 
+            $retirecategory = get_config('block_course_recycle', 'retirecategory');
+
             $curentstatusmap = [
                 RECYCLE_ASK => RECYCLE_ASK,
-                RECYCLE_RQFA => RECYCLE_RQFA,
                 RECYCLE_DONE => '',
                 RECYCLE_FAILED => '',
                 RECYCLE_STAY => '',
                 RECYCLE_RESET => RECYCLE_RESET,
-                RECYCLE_RETIRE => RECYCLE_RETIRE,
                 RECYCLE_DELETE => RECYCLE_DELETE,
                 RECYCLE_CLONE => RECYCLE_CLONE,
                 RECYCLE_CLONETANDRESET => RECYCLE_CLONETANDRESET,
@@ -152,7 +160,13 @@ class course_recycler {
                 RECYCLE_ARCHIVEANDELETE => RECYCLE_ARCHIVE,
                 RECYCLE_ARCHIVECLONEANDRESET => RECYCLE_ARCHIVE
             ];
+
+            if ($retirecategory) {
+                $curentstatusmap[RECYCLE_RETIRE] = RECYCLE_RETIRE;
+            }
         }
+
+        return $curentstatusmap[$status];
     }
 
     public static function get_post_action($status) {
@@ -162,7 +176,6 @@ class course_recycler {
 
             $fullstatuslist = [
                 RECYCLE_ASK => '',
-                RECYCLE_RQFA => '',
                 RECYCLE_DONE => '',
                 RECYCLE_FAILED => '',
                 RECYCLE_STAY => '',

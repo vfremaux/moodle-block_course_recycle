@@ -10,8 +10,12 @@
 
 {{{pager}}}
 
+<form name="groupcommands" id="id-groupcommands" method="post" action="{{{confirmurl}}}">
 <table class="block-course-recycle-confirmlist generaltable">
 <tr>
+    <th id="confirm-list-sel" width="2%">
+    </th>
+
     <th id="confirm-list-shortname" width="20%">
         {{#str}}shortname{{/str}}
     </th>
@@ -44,6 +48,12 @@
 {{#courses}}
 <tr valign="top">
     <td class="issue-list-shortname">
+        {{#hasmany}}
+        <input type="checkbox" class="confirm-select" name="sel{{id}}" data-courseid="{{id}}" value="1" />
+        {{/hasmany}}
+    </td>
+
+    <td class="issue-list-shortname">
         <a href="{{{courseurl}}}">{{{shortname}}}</a>
     </td>
 
@@ -61,10 +71,15 @@
 
     <td class="confirm-list-status-{{id}} status-{{{status.code}}}"  style="max-width: 120px;width:120px">
         {{> block_course_recycle/listformstatuspart }}
+        {{#nopeerwarning}}
+        <span class="bg-danger text-white">
+        {{#str}}nopeer, block_course_recycle{{/str}}
+        </span>
+        {{/nopeerwarning}}
     </td>
 
     <td class="confirm-list-nextstate">
-        {{{nextstate}}}
+        {{{nextstatestr}}}
     </td>
 
     <td class="confirm-list-nextdate">
@@ -74,6 +89,13 @@
 </tr>
 {{/courses}}
 </table>
+
+{{#hasmany}}
+<div id="confirm-group-commands">
+<a id="confirm-selectall-handle">{{#str}}selectall, block_course_recycle{{/str}}</a> - <a id="confirm-unselectall-handle">{{#str}}unselectall, block_course_recycle{{/str}}</a> {{#str}}withselection, block_course_recycle{{/str}} {{{changeselect}}}
+</div>
+</form>
+{{/hasmany}}
 
 {{{pager}}}
 

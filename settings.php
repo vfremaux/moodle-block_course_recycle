@@ -149,7 +149,7 @@ if ($ADMIN->fulltree) {
         RECYCLE_DELETE => get_string('throw', 'block_course_recycle'), // means "delete with no archiving"
     );
 
-    $key = 'block_course_recycle/defaultinteractiveactionfinishedcourses';
+    $key = 'block_course_recycle/defaultiafcourses';
     $label = get_string('configdefaultiafcourses', 'block_course_recycle');
     $desc = get_string('configdefaultiafcourses_desc', 'block_course_recycle');
     $settings->add(new admin_setting_configselect($key, $label, $desc, 'Stay', $actionoptions));

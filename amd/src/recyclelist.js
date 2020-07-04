@@ -9,6 +9,9 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
             $(".recycle-course-edit-handle").bind('click', this.load_change_form);
             $("#modal-status-save").bind('click', this.submit_change_form);
             $("#menutopcatid").bind('change', this.reload_category);
+            $("#confirm-selectall-handle").bind('click', this.select_all);
+            $("#confirm-unselectall-handle").bind('click', this.unselect_all);
+            $("#menuchangestatus").bind('change', this.group_change);
             log.debug('AMD Course Recycle List initialized');
         },
 
@@ -98,6 +101,18 @@ define(['jquery', 'core/config', 'core/log', 'block_course_recycle/bootstrap-sel
 
         reload_category: function() {
             $('#recycle-confirm-category-filter-form').submit();
+        },
+
+        select_all: function() {
+            $('.confirm-select').prop('checked', true);
+        },
+
+        unselect_all: function() {
+            $('.confirm-select').prop('checked', false);
+        },
+
+        group_change: function() {
+            $('#id-groupcommands').submit();
         }
 
     };
