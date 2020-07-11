@@ -191,6 +191,7 @@ class course_recycler {
     }
 
     public static function discover_finished_courses($interactive) {
+        global $DB;
         // Discover using several heuristics.
 
         $config = get_config('block_course_recycle');

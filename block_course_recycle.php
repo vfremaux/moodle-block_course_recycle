@@ -86,7 +86,7 @@ class block_course_recycle extends block_base {
 
             $oldstate = $DB->get_field('block_course_recycle', 'status', ['courseid' => $COURSE->id]);
             if ($oldstate) {
-                $state = $oldstate;
+                $state->status = $oldstate;
 
                 $recycleaction = optional_param('recycleaction', false, PARAM_TEXT);
                 if ($recycleaction) {
