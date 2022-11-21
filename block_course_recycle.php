@@ -26,6 +26,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/blocks/course_recycle/lib.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
+
 class block_course_recycle extends block_base {
 
     public function init() {
@@ -37,7 +40,7 @@ class block_course_recycle extends block_base {
     }
 
     public function applicable_formats() {
-        return array('all' => false, 'course' => true, 'site' => true);
+        return array('all' => true, 'course' => true, 'site' => true);
     }
 
     public function specialization() {
@@ -58,7 +61,7 @@ class block_course_recycle extends block_base {
     }
 
     public function get_content() {
-        global $PAGE, $OUTPUT, $COURSE;
+        global $PAGE, $OUTPUT, $COURSE, $DB;
 
         $renderer = $PAGE->get_renderer('block_course_recycle');
         $config = get_config('block_course_recycle');
@@ -67,57 +70,80 @@ class block_course_recycle extends block_base {
             $config->blockstate = 'active';
         }
 
-        $blockcontext = context_block::instance($this->instance->id);
-
-        $recycleaction = optional_param('recycleaction', false, PARAM_TEXT);
-        if ($recycleaction) {
-            $this->config = new StdClass;
-            $this->config->recycleaction = $recycleaction;
-            $this->instance_config_save($this->config);
-        }
-
-        if (!has_capability('block/course_recycle:view', $blockcontext)) {
-            $this->content = new StdClass;
-            $this->content->text = '';
-            $this->content->footer = '';
-            return $this->content;
-        }
-
-        // Not in period.
-        if ($config->blockstate == 'inactive') {
-            $this->content = new StdClass;
-            $this->content->text = '';
-            $this->content->footer = '';
-            return $this->content;
-        }
-
-        if (empty($this->config)) {
-            $this->config = new StdClass;
-        }
-
-        if (empty($this->config->recycleaction)) {
-            $this->config->recycleaction = 'reset';
-        }
-
-        $this->content = new StdClass();
-
+        $this->content = new StdClass;
         $this->content->text = '';
-        $this->content->text .= $OUTPUT->box_start('', 'block-recycle-state');
-        $this->content->text .= $renderer->recyclebutton($this->config->recycleaction, $this->instance->id);
-        $this->content->text .= $OUTPUT->box_end();
-
         $this->content->footer = '';
 
-        $task = \core\task\manager::get_scheduled_task('\\block_course_recycle\\task\\lock_task');
-        if (!$task->get_disabled()) {
-            if ($config->blockstate != 'locked') {
-                $taskdate = $task->get_next_run_time();
-                $this->content->footer .= get_string('opentill', 'block_course_recycle', userdate($taskdate));
-            } else {
-                $this->content->footer .= get_string('choicelocked', 'block_course_recycle');
+        $blockcontext = context_block::instance($this->instance->id);
+        if (!has_capability('block/course_recycle:view', $blockcontext)) {
+            return $this->content;
+        }
+
+        $state = new StdClass;
+        $state->status = 'undefined';
+
+        if ($COURSE->id > SITEID) {
+
+            $oldstate = $DB->get_field('block_course_recycle', 'status', ['courseid' => $COURSE->id]);
+            if ($oldstate) {
+                $state->status = $oldstate;
+
+                $recycleaction = optional_param('recycleaction', false, PARAM_TEXT);
+                if ($recycleaction) {
+                    $this->config = new StdClass;
+                    if ($state) {
+                        $state->status = $recycleaction;
+                        $state->timemodified = time();
+                        $state->lastuserid = $USER->id;
+                        $DB->update_record('block_course_recycle', $state);
+                    } else {
+                        $state->courseid = $COURSE->id;
+                        $state->status = $recycleaction;
+                        $state->timemodified = time();
+                        $state->lastuserid = $USER->id;
+                        $state->id = $DB->insert_record('block_course_recycle', $state);
+                    }
+                }
+            }
+
+            // Not in period.
+            if ($config->blockstate == 'inactive') {
+                $this->content = new StdClass;
+                $this->content->text = '';
+                $this->content->footer = '';
+                return $this->content;
+            }
+
+            if (empty($this->config)) {
+                $this->config = new StdClass;
+            }
+
+            $this->content->text = '';
+            $this->content->text .= $OUTPUT->box_start('', 'block-recycle-state');
+            $this->content->text .= $renderer->recyclebutton($state->status, $this->instance->id);
+            $this->content->text .= $OUTPUT->box_end();
+
+            $this->content->footer = '';
+
+            $task = \core\task\manager::get_scheduled_task('\\block_course_recycle\\task\\lock_task');
+            if (!$task->get_disabled()) {
+                if ($config->blockstate != 'locked') {
+                    $taskdate = $task->get_next_run_time();
+                    $this->content->footer .= get_string('opentill', 'block_course_recycle', userdate($taskdate));
+                } else {
+                    $this->content->footer .= get_string('choicelocked', 'block_course_recycle');
+                }
             }
         }
 
+        if ($config->moodletype == 'standard') {
+            if (block_course_recycle_has_capability_somewhere('moodle/course:manageactivities', false, true, true, CONTEXT_COURSE)) {
+                $this->content->footer .= '<br/>';
+                $stateurl = new moodle_url('/blocks/course_recycle/confirmmycourses.php');
+                $this->content->footer .= '<a href="'.$stateurl.'">'.get_string('stateyourcourses', 'block_course_recycle').'</a>';
+            }
+        }
+        // Archive node.
         $contextsystem = context_system::instance();
         if (has_capability('moodle/site:config', $contextsystem)) {
             $this->content->footer .= '<br/>';
@@ -127,7 +153,6 @@ class block_course_recycle extends block_base {
 
         return $this->content;
     }
-
 
     /**
      * Serialize and store config data
@@ -227,7 +252,6 @@ class block_course_recycle extends block_base {
                             if ($f) {
                                 fputs($f, "Deleted.\n");
                             }
-
                             break;
                         }
 
@@ -235,7 +259,6 @@ class block_course_recycle extends block_base {
                             $data = new StdClass;
                             // ... TODO : Fill all resetdata subkeys. (As many as possible)
                             $data->courseid = $course->id;
-
                             if ($f) {
                                 fputs($f, 'RECYCLE RESETTING course '.$context->instanceid."\n");
                             }
@@ -243,23 +266,19 @@ class block_course_recycle extends block_base {
                             if ($f) {
                                 fputs($f, "Reset.\n");
                             }
-
                             break;
                         }
 
                         case 'keep': {
-
                             if ($f) {
                                 fputs($f, 'RECYCLE KEEPING course '.$context->instanceid."\n");
                                 fputs($f, "No op.\n");
                             }
-
                             break;
                         }
 
                         case 'archive': {
                             // Activate the archive active plugin strategy.
-
                             if ($config->archivestrategy == 'backup') {
                                 // Standard backup automation.
                             } else if ($config->archivestrategy == 'publishflow') {
@@ -281,7 +300,6 @@ class block_course_recycle extends block_base {
                                     }
                                 }
                             }
-
                             break;
                         }
                     }

@@ -17,7 +17,7 @@
 /**
  * @package   block_course_recycle
  * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 namespace block_course_recycle\task;
@@ -25,9 +25,10 @@ namespace block_course_recycle\task;
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Recycle processing for courses.
+ * Recycle processing for courses. this task is triggered once per period to lock the recycling action
+ * choices in the recycling block instances.
  */
-class show_task extends \core\task\scheduled_task {
+class interactive_lock_task extends \core\task\scheduled_task {
 
     /**
      * Get a descriptive name for this task (shown to admins).
@@ -35,14 +36,14 @@ class show_task extends \core\task\scheduled_task {
      * @return string
      */
     public function get_name() {
-        return get_string('task_show', 'block_course_recycle');
+        return get_string('task_interactive_lock', 'block_course_recycle');
     }
 
     /**
      * Do the job.
      */
     public function execute() {
-        // Set all blocs to active state (showing).
-        set_config('blockstate', 'active', 'block_course_recycle');
+        // Turns on all blocks to lock state.
+        set_config('blockstate', 'locked', 'block_course_recycle');
     }
 }

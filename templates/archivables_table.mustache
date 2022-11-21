@@ -1,0 +1,66 @@
+
+
+<!-- block_course_recycle/archivables_table -->
+
+{{#emptylist}}
+{{{nocoursetoarchivenotification}}}
+{{/emptylist}}
+
+{{^emptylist}}
+
+<table class="block-course-recycle-list generaltable" width="100%">
+<tr>
+    <th id="confirm-list-shortname" width="20%">
+        {{#str}}shortname{{/str}}
+    </th>
+
+    <th id="confirm-list-fullname">
+        {{#str}}fullname{{/str}}
+    </th>
+
+    <th id="confirm-list-idnumber">
+        {{#str}}idnumber{{/str}}
+    </th>
+
+    <th id="confirm-list-actiondate">
+        {{#str}}nextdate, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-postactions">
+        {{#str}}nextactions, block_course_recycle{{/str}}
+    </th>
+</tr>
+
+{{#archivables}}
+<tr valign="top">
+    <td class="arch-list-shortname">
+        {{{shortname}}}
+    </td>
+
+    <td class="arch-list-fullname">
+        {{{fullname}}}
+    </td>
+
+    <td class="arch-list-idnumber">
+        {{{idnumber}}}
+    </td>
+
+    <td class="arch-list-actiondate">
+        {{#processable}}
+        <span class="processable">{{{actiondate}}}</span>
+        {{/processable}}
+        {{^processable}}
+        <span class="future">{{{actiondate}}}</span>
+        {{/processable}}
+    </td>
+
+    <td class="arch-list-status">
+        {{{status}}}
+    </td>
+</tr>
+{{/archivables}}
+</table>
+
+{{/emptylist}}
+
+<!-- /block_course_recycle/archivables_table -->

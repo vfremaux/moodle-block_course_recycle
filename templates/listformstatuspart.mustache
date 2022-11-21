@@ -1,0 +1,17 @@
+
+
+<!-- block_course_recycle/listformstatuspart -->
+<div class="recycle-status-{{status.code}} recycle-status">
+
+    {{#status.static}}
+    <span id="recycle-status-{{id}}">
+    {{{status.static}}}
+    </span>
+    {{/status.static}}
+
+    {{#status.editlink}}
+    <span class="fa fa-edit icon recycle-course-edit-handle" data-toggle="modal" data-target="#recyclelist-edit-form" data-course="{{id}}" id="confirm-edit-status-handle-{{id}}"></span>
+    {{/status.editlink}}
+
+</div>
+<!-- /block_course_recycle/listformstatuspart -->

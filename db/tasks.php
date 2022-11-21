@@ -15,18 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Definition of block dashboard scheduled tasks.
+ * Definition of block recycle scheduled tasks.
  *
  * @package   block_course_recycle
  * @category  blocks
- * @author    Valery Fremaux <valery.fremaux@gmail.com>, <valery@edunao.com>
+ * @author    Valery Fremaux <valery.fremaux@gmail.com>
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
 $tasks = array(
     array(
-        'classname' => 'block_course_recycle\task\recycle_task',
+        'classname' => 'block_course_recycle\task\interactive_recycle_task',
         'blocking' => 0,
         'minute' => '*',
         'hour' => '*',
@@ -37,7 +37,7 @@ $tasks = array(
     ),
 
     array(
-        'classname' => 'block_course_recycle\task\lock_task',
+        'classname' => 'block_course_recycle\task\interactive_lock_task',
         'blocking' => 0,
         'minute' => '0',
         'hour' => '0',
@@ -48,7 +48,7 @@ $tasks = array(
     ),
 
     array(
-        'classname' => 'block_course_recycle\task\reset_task',
+        'classname' => 'block_course_recycle\task\interactive_reset_task',
         'blocking' => 0,
         'minute' => '0',
         'hour' => '0',
@@ -59,7 +59,7 @@ $tasks = array(
     ),
 
     array(
-        'classname' => 'block_course_recycle\task\show_task',
+        'classname' => 'block_course_recycle\task\interactive_show_task',
         'blocking' => 0,
         'minute' => '0',
         'hour' => '0',
@@ -69,4 +69,36 @@ $tasks = array(
         'disabled' => 1,
     ),
 
+    array(
+        'classname' => 'block_course_recycle\task\discover_finished_courses_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '20',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\recycle_courses_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '20',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
+
+    array(
+        'classname' => 'block_course_recycle\task\pull_and_archive_task',
+        'blocking' => 0,
+        'minute' => '0',
+        'hour' => '2',
+        'day' => '30',
+        'month' => '*',
+        'dayofweek' => '*',
+        'disabled' => 1,
+    ),
 );

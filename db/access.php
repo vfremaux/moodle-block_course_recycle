@@ -39,6 +39,19 @@ $capabilities = array(
         'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 
+    'block/course_recycle:myaddinstance' => array(
+        'riskbitmask' => RISK_SPAM | RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW,
+            'coursecreator' => CAP_ALLOW
+        ),
+
+        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    ),
+
     'block/course_recycle:view' => array(
         'riskbitmask' => RISK_SPAM | RISK_XSS,
 
@@ -48,8 +61,6 @@ $capabilities = array(
             'editingteacher' => CAP_ALLOW,
             'manager' => CAP_ALLOW
         ),
-
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
     ),
 
     'block/course_recycle:admin' => array(
@@ -60,7 +71,25 @@ $capabilities = array(
         'archetypes' => array(
             'manager' => CAP_ALLOW,
         ),
+    ),
 
-        'clonepermissionsfrom' => 'moodle/site:manageblocks'
+    'block/course_recycle:archive' => array(
+        'riskbitmask' => RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'manager' => CAP_ALLOW,
+        ),
+    ),
+
+    'block/course_recycle:student' => array(
+        'riskbitmask' => RISK_XSS,
+
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => array(
+            'student' => CAP_ALLOW,
+        ),
     ),
 );

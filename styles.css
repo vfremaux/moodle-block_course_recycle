@@ -2,3 +2,29 @@
 .block.block_course_recycle .footer {
     font-size: 0.8em;
 }
+
+.future {
+    color: red;
+}
+
+.processable {
+    color: green;
+}
+
+#recycle-confirm-category-filter-form {
+    margin-bottom: 10px;
+}
+
+.recycle-top-tools {
+    display: flex;
+    justify-content: space-between;
+}
+
+.recycle-task-status {
+    display: inline-block;
+    padding: 3px;
+    border-radius: 4px;
+    margin: 0 10px 0 4px;
+    min-width: 70px;
+    text-align: center;
+}

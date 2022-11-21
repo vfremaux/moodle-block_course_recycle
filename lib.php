@@ -23,9 +23,32 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/blocks/course_recycle/mailtemplatelib.php');
+
+define('RECYCLE_STAY', 'Stay'); // Action state : Do nothing.
+define('RECYCLE_RESET', 'Reset'); // Action state.
+define('RECYCLE_RETIRE', 'Retire'); // Action state.
+define('RECYCLE_CLONE', 'Clone'); // Action state.
+define('RECYCLE_CLONEANDRESET', 'CloneAndReset'); // Action state.
+define('RECYCLE_ARCHIVE', 'Archive'); // Action state.
+define('RECYCLE_ARCHIVEANDRESET', 'ArchiveAndReset'); // Action state.
+define('RECYCLE_ARCHIVEANDDELETE', 'ArchiveAndDelete'); // Action state.
+define('RECYCLE_ARCHIVECLONEANDRESET', 'ArchiveCloneAndReset'); // Action state.
+define('RECYCLE_DELETE', 'Delete'); // Action state.
+define('RECYCLE_FREEZE', 'Freeze'); // Action state. Prov for M3.9
+define('RECYCLE_FREEZECLONEANDRESET', 'Freeze'); // Action state. Prov for M3.9
+
+define('RECYCLE_ASK', 'Ask'); // PseudoAction state
+
+define('RECYCLE_DONE', 'Done'); // Result states : All finished
+define('RECYCLE_FAILED', 'Failed'); // Result states : Failure
+define('RECYCLE_ARCHIVED', 'Archived'); // Result states : Archived in remote node.
+
 /**
  * This function is not implemented in this plugin, but is needed to mark
  * the vf documentation custom volume availability.
+ * 
+ * @param string $feature a cat/item feature key.
  */
 function block_course_recycle_supports_feature($feature) {
     assert(1);

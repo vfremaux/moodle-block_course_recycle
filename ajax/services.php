@@ -24,45 +24,105 @@
 define('AJAX_SCRIPT', 1);
 
 require('../../../config.php');
+require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
-$id = required_param('id', PARAM_INT); // Block id.
-$course = required_param('course', PARAM_INT); // Course id.
+use block_course_recycle\course_recycler;
 
-if (!$course = $DB->get_record('course', array('id' => $course))) {
+$blockid = optional_param('blockid', 0, PARAM_INT); // Block id.
+$id = required_param('id', PARAM_INT); // Course id.
+
+if (!$course = $DB->get_record('course', array('id' => $id))) {
     die("No course");
 }
 
-if (!$blockrec = $DB->get_record('block_instances', array('id' => $id))) {
-    die("No block");
+if (!empty($blockid)) {
+    $blockcontext = context_block::instance($id);
+    $blockrec = $DB->get_record('block_instances', ['id' => $blockid]);
 }
 
-$context = context_block::instance($id);
 $coursecontext = context_course::instance($course->id);
 
 require_login($course);
 
 $action = required_param('what', PARAM_ALPHA); // MCD command.
 
-if ($action == 'change') {
-    $recycleaction = required_param('state', PARAM_ALPHA);
+if ($action == 'getmodalform') {
+
+    $renderer = $PAGE->get_renderer('block_course_recycle');
+    $return = $renderer->modal_form($id);
+
+    echo $return;
+    exit(0);
+}
+
+if ($action == 'changerecycle') {
+    // Site level service.
+    $recycleaction = required_param('status', PARAM_ALPHA);
 
     $PAGE->set_context($coursecontext);
     $renderer = $PAGE->get_renderer('block_course_recycle');
 
-    $block = block_instance('course_recycle', $blockrec);
-    $block->config->recycleaction = $recycleaction;
-    $block->config->choicedone = true;
-    $block->instance_config_save($block->config);
+    $state = $DB->get_record('block_course_recycle', ['courseid' => $id]);
+    $response = new StdClass;
+    $response->oldstate = $state->status;
+
+    if (!$state) {
+        $state = new Stdclass;
+        $state->courseid = $COURSE->id;
+        $state->status = $recycleaction;
+        $state->postactions = course_recycler::get_post_action($state->status);
+        $state->timemodified = time();
+        $state->lastuserid = $USER->id;
+        $DB->insert_record('block_course_recycle', $state);
+    } else {
+        $state->status = $recycleaction;
+        $state->timemodified = time();
+        $state->postactions = course_recycler::get_post_action($state->status);
+        $state->lastuserid = $USER->id;
+        $DB->update_record('block_course_recycle', $state);
+    }
+
+    $response->result = 'success';
+    $response->newlabel = get_string($recycleaction, 'block_course_recycle');
+    $response->newstate = $recycleaction;
+    echo json_encode($response);
+    die;
+}
+
+if ($action == 'change') {
+    // Site level service.
+    $recycleaction = required_param('status', PARAM_ALPHA);
+
+    $PAGE->set_context($coursecontext);
+    $renderer = $PAGE->get_renderer('block_course_recycle');
+
+    $state = $DB->get_record('block_course_recycle', ['courseid' => $id]);
+
+    if (!$state) {
+        $state = new Stdclass;
+        $state->courseid = $COURSE->id;
+        $state->status = $recycleaction;
+        $state->timemodified = time();
+        $state->lastuserid = $USER->id;
+        $DB->insert_record('block_course_recycle', $state);
+    } else {
+        $state->status = $recycleaction;
+        $state->timemodified = time();
+        $state->lastuserid = $USER->id;
+        $DB->update_record('block_course_recycle', $state);
+    }
 
     echo $renderer->recyclebutton($recycleaction, $id);
     die;
 }
+
 if ($action == 'stopnotify') {
     $block = block_instance('course_recycle', $blockrec);
     $block->config->stopnotify = true;
     $block->instance_config_save($block->config);
     die;
 }
+
 if ($action == 'stopnotifyall') {
     // Stop notifications for this user.
     $userid = required_param('userid', PARAM_INT);
@@ -77,6 +137,7 @@ if ($action == 'stopnotifyall') {
         $DB->insert_record('user_preferences', $rec);
     }
 }
+
 if ($action == 'restorenotifyall') {
     // Restore notifications for this user.
     $userid = required_param('userid', PARAM_INT);

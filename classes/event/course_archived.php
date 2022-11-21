@@ -15,21 +15,27 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * This file contains an event for when a  activity is viewed.
  *
- * @package     block_course_recycle
- * @category    blocks
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_course_recycle
+ * @copyright  2013 Ankit Agarwal
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+namespace block_course_recycle\event;
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020070401;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2020061500;        // Requires this Moodle version.
-$plugin->component = 'block_course_recycle'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '(3.9.0 (Build 2020070401)';
-$plugin->maturity = MATURITY_RC;
+/**
+ * Event for when an archived course activity is viewed.
+ */
+class course_archived extends \core\event\course_deleted {
 
-// Non moodle attributes.
-$plugin->codeincrement = '3.9.0006';
+    /**
+     * Init method.
+     */
+    protected function init() {
+        $this->data['crud'] = 'd';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'course';
+    }
+}
+

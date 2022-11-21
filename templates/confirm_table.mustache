@@ -1,0 +1,161 @@
+
+
+<!-- block_course_recycle/confirm_table -->
+
+{{#emptylist}}
+{{{nocoursenotification}}}
+{{/emptylist}}
+
+{{^emptylist}}
+
+<div class="recycle-top-tools">
+    <div class="categoryselector">
+    {{{categoryfilter}}}
+    </div>
+    {{#isadmin}}
+    <div class="task-status">
+        <b>{{#str}}taskstate, block_course_recycle{{/str}}</b>
+        {{#str}}task_recycle_courses, block_course_recycle{{/str}}:
+        {{#recycletaskstate}}
+        <div class="bg-success text-white recycle-task-status">
+        On
+        </div>
+        {{/recycletaskstate}}
+        {{^recycletaskstate}}
+        <div class="bg-danger text-white recycle-task-status">
+        Off
+        </div>
+        {{/recycletaskstate}}
+
+        {{#str}}task_discover_finished, block_course_recycle{{/str}}:
+        {{#discovertaskstate}}
+        <div class="bg-success text-white recycle-task-status">
+        On
+        </div>
+        {{/discovertaskstate}}
+        {{^discovertaskstate}}
+        <div class="bg-danger text-white recycle-task-status">
+        Off
+        </div>
+        {{/discovertaskstate}}
+    </div>
+    {{/isadmin}}
+</div>
+
+{{{pager}}}
+
+<form name="groupcommands" id="id-groupcommands" method="post" action="{{{confirmurl}}}">
+<input type="hidden" name="what" value="groupchange" />
+<input type="hidden" name="sesskey" value="{{sesskey}}" />
+<input type="hidden" name="topcatid" value="{{topcatid}}" />
+<table class="block-course-recycle-confirmlist generaltable">
+<tr>
+    <th id="confirm-list-sel" width="2%">
+    </th>
+
+    <th id="confirm-list-shortname" width="20%">
+        {{#str}}shortname{{/str}}
+    </th>
+
+    <th id="confirm-list-fullname">
+        {{#str}}fullname{{/str}}
+    </th>
+
+    <th id="confirm-list-editor-num">
+        {{#str}}directeditorsnum, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-reason-of-request">
+        {{#str}}reason, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-status">
+        {{#str}}recycleaction, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-nextstatus">
+        {{#str}}nextactions, block_course_recycle{{/str}}
+    </th>
+
+    <th id="confirm-list-nextdate">
+        {{#str}}nextdate, block_course_recycle{{/str}}
+    </th>
+</tr>
+
+{{#courses}}
+<tr valign="top">
+    <td class="issue-list-shortname">
+        {{#hasmany}}
+        <input type="checkbox" class="confirm-select" name="sel{{id}}" data-courseid="{{id}}" value="1" />
+        {{/hasmany}}
+    </td>
+
+    <td class="issue-list-shortname">
+        <a href="{{{courseurl}}}">{{{shortname}}}</a>
+    </td>
+
+    <td class="confirm-list-fullname">
+        {{{fullname}}}
+    </td>
+
+    <td class="confirm-list-editor-num">
+        {{editorcount}}
+    </td>
+
+    <td class="confirm-list-reason">
+        {{{reason}}}
+    </td>
+
+    <td class="confirm-list-status-{{id}} status-{{{status.code}}}"  style="max-width: 120px;width:120px">
+        {{> block_course_recycle/listformstatuspart }}
+        {{#nopeerwarning}}
+        <span class="bg-danger text-white">
+        {{#str}}nopeer, block_course_recycle{{/str}}
+        </span>
+        {{/nopeerwarning}}
+    </td>
+
+    <td class="confirm-list-nextstate">
+        {{{nextstatestr}}}
+    </td>
+
+    <td class="confirm-list-nextdate">
+        {{{nextdate}}}
+        {{#daystorun}}{{daystorun}} {{#str}}days{{/str}}<br/>{{/daystorun}}
+    </td>
+</tr>
+{{/courses}}
+</table>
+
+{{#hasmany}}
+<div id="confirm-group-commands">
+<a id="confirm-selectall-handle">{{#str}}selectall, block_course_recycle{{/str}}</a> - <a id="confirm-unselectall-handle">{{#str}}unselectall, block_course_recycle{{/str}}</a> 
+- {{#str}}withselection, block_course_recycle{{/str}} {{{changeselect}}}
+</div>
+</form>
+{{/hasmany}}
+
+{{{pager}}}
+
+{{/emptylist}}
+
+</form>
+
+<div id="recyclelist-edit-form" class="modal fade" tabindex="-1" aria-labelledby="recyclelist-edit-formLabel" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{#str}}updateaction, block_course_recycle{{/str}}</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="{{#str}}cancel{{/str}}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="recyclelist-edit-inner-form"></div>
+      <div class="modal-footer">
+        <button id="modal-status-save" data-course="" type="button" class="btn btn-primary">{{#str}}update{{/str}}</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{#str}}cancel{{/str}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /block_course_recycle/confirm_table -->

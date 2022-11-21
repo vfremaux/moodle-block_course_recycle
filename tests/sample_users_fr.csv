@@ -1,0 +1,29 @@
+username;firstname;lastname;idnumber;email;password;lang;country
+aa1;Etudiant;AA1;ID_AA1;aa1@foo.com;Spr!ngb0ks;fr;FR
+aa2;Etudiant;AA2;ID_AA2;aa2@foo.com;Spr!ngb0ks;fr;FR
+aa3;Etudiant;AA3;ID_AA3;aa3@foo.com;Spr!ngb0ks;fr;FR
+aa4;Etudiant;AA4;ID_AA4;aa4@foo.com;Spr!ngb0ks;fr;FR
+aa5;Etudiant;AA5;ID_AA5;aa5@foo.com;Spr!ngb0ks;fr;FR
+aa6;Etudiant;AA6;ID_AA6;aa6@foo.com;Spr!ngb0ks;fr;FR
+aa7;Etudiant;AA7;ID_AA7;aa7@foo.com;Spr!ngb0ks;fr;FR
+aa8;Etudiant;AA8;ID_AA8;aa8@foo.com;Spr!ngb0ks;fr;FR
+bb1;Etudiant;BB1;ID_BB1;bb1@foo.com;Spr!ngb0ks;fr;FR
+bb2;Etudiant;BB2;ID_BB2;bb2@foo.com;Spr!ngb0ks;fr;FR
+bb3;Etudiant;BB3;ID_BB3;bb3@foo.com;Spr!ngb0ks;fr;FR
+bb4;Etudiant;BB4;ID_BB4;bb4@foo.com;Spr!ngb0ks;fr;FR
+bb5;Etudiant;BB5;ID_BB5;bb5@foo.com;Spr!ngb0ks;fr;FR
+bb6;Etudiant;BB6;ID_BB6;bb6@foo.com;Spr!ngb0ks;fr;FR
+bb7;Etudiant;BB7;ID_BB7;bb7@foo.com;Spr!ngb0ks;fr;FR
+bb8;Etudiant;BB8;ID_BB8;bb8@foo.com;Spr!ngb0ks;fr;FR
+cc1;Etudiant;CC1;ID_CC1;cc1@foo.com;Spr!ngb0ks;fr;FR
+cc2;Etudiant;CC2;ID_CC2;cc2@foo.com;Spr!ngb0ks;fr;FR
+cc3;Etudiant;CC3;ID_CC3;cc3@foo.com;Spr!ngb0ks;fr;FR
+cc4;Etudiant;CC4;ID_CC4;cc4@foo.com;Spr!ngb0ks;fr;FR
+ee1;Enseignant Editeur;EE1;ID_EE1;ee1@foo.com;Spr!ngb0ks;fr;FR
+ee2;Enseignant Editeur;CC2;ID_EE2;ee2@foo.com;Spr!ngb0ks;fr;FR
+ee3;Enseignant Editeur;CC3;ID_EE3;ee3@foo.com;Spr!ngb0ks;fr;FR
+ee4;Enseignant Editeur;CC4;ID_EE4;ee4@foo.com;Spr!ngb0ks;fr;FR
+en1;Enseignant Non Editeur;EN1;ID_EN1;en1@foo.com;Spr!ngb0ks;fr;FR
+en2;Enseignant Non Editeur;EN2;ID_EN2;en2@foo.com;Spr!ngb0ks;fr;FR
+en3;Enseignant Non Editeur;EN3;ID_EN3;en3@foo.com;Spr!ngb0ks;fr;FR
+en4;Enseignant Non Editeur;EN4;ID_EN4;en4@foo.com;Spr!ngb0ks;fr;FR

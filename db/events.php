@@ -15,21 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details.
+ * Global settings.
  *
- * @package     block_course_recycle
- * @category    blocks
- * @author      Valery Fremaux <valery.fremaux@gmail.com>
- * @copyright   2015 onwards Valery Fremaux (http://www.mylearningfactory.com)
- * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    block_course_recycle
+ * @category   blocks
+ * @author     Valery Fremaux <valery.fremaux@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2020070401;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2020061500;        // Requires this Moodle version.
-$plugin->component = 'block_course_recycle'; // Full name of the plugin (used for diagnostics).
-$plugin->release = '(3.9.0 (Build 2020070401)';
-$plugin->maturity = MATURITY_RC;
+$observers = array (
+    array(
+        'eventname'   => '\core\event\course_deleted',
+        'callback'    => 'block_course_recycle_observer::on_course_deleted',
+        'includefile' => '/blocks/course_recycle/observers.php',
+        'internal'    => true,
+        'priority'    => 9999,
+    ),
 
-// Non moodle attributes.
-$plugin->codeincrement = '3.9.0006';
+);

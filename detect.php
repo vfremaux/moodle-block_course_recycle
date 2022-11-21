@@ -26,19 +26,15 @@ require('../../config.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/locallib.php');
 require_once($CFG->dirroot.'/blocks/course_recycle/classes/course_recycler.class.php');
 
-global $verbose;
-
 use \block_course_recycle\course_recycler;
 
-$courseid = required_param('courseid', PARAM_INT);
+$id = required_param('courseid', PARAM_INT);
 
-$url = new moodle_url('/blocks/course_recycle/index.php', array('courseid' => $courseid));
+$url = new moodle_url('/blocks/course_recycle/detect.php', array('courseid' => $id));
 $PAGE->set_url($url);
 
 $context = context_system::instance();
 $PAGE->set_context($context);
-
-$config = get_config('block_course_recycle');
 
 // Security.
 
@@ -58,48 +54,13 @@ $renderer = $PAGE->get_renderer('block_course_recycle');
 
 echo $OUTPUT->header();
 
-if ($config->moodletype == 'standard') {
+echo '<pre>';
+mtrace("Starting discovering...");
+course_recycler::task_discover_finished(true); // Run in mode interactive.
+echo '</pre>';
 
-    echo $renderer->globalstable($globals);
-
-    if ($countinstances > $pagesize) {
-        echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
-
-        echo $renderer->recyclestates($recycleinstances);
-
-        echo $OUTPUT->paging_bar($url, optional_param($page), $countinstances);
-    }
-} else {
-    $confirm = optional_param('confirm', false, PARAM_BOOL);
-    if ($confirm == 1) {
-
-        $verbose = true;
-
-        include_once($CFG->dirroot.'/blocks/course_recycle/classes/task/pull_and_archive_task.php');
-        $task = new \block_course_recycle\task\pull_and_archive_task();
-
-        echo "<pre>";
-        echo "Starting archivage task...\n";
-        $task->execute();
-        echo "</pre>";
-    } else {
-
-        $verbose = false;
-
-        $archivables = course_recycler::get_archivables(true); // Ask for all dates, processable or NOT.
-
-        echo $renderer->list_archivables($archivables);
-    }
-
-    echo $OUTPUT->box_start('', 'block-recycle-task');
-    echo $renderer->recycletaskbutton($courseid);
-    echo $OUTPUT->box_end();
-}
-
-
-echo '<center>';
-$buttonurl = new moodle_url('/course/view.php', array('id' => $courseid));
-echo $OUTPUT->single_button($buttonurl, get_string('backtocourse', 'block_course_recycle'));
+$buttonurl = new moodle_url('/blocks//course_recycle/confirmmycourses.php', array('fromcourse' => $id));
+echo $OUTPUT->single_button($buttonurl, get_string('backtoreport', 'block_course_recycle'));
 echo '</center>';
 
 echo $OUTPUT->footer();

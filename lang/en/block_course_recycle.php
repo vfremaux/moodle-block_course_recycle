@@ -23,56 +23,150 @@
  */
 
 $string['course_recycle:addinstance'] = 'Add a new Course Recycle block';
+$string['course_recycle:myaddinstance'] = 'Add a new Course Recycle block on My page';
 $string['course_recycle:view'] = 'View the Course Recycle block';
 $string['course_recycle:admin'] = 'Administrate Course Recycling';
+$string['course_recycle:archive'] = 'Archive courses';
+$string['course_recycle:student'] = 'Mark student roles for course recycling';
 
 // Privacy
 $string['privacy:metadata'] = 'Although the teacher will drive the recycle option, the recycle option belongs to the course scope and not the user scope.';
 
 $string['active'] = 'Visible';
 $string['addeverywhere'] = 'Ensure an instance is available in all courses';
-$string['archive'] = 'At end of session, archive the course';
-$string['backtocourse'] = 'Return to course';
+$string['archive'] = 'Archive the course';
+$string['archivemoodle'] = 'Archive moodle instance';
 $string['atendofsession'] = 'At end of session';
+$string['backtocourse'] = 'Return to course';
+$string['backtodashboard'] = 'Return to dashboard';
+$string['backtoreport'] = 'Return to report';
+$string['byaccess'] = 'By access';
+$string['bydate'] = 'By end date';
+$string['byenrols'] = 'By enrols';
 $string['choicelocked'] = 'Choice are now closed. Contact our administrators.';
+$string['configactiondelay'] = 'Action delay';
+$string['configactiondelay_desc'] = 'A delay (in days) after which the recycling action will be effectively handled.';
+$string['configarchivefactory'] = 'Archiving factory';
+$string['configarchivefactory_desc'] = 'Archiving factory';
+$string['configarchivesbackupdir'] = 'Log file';
+$string['configarchivesbackupdir_desc'] = 'Log file';
+$string['configarchivestrategy'] = 'Archiving strategy';
+$string['configarchivestrategy_desc'] = 'Archiving strategy';
+$string['configdefaultiafcourses'] = 'Default action';
+$string['configdefaultiafcourses_desc'] = '';
+$string['configaskowner'] = 'Ask owner';
+$string['configaskowner_desc'] = 'Ask owner of the course for recycling action';
 $string['configblockstate'] = 'Block state';
+$string['configchoicedone'] = 'Choice done';
+$string['configdecisiondelay'] = 'Decision delay';
+$string['configdecisiondelay_desc'] = 'A delay (in days) the teacher has to take position on course archiving action.';
 $string['configdefaultaction'] = 'Default action ';
+$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
+$string['configdefaultactionfinishedcourses'] = 'Default action for detected finished courses';
+$string['configdefaultactionfinishedcourses_desc'] = 'This is the imperative action that will be taken for courses that have an explicit "end of course" condition (by end date)';
+$string['configdefaultiafcourses'] = 'Default action for course action choice (interactive)';
+$string['configdefaultiafcourses_desc'] = 'This is the default choice that is given in course recycle block when asking for recycling action to teachers.';
+$string['configinstancesperrun'] = 'Instances per run';
 $string['configlockdate'] = 'Date of choice lock';
+$string['configlogfile'] = 'Log file';
+$string['configlogfile_desc'] = 'Log file';
+$string['configminactiveaccesstomaintain'] = 'Minimum number of active users';
+$string['configminactiveaccesstomaintain_desc'] = 'The minimal number of active users under which will be considered there is no activity in the course.';
+$string['configminhitstomaintain'] = 'Min hits in the closing period to maintain';
+$string['configminhitstomaintain_desc'] = 'If there is more than this amount of hits in the course within the inactive delay examination period, than maintain the course alive.';
+$string['configmininactivedaystofinish'] = 'Days of inactivity from the current date';
+$string['configmininactivedaystofinish_desc'] = 'The amount of days to backscan for user access to check if a course is potentially finished.';
+$string['configmoodletype'] = 'Moodle type';
+$string['configmoodletype_desc'] = 'Type of moodle in the archiving architecture';
 $string['confignotificationtext'] = 'Notification text ';
 $string['confignumberofnotifications'] = 'Notifications ';
+$string['configpolicyenddate'] = 'Detect end date';
+$string['configpolicyenddate_desc'] = 'Detect finished courses by end date';
+$string['configpolicyenrols'] = 'Detect expired enrols';
+$string['configpolicyenrols_desc'] = 'Detect finished courses by examinating enrols of significant users to see if they are still actives';
+$string['configpolicylastaccess'] = 'Detect last access';
+$string['configpolicylastaccess_desc'] = 'Detect finished courses by examinating last access dates on significant users';
 $string['configrecycleaction'] = 'Recycling action ';
-$string['configinstancesperrun'] = 'Instances per run';
-$string['configchoicedone'] = 'Choice done';
+$string['configrequestforarchivenotification'] = 'Request for archive notification';
+$string['configrequestforarchivenotification_desc'] = 'If enabled, will send a notification to editing teachers';
+$string['configretirecategory'] = 'Category where to move trashed courses';
+$string['configretirecategory_desc'] = 'A course category designated to move finished courses in.';
 $string['configstopnotify'] = 'Stop notify';
-<<<<<<< HEAD
-=======
-$string['configarchivestrategy'] = 'Archiving strategy';
-$string['configarchivefactory'] = 'Archiving factory';
-$string['configarchivesbackupdir'] = 'Log file';
-$string['configlogfile'] = 'Log file';
-$string['configarchivestrategy_desc'] = 'Archiving strategy';
-$string['configarchivefactory_desc'] = 'Archiving factory';
-$string['configarchivesbackupdir_desc'] = 'Log file';
-$string['configlogfile_desc'] = 'Log file';
-$string['configdefaultaction_desc'] = 'What will happen with the course when the recycle process is scheduled.';
->>>>>>> MOODLE_35_STABLE
-$string['unset'] = 'Unset';
+$string['confirmboard'] = 'Courses candidates for recycling';
+$string['confirmmycourses'] = 'Confirm my course end action(s)';
+$string['datachanged'] = 'Changes have been recorded';
+$string['detectcourses'] = 'Scan for finished courses';
+$string['directeditorsnum'] = 'Course editors';
+$string['dorecycle'] = 'Launch the recycling task';
+$string['finishedcoursessettings'] = 'Settings for finished courses detection';
 $string['inactive'] = 'Hidden';
-$string['keep'] = 'At end of session, keep unchanged';
+$string['interactivesettings'] = 'Interactive mode settings';
+$string['interactivesettingshelp'] = 'The following parameters impact the recycle block when used interactively in courses.';
+$string['keep'] = 'Keep unchanged';
 $string['locked'] = 'Locked';
+$string['nextactions'] = 'Next actions';
+$string['nextdate'] = 'On';
+$string['nocourses'] = 'No courses to recycle';
+$string['nocoursestoarchive'] = 'No courses to archive';
 $string['nonotifications'] = 'No notifications';
+$string['nopeer'] = 'No one will decide !';
+$string['notificationstopped'] = 'Notifications disabled';
 $string['opentill'] = 'You can still change the course recycling action till {$a}.';
 $string['pluginname'] = 'Course Recycle';
+$string['reason'] = 'Reason';
 $string['recycle'] = 'Manage the recycling process';
+$string['recycleaction'] = 'Recycle action';
 $string['reminded1'] = 'First reminder sent';
 $string['reminded2'] = 'Second reminder sent';
 $string['reminded3'] = 'Third reminder sent';
-$string['reset'] = 'At end of session, reset the course';
-$string['task_recycle'] = 'Recycling process end of year cleanup';
-$string['task_lock'] = 'Recycle lock choices';
-$string['task_show'] = 'Recycle activate blocks';
-$string['task_reset'] = 'Recycle process cycle reset';
-$string['throw'] = 'At end of session, delete the course';
+$string['reset'] = 'Reset the course';
+$string['retire'] = 'Retire';
+$string['rfanallets'] = 'All editing teacher';
+$string['rfannone'] = 'No notification';
+$string['rfanoldestet'] = 'First enrolled editing teacher';
+$string['selectall'] = 'Select all';
+$string['standardmoodle'] = 'Standard moodle instance';
+$string['stateyourcourses'] = 'State your courses';
+$string['taskstate'] = 'Scheduled tasks state: ';
+$string['task_discover_finished'] = 'Discover (guess) terminated courses';
+$string['task_recycle_courses'] = 'Execute pending actions on course';
+$string['task_interactive_lock'] = 'Recycle lock choices';
+$string['task_pull_and_archive'] = 'Pull and archive courses';
+$string['task_interactive_recycle'] = 'Recycling process end of year cleanup';
+$string['task_interactive_reset'] = 'Recycle process cycle reset';
+$string['task_interactive_show'] = 'Recycle activate blocks';
+$string['throw'] = 'Delete the course';
+$string['unselectall'] = 'Unselect all';
+$string['unset'] = 'Unset';
+$string['updateaction'] = 'Update recycling action';
+$string['withselection'] = 'With the selection';
+
+$string['archiversettings'] = 'Archiver Moodle settings';
+$string['configsourcewwwroot'] = 'Archive source wwwroot';
+$string['configsourcewwwroot_desc'] = 'Root url of the source moodle to archive';
+$string['configsourcetoken'] = 'Archive source WS Token';
+$string['configsourcetoken_desc'] = 'WS Token of the source moodle to archive (course_recycle service)';
+$string['configaskowner'] = 'Ask owner';
+$string['configaskowner_desc'] = 'Ask owner before applying the default operation';
+$string['configpreservesourcecategory'] = 'Preserve source category';
+$string['configpreservesourcecategory_desc'] = 'If enabled, the backups will be stored in a similar category path it has in the source moodle.
+Missing paths will be created on first archive. If not enabled, the course tranport associated plugin destination policy is respected.';
+
+$string['Ask'] = 'Ask the owner';
+$string['RequestForArchive'] = 'Requested for archive';
+$string['Done'] = 'Done';
+$string['Failed'] = 'Failed';
+$string['Stay'] = 'Do nothing';
+$string['Reset'] = 'Reset course';
+$string['Clone'] = 'Clone course';
+$string['CloneAndReset'] = 'Clone and reset the new course';
+$string['Archive'] = 'Archive and keep';
+$string['ArchiveAndDelete'] = 'Archive and delete';
+$string['ArchiveAndReset'] = 'Archive and reset';
+$string['ArchiveAndRetire'] = 'Archive and retire';
+$string['ArchiveCloneAndReset'] = 'Archive original than clone and reset the clone';
+$string['Delete'] = 'Destroy completely the course with no saving';
+$string['Retire'] = 'Retire course in the category {$a}';
 
 $string['throwhdr'] = 'Delete';
 $string['resethdr'] = 'Reinitialize';
@@ -94,14 +188,27 @@ will be performed on this course at this date. If you do NOT choose, your course
 Browse <a href="%COURSEURL%">in your course</a> to choose the course action or to stop notifications.
 ';
 
+$string['requestforarchive_title_tpl'] = '[<%%SITENAME%%>] : You have new reqests for course archiving ';
+$string['requestforarchive_tpl'] = '
+<p>The archiving course crawler has detected some courses that seem being finished
+and awaiting your decision for recycle action.</p>
+
+<p>Please visit <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> to mark your decision.</p>
+';
+
+$string['defaultaction_title_tpl'] = '[<%%SITENAME%%>] : Some courses will be recycled ';
+$string['defaultaction_tpl'] = '
+<p>The course <%%FULLNAME%%> you are editing will be recycled with the default action <%%ACTION%%>.</p>
+
+<p>You can still visit <a href="<%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%>"><%%WWWROOT%%>/login/index.php?ticket=<%%TICKET%%></a> to change the destination.</p>
+';
+
 $string['configblockstate_desc'] = 'This state variable controls the overall behaviour cycle of the block in any course. the block has a single site
 wide internal workflow that will affect all block instances in the site. Administrators may change the state for setup. State changes are
 driven by course recycle associated scheduled tasks.
 ';
 
 $string['configinstancesperrun_desc'] = 'Number of courses instances being recycled per cron run.';
-<<<<<<< HEAD
-=======
 
 $string['configarchivestrategy_desc'] = 'Archiving strategy for courses. The default strategy backup the courses into
 an archiving dedicated location on the filesystem. Other plugins may provide alternative archiving strategies
@@ -115,4 +222,4 @@ in the local file system and the recycle task should be able to write and create
 $string['configlogfile_desc'] = 'the location of an optional log file for recycling operations. If empty,
 then no log will be performed. the path is usually an absolute path to a writable directory, but can be given relatively to moodle\'s
 file storage by prefixing the path with %DATAROOT%';
->>>>>>> MOODLE_35_STABLE
+
